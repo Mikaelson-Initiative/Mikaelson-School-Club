@@ -1,3 +1,5 @@
+import Footer from "../components/Footer";
+
 export default function LeadershipPage() {
   const officers = [
     {
@@ -49,6 +51,7 @@ export default function LeadershipPage() {
             Mikaelson School Club
           </a>
           <ul className="hidden md:flex gap-8 text-gray-700 dark:text-gray-300">
+            <li><a href="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a></li>
             <li><a href="/events" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Events</a></li>
             <li><a href="/leadership" className="hover:text-blue-600 dark:hover:text-blue-400 transition font-medium">Leadership</a></li>
             <li><a href="/get-involved" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Get Involved</a></li>
@@ -118,11 +121,7 @@ export default function LeadershipPage() {
         </section>
       </main>
 
-      <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-600 dark:text-gray-400">
-          <p>&copy; 2026 Mikaelson School Club. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
