@@ -3,22 +3,37 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-white dark:bg-black">
       <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+          <a href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">
             Mikaelson School Club
-          </div>
+          </a>
           <ul className="hidden md:flex gap-8 text-gray-700 dark:text-gray-300">
             <li>
-              <a href="#about" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
-                About
+              <a href="/events" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Events
               </a>
             </li>
             <li>
-              <a href="#features" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
-                Activities
+              <a href="/leadership" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Leadership
               </a>
             </li>
             <li>
-              <a href="#contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+              <a href="/get-involved" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Get Involved
+              </a>
+            </li>
+            <li>
+              <a href="/resources" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Resources
+              </a>
+            </li>
+            <li>
+              <a href="/partners" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Partners
+              </a>
+            </li>
+            <li>
+              <a href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition">
                 Contact
               </a>
             </li>
