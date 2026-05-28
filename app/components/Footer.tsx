@@ -1,49 +1,79 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Mikaelson School Club</h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm">Building community, fostering excellence, and inspiring growth.</p>
-          </div>
-          <div>
-            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <li><a href="/about" className="hover:text-blue-600 dark:hover:text-blue-400">About</a></li>
-              <li><a href="/events" className="hover:text-blue-600 dark:hover:text-blue-400">Events</a></li>
-              <li><a href="/get-involved" className="hover:text-blue-600 dark:hover:text-blue-400">Get Involved</a></li>
-              <li><a href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400">Contact</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Resources</h4>
-            <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <li><a href="/resources" className="hover:text-blue-600 dark:hover:text-blue-400">Documents</a></li>
-              <li><a href="/leadership" className="hover:text-blue-600 dark:hover:text-blue-400">Leadership</a></li>
-              <li><a href="/partners" className="hover:text-blue-600 dark:hover:text-blue-400">Partners</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-bold text-gray-900 dark:text-white mb-4">Contact</h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              <a href="mailto:info@mikaelsonclub.edu" className="hover:text-blue-600 dark:hover:text-blue-400">info@mikaelsonclub.edu</a><br />
-              Room 301, Main Building<br />
-              <a href="tel:+1-555-0123" className="hover:text-blue-600 dark:hover:text-blue-400">(555) 0123</a>
-            </p>
-          </div>
-        </div>
-        <div className="border-t border-gray-200 dark:border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-600 dark:text-gray-400 text-sm">&copy; 2026 Mikaelson School Club. All rights reserved.</p>
-            <div className="flex gap-4 mt-4 md:mt-0">
-              <a href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm">Facebook</a>
-              <a href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm">Twitter</a>
-              <a href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm">Instagram</a>
-              <a href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 text-sm">LinkedIn</a>
+    <footer className="bg-surface-container-lowest border-t border-outline-variant">
+      <div className="w-full py-section-gap px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-start max-w-container-max mx-auto">
+        <div className="mb-12 md:mb-0 max-w-xs">
+          <div className="flex items-center gap-stack-md mb-6">
+            <div className="h-10 w-10 bg-primary rounded-lg flex items-center justify-center text-on-primary font-bold">
+              M
             </div>
+            <span className="text-headline-md font-headline-md font-black text-primary">Mikaelson</span>
+          </div>
+          <p className="font-body-md text-body-md text-on-secondary-container mb-8">
+            Elevating humanity through leadership, technology, and community — one student at a time.
+          </p>
+          <div className="flex gap-4">
+            <a className="text-on-secondary-container hover:text-primary transition-all duration-200 active:scale-95" href="#">
+              🌐
+            </a>
+            <a className="text-on-secondary-container hover:text-primary transition-all duration-200 active:scale-95" href="#">
+              ✉️
+            </a>
+            <a className="text-on-secondary-container hover:text-primary transition-all duration-200 active:scale-95" href="#">
+              🤝
+            </a>
           </div>
         </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-12 md:gap-24">
+          <div>
+            <h5 className="font-label-md text-label-md font-bold text-primary mb-6 uppercase tracking-widest">Club</h5>
+            <ul className="space-y-4">
+              <li>
+                <a className="text-on-secondary-container hover:text-primary transition-all duration-200 font-body-md" href="#">
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a className="text-on-secondary-container hover:text-primary transition-all duration-200 font-body-md" href="#">
+                  Programs
+                </a>
+              </li>
+              <li>
+                <a className="text-on-secondary-container hover:text-primary transition-all duration-200 font-body-md" href="#">
+                  Resources
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h5 className="font-label-md text-label-md font-bold text-primary mb-6 uppercase tracking-widest">Support</h5>
+            <ul className="space-y-4">
+              <li>
+                <a className="text-on-secondary-container hover:text-primary transition-all duration-200 font-body-md" href="#">
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a className="text-on-secondary-container hover:text-primary transition-all duration-200 font-body-md" href="#">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a className="text-on-secondary-container hover:text-primary transition-all duration-200 font-body-md" href="#">
+                  Terms of Service
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto py-8 border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-4">
+        <span className="font-body-md text-sm text-on-secondary-container">
+          © 2024 Mikaelson School Club. Empowering African Youth through Habit & Leadership.
+        </span>
+        <span className="font-body-md text-sm text-on-secondary-container/60">Built for the next generation of African Leaders.</span>
       </div>
     </footer>
   );
