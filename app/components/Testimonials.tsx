@@ -7,7 +7,7 @@ const QUOTES = [
     rl: 'Grade 11 · Lagos',
   },
   {
-    q: 'The habit tracking changed how my students show up — to the club and to class. It\'s the most useful thing we\'ve added all year.',
+    q: 'The habit tracking changed how my students show up, to the club and to class. It\'s the most useful thing we\'ve added all year.',
     nm: 'Mr. Ndlovu',
     rl: 'Teacher mentor · Soweto',
   },

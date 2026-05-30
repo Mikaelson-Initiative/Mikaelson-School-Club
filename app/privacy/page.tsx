@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description:
-    'How Mikaelson School Club collects, stores, and uses personal data — including student data consent and your rights.',
+    'How Club collects, stores, and uses personal data, including student data consent and your rights.',
   openGraph: {
-    title: 'Privacy Policy | Mikaelson School Club',
-    description: 'Privacy Policy — how we handle your data.',
+    title: 'Privacy Policy | Club',
+    description: 'Privacy Policy, how we handle your data.',
   },
 };
 
@@ -56,7 +56,7 @@ const SECTIONS = [
     heading: 'Student Data',
     content: (
       <p>
-        We collect student participation data — including attendance and habit tracking — only with explicit consent
+        We collect student participation data, including attendance and habit tracking, only with explicit consent
         from the school and the student&apos;s parent or guardian. Students are never identified by name in public reporting.
         Aggregate and anonymised data may be used to report programme outcomes to partners and funders.
       </p>

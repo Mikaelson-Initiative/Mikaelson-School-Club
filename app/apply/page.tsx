@@ -51,7 +51,7 @@ export default function ApplyPage() {
 
       <PageHero
         label="Apply"
-        title="Bring Mikaelson to your school."
+        title="Bring Club to your school."
         lede="Complete this short form and we'll be in touch within 3 working days to discuss next steps."
       />
 
@@ -65,7 +65,7 @@ export default function ApplyPage() {
               alignItems: 'start',
             }}
           >
-            {/* Left — Form */}
+            {/* Left Form */}
             <div>
               {submitted ? (
                 <div
@@ -176,7 +176,7 @@ export default function ApplyPage() {
                   </div>
 
                   <div>
-                    <label style={labelStyle}>Tell us about your school and why you want to run a Mikaelson chapter</label>
+                    <label style={labelStyle}>Tell us about your school and why you want to run a Club chapter</label>
                     <textarea
                       style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
                       name="message"
@@ -196,7 +196,7 @@ export default function ApplyPage() {
               )}
             </div>
 
-            {/* Right — Info box */}
+            {/* Right Info box */}
             <div
               style={{
                 background: 'var(--surface-2)',

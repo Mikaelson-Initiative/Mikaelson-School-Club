@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Contact',
   description:
-    'Get in touch with Mikaelson School Club — general enquiries, school partnerships, sponsorship, and media contact.',
+    'Get in touch with Club, general enquiries, school partnerships, sponsorship, and media contact.',
   openGraph: {
-    title: 'Contact | Mikaelson School Club',
-    description: 'Contact Mikaelson School Club for enquiries, partnerships, and media.',
+    title: 'Contact | Club',
+    description: 'Contact Club for enquiries, partnerships, and media.',
   },
 };
 
@@ -53,7 +53,7 @@ export default function ContactPage() {
       <PageHero
         label="Get in Touch"
         title="We'd love to hear from you."
-        lede="Whether you're a school, a student, a potential partner, or media — reach out."
+        lede="Whether you're a school, a student, a potential partner, or media, reach out."
       />
 
       <section className="sec">
@@ -66,7 +66,7 @@ export default function ContactPage() {
               alignItems: 'start',
             }}
           >
-            {/* Left — Contact blocks + socials */}
+            {/* Left Contact blocks + socials */}
             <div>
               <Reveal>
                 <span className="label">Contact</span>
@@ -152,7 +152,7 @@ export default function ContactPage() {
               </Reveal>
             </div>
 
-            {/* Right — Simple contact form (mailto fallback, no JS required) */}
+            {/* Right Simple contact form (mailto fallback, no JS required) */}
             <Reveal delay={100}>
               <div
                 style={{

@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Leadership',
   description:
-    'Meet the elected student officers and faculty advisors leading the Mikaelson School Club network across Africa.',
+    'Meet the elected student officers and faculty advisors leading the Club network across Africa.',
   openGraph: {
-    title: 'Leadership | Mikaelson School Club',
-    description: 'The students and advisors leading the Mikaelson School Club network.',
+    title: 'Leadership | Club',
+    description: 'The students and advisors leading the Club network.',
   },
 };
 
@@ -14,14 +14,20 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
-import { IconArrow } from '../components/Icons';
-import Link from 'next/link';
+import VolunteerModal from '../components/VolunteerModal';
 
 const OFFICERS = [
-  { name: 'Mikaelson Initiative', role: 'Founder & Executive Director', bio: 'Driving the vision to equip every African secondary school student with the mindset and tools to lead.', email: 'hello@mikaelsoninitiative.org' },
-  { name: 'Programme Director', role: 'Head of Programmes', bio: 'Designs and oversees the weekly curriculum, chapter playbooks, and member assessment systems.', email: 'hello@mikaelsoninitiative.org' },
-  { name: 'Partnerships Lead', role: 'Head of Partnerships', bio: 'Builds relationships with schools, sponsors, and community organisations that power each chapter.', email: 'hello@mikaelsoninitiative.org' },
-  { name: 'Operations Lead', role: 'Head of Operations', bio: 'Manages chapter logistics, champion training, and cross-network communications.', email: 'hello@mikaelsoninitiative.org' },
+  { name: 'Michael Olukayode', role: 'Team Lead', email: 'michael@mikaelsoninitiative.org', img: '/team/Michael%20Olukayode.jpg' },
+  { name: 'Boluwatife Adeleke', role: 'Project Manager', email: 'boluwatife@mikaelsoninitiative.org', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg' },
+  { name: 'Irene Ezechi', role: 'Program Manager', email: 'irene@mikaelsoninitiative.org', img: '/team/Irene%20Ezechi.jpg' },
+  { name: 'Mariam Jimoh', role: 'ESG and Impact', email: 'mariam@mikaelsoninitiative.org', img: '/team/Mariam%20Jimoh.jpeg' },
+  { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', email: 'bright@mikaelsoninitiative.org', img: '/team/Ayegbusi%20Bright%20Temitope.jpg' },
+  { name: 'Feranmi Oluwole', role: 'Operations Manager', email: 'feranmi@mikaelsoninitiative.org', img: '/team/Feranmi%20Oluwole.JPG' },
+  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', email: 'theresa@mikaelsoninitiative.org', img: '/team/Asiedu%20Gyamfi.png' },
+  { name: 'Esther Adeoye', role: 'Social Media Manager', email: 'esther@mikaelsoninitiative.org', img: '/team/Adeoye%20Esther.jpg' },
+  { name: 'Ariyo Aresa', role: 'Front-end Engineer', email: 'ariyo@mikaelsoninitiative.org', img: '/team/Ariyo%20Aresa.jpg' },
+  { name: 'Blessing Olusola', role: 'Technical Writer', email: 'blessing@mikaelsoninitiative.org', img: '/team/Blessing%20Olusola.jpeg' },
+  { name: 'Ayomide Idowu', role: 'Visuals and Designs', email: 'ayomide@mikaelsoninitiative.org', img: '/team/Ayomide%20Idowu.jpg' },
 ];
 
 const ADVISORS = [
@@ -36,7 +42,7 @@ export default function LeadershipPage() {
       <PageHero
         label="Our Team"
         title="The team behind the movement."
-        lede="Mikaelson School Club is built and run by a dedicated team committed to one mission — giving every African secondary school student the habits, mindset, and community to lead."
+        lede="Club is built and run by a dedicated team committed to one mission, giving every African secondary school student the habits, mindset, and community to lead."
       />
 
       <section className="sec" style={{ paddingTop: 56 }}>
@@ -52,13 +58,16 @@ export default function LeadershipPage() {
               <Reveal delay={i * 90} key={o.name}>
                 <div className="person">
                   <div className="person-avatar">
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 700, color: 'var(--accent-ink)' }}>
-                      {o.name.charAt(0)}
-                    </span>
+                    {o.img ? (
+                      <img src={o.img} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 700, color: 'var(--accent-ink)' }}>
+                        {o.name.charAt(0)}
+                      </span>
+                    )}
                   </div>
                   <h3>{o.name}</h3>
                   <div className="role">{o.role}</div>
-                  <p>{o.bio}</p>
                   <a className="email" href={`mailto:${o.email}`}>{o.email}</a>
                 </div>
               </Reveal>
@@ -113,11 +122,7 @@ export default function LeadershipPage() {
                 We&apos;re always looking for passionate students to join the leadership team and run new chapters.
                 Step up and we&apos;ll give you the playbook.
               </p>
-              <div className="cta-actions">
-                <Link href="/get-involved" className="btn btn-primary">
-                  Apply for leadership <IconArrow size={16} className="arr" />
-                </Link>
-              </div>
+              <VolunteerModal />
             </div>
           </Reveal>
         </div>

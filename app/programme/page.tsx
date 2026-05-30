@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { IconBuild, IconLead, IconDigital, IconCheck } from '../components/Icons';
 
 export const metadata = {
-  title: 'The Programme | Mikaelson School Club',
+  title: 'The Programme | Club',
   description:
-    'How the Mikaelson School Club programme works — a weekly rhythm that builds habits, leadership, and digital fluency term by term.',
+    'How the Club programme works, a weekly rhythm that builds habits, leadership, and digital fluency term by term.',
 };
 
 export default function ProgrammePage() {
@@ -20,10 +20,10 @@ export default function ProgrammePage() {
         <PageHero
           label="How It Works"
           title="A system, not just a club."
-          lede="The Mikaelson programme runs on a weekly rhythm that compounds — building habits, leadership, and digital fluency term by term."
+          lede="the club programme runs on a weekly rhythm that compounds, building habits, leadership, and digital fluency term by term."
         />
 
-        {/* Section 1 — Three Pillars */}
+        {/* Section 1 Three Pillars */}
         <section className="sec">
           <div className="wrap">
             <Reveal>
@@ -51,13 +51,13 @@ export default function ProgrammePage() {
                     Icon: IconLead,
                     num: '02',
                     title: 'Community & Leadership',
-                    body: 'Chapters are student-led. Members vote on a student exec team, run projects, and hold each other accountable — practicing real leadership at school level.',
+                    body: 'Chapters are student-led. Members vote on a student exec team, run projects, and hold each other accountable, practicing real leadership at school level.',
                   },
                   {
                     Icon: IconDigital,
                     num: '03',
                     title: 'Digital Thinking',
-                    body: 'Sessions include practical tech: using AI tools responsibly, digital communication, and basic problem-solving with technology — skills school doesn\'t cover.',
+                    body: 'Sessions include practical tech: using AI tools responsibly, digital communication, and basic problem-solving with technology, skills school doesn\'t cover.',
                   },
                 ].map((card) => (
                   <div key={card.num} className="card">
@@ -74,7 +74,7 @@ export default function ProgrammePage() {
           </div>
         </section>
 
-        {/* Section 2 — Weekly Rhythm */}
+        {/* Section 2 Weekly Rhythm */}
         <section className="sec" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <Reveal>
@@ -98,7 +98,7 @@ export default function ProgrammePage() {
                   {
                     n: 'Monday',
                     title: 'Check-in',
-                    body: 'Members log last week\'s habits and set goals for the week. Takes five minutes — the discipline is in showing up and being honest.',
+                    body: 'Members log last week\'s habits and set goals for the week. Takes five minutes, the discipline is in showing up and being honest.',
                   },
                   {
                     n: 'Wednesday',
@@ -127,7 +127,7 @@ export default function ProgrammePage() {
           </div>
         </section>
 
-        {/* Section 3 — What Students Gain */}
+        {/* Section 3 What Students Gain */}
         <section className="sec">
           <div className="wrap">
             <Reveal>
@@ -144,14 +144,14 @@ export default function ProgrammePage() {
 
             <Reveal delay={80}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
-                {/* Left — outcomes list */}
+                {/* Left outcomes list */}
                 <div>
                   <ul className="involve-bullets">
                     {[
                       'Leadership experience for CV and university applications',
                       'Peer accountability network that lasts beyond school',
                       'Digital skills and confidence for the real world',
-                      'A habit system that sticks — not just a school-term experiment',
+                      'A habit system that sticks, not just a school-term experiment',
                       'Certificate of completion awarded each term',
                     ].map((item, i) => (
                       <li key={i}>
@@ -164,7 +164,7 @@ export default function ProgrammePage() {
                   </ul>
                 </div>
 
-                {/* Right — testimonial */}
+                {/* Right testimonial */}
                 <div className="tcard">
                   <div className="qmark">&ldquo;</div>
                   <blockquote>

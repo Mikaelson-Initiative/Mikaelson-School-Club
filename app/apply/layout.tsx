@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Apply',
   description:
-    'Apply to bring the Mikaelson School Club to your school. Complete our short expression of interest form and we\'ll be in touch within 3 working days.',
+    'Apply to bring the Club to your school. Complete our short expression of interest form and we\'ll be in touch within 3 working days.',
   openGraph: {
-    title: 'Apply | Mikaelson School Club',
-    description: 'Apply to host a Mikaelson chapter at your school.',
+    title: 'Apply | Club',
+    description: 'Apply to host a Club chapter at your school.',
   },
 };
 

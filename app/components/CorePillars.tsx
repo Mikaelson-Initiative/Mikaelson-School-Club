@@ -14,7 +14,7 @@ const PILLARS = [
     Icon: IconLead,
     n: '02',
     t: 'Leadership',
-    d: 'Beyond simple management — we teach students to influence with purpose, foster collaboration, and spark initiative within their school community.',
+    d: 'Beyond simple management, we teach students to influence with purpose, foster collaboration, and spark initiative within their school community.',
     cta: 'Lead your peers',
   },
   {

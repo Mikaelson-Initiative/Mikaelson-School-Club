@@ -6,11 +6,20 @@ import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import Counter from '../components/Counter';
-import { IconArrow, IconCheck } from '../components/Icons';
+import { IconArrow } from '../components/Icons';
 import Link from 'next/link';
 
 const CHAPTERS = [
-  { school: 'Greenwood High', city: 'Lagos, Nigeria', code: 'LG', members: 64, live: true },
+  { school: 'Igbobi College', city: 'Lagos, Nigeria', code: 'IC', members: 0, live: false },
+  { school: 'St Finbars College', city: 'Lagos, Nigeria', code: 'SF', members: 0, live: false },
+  { school: "St Gregory's College", city: 'Lagos, Nigeria', code: 'SG', members: 0, live: false },
+  { school: 'Methodist Girls & Boys', city: 'Lagos, Nigeria', code: 'MG', members: 0, live: false },
+  { school: 'Dowen College', city: 'Lagos, Nigeria', code: 'DC', members: 0, live: false },
+  { school: 'Yabatech Secondary School', city: 'Lagos, Nigeria', code: 'YS', members: 0, live: false },
+  { school: "King's College", city: 'Lagos, Nigeria', code: 'KC', members: 0, live: false },
+  { school: "Kay's International College", city: 'Lagos, Nigeria', code: 'KI', members: 0, live: false },
+  { school: 'Our Lady of Apostles Secondary School', city: 'Yaba, Lagos, Nigeria', code: 'OL', members: 0, live: false },
+  { school: 'Cathedral Missionary School (CMS)', city: 'Lagos, Nigeria', code: 'CM', members: 0, live: false },
   { school: 'Capital Grammar', city: 'Abuja, Nigeria', code: 'AB', members: 41, live: true },
   { school: 'Achimota School', city: 'Accra, Ghana', code: 'AC', members: 52, live: true },
   { school: 'Riara Springs', city: 'Nairobi, Kenya', code: 'NB', members: 38, live: true },
@@ -39,7 +48,7 @@ export default function ChaptersPage() {
       <PageHero
         label="Our Network"
         title="Chapters across the continent."
-        lede="A chapter is a school running the Mikaelson system — a community of students building habits, leadership, and digital fluency together. Find one near you, or start your own."
+        lede="A chapter is a school running the Club system, a community of students building habits, leadership, and digital fluency together. Find one near you, or start your own."
       />
 
       <section className="sec" style={{ paddingTop: 56 }}>
@@ -103,10 +112,10 @@ export default function ChaptersPage() {
           <Reveal>
             <span className="label">Start a chapter</span>
             <h2 className="display sec-head" style={{ fontSize: 'clamp(28px,3.6vw,42px)', margin: '16px 0 8px' }}>
-              Bring Mikaelson to your school in four steps.
+              Bring Club to your school in four steps.
             </h2>
             <p className="muted sec-head" style={{ fontSize: 17, marginBottom: 42 }}>
-              We handle the system and training — you bring the students. Most chapters launch within a term.
+              We handle the system and training, you bring the students. Most chapters launch within a term.
             </p>
           </Reveal>
           <div className="rhythm">

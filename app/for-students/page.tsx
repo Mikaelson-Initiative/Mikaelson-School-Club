@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'For Students',
   description:
-    'What students experience in the Mikaelson School Club — weekly sessions, leadership roles, habit tracking, and community projects.',
+    'What students experience in the Club, weekly sessions, leadership roles, habit tracking, and community projects.',
   openGraph: {
-    title: 'For Students | Mikaelson School Club',
-    description: 'For students — what you will experience, do, and gain in the club.',
+    title: 'For Students | Club',
+    description: 'For students, what you will experience, do, and gain in the club.',
   },
 };
 
@@ -33,7 +33,7 @@ const RHYTHM_STEPS = [
   {
     n: '02',
     title: 'Learn something real',
-    body: 'Sessions cover leadership, communication, and digital skills — not theory, but things you can use the same day.',
+    body: 'Sessions cover leadership, communication, and digital skills, not theory, but things you can use the same day.',
   },
   {
     n: '03',
@@ -89,7 +89,7 @@ export default function ForStudentsPage() {
         lede="It's the one that gives you skills, accountability, and a community that actually helps you grow."
       />
 
-      {/* Section 1 — Weekly practice */}
+      {/* Section 1 Weekly practice */}
       <section className="sec">
         <div className="wrap">
           <Reveal>
@@ -115,7 +115,7 @@ export default function ForStudentsPage() {
         </div>
       </section>
 
-      {/* Section 2 — What you'll gain */}
+      {/* Section 2 What you'll gain */}
       <section className="sec" style={{ background: 'var(--surface-2)' }}>
         <div className="wrap">
           <Reveal>
@@ -169,7 +169,7 @@ export default function ForStudentsPage() {
                   </div>
                   <div>
                     <p className="nm">Kwame</p>
-                    <p className="rl">Grade 12 &mdash; Accra</p>
+                    <p className="rl">Grade 12 , Accra</p>
                   </div>
                 </div>
               </div>
@@ -178,7 +178,7 @@ export default function ForStudentsPage() {
         </div>
       </section>
 
-      {/* Section 3 — Student Leadership Roles */}
+      {/* Section 3 Student Leadership Roles */}
       <section className="sec">
         <div className="wrap">
           <Reveal>
@@ -215,7 +215,7 @@ export default function ForStudentsPage() {
         </div>
       </section>
 
-      {/* Section 4 — Why it matters */}
+      {/* Section 4 Why it matters */}
       <section className="sec" style={{ background: 'var(--surface-2)' }}>
         <div className="wrap">
           <Reveal>
@@ -237,8 +237,8 @@ export default function ForStudentsPage() {
               }}
             >
               Most students are told to wait. Wait until university. Wait until you have a job. Wait until someone gives
-              you the title. Mikaelson School Club is built on the opposite idea: that leadership is a practice, not a
-              reward. Students who go through the programme leave with a documented record of what they did &mdash;
+              you the title. Club is built on the opposite idea: that leadership is a practice, not a
+              reward. Students who go through the programme leave with a documented record of what they did ,
               sessions run, habits tracked, projects delivered. That&apos;s the thing that makes an application stand
               out.
             </p>
@@ -257,7 +257,7 @@ export default function ForStudentsPage() {
                 Find a chapter near you or apply to start one.
               </h2>
               <p>
-                Whether there&apos;s already a chapter at your school or you want to be the one to launch it &mdash; we
+                Whether there&apos;s already a chapter at your school or you want to be the one to launch it , we
                 want to hear from you.
               </p>
               <div className="cta-actions">

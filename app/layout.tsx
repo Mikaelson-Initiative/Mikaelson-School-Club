@@ -25,8 +25,8 @@ const BASE_URL = 'https://mikaelsonschoolclub.org';
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: 'Mikaelson School Club — Every student can lead.',
-    template: '%s | Mikaelson School Club',
+    default: 'Club, Every student can lead.',
+    template: '%s | Club',
   },
   description:
     'A structured leadership programme for African secondary schools. Building the next generation of leaders through habit systems, peer leadership, and digital literacy.',
@@ -53,22 +53,22 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: BASE_URL,
-    siteName: 'Mikaelson School Club',
-    title: 'Mikaelson School Club — Every student can lead.',
+    siteName: 'Club',
+    title: 'Club, Every student can lead.',
     description:
-      'A structured leadership programme for African secondary schools. Building habits, leadership, and digital literacy — term by term.',
+      'A structured leadership programme for African secondary schools. Building habits, leadership, and digital literacy, term by term.',
     images: [
       {
         url: '/hero-v3.png',
         width: 1200,
         height: 630,
-        alt: 'Mikaelson School Club — Every student can lead.',
+        alt: 'Club, Every student can lead.',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Mikaelson School Club — Every student can lead.',
+    title: 'Club, Every student can lead.',
     description:
       'A structured leadership programme for African secondary schools.',
     images: ['/hero-v3.png'],
@@ -92,7 +92,7 @@ const jsonLd = {
       '@type': 'WebSite',
       '@id': `${BASE_URL}/#website`,
       url: BASE_URL,
-      name: 'Mikaelson School Club',
+      name: 'Club',
       description:
         'A structured leadership programme for African secondary schools.',
       publisher: { '@id': `${BASE_URL}/#organization` },
@@ -105,8 +105,8 @@ const jsonLd = {
     {
       '@type': 'EducationalOrganization',
       '@id': `${BASE_URL}/#organization`,
-      name: 'Mikaelson School Club',
-      alternateName: 'Mikaelson Initiative School Club',
+      name: 'Club',
+      alternateName: 'Club',
       url: BASE_URL,
       logo: {
         '@type': 'ImageObject',

@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { IconCheck } from '../components/Icons';
 
 export const metadata = {
-  title: 'For Schools | Mikaelson School Club',
+  title: 'For Schools | Club',
   description:
-    'Bring a structured leadership programme to your school — we provide the system, training, and support. You provide the students and the space.',
+    'Bring a structured leadership programme to your school, we provide the system, training, and support. You provide the students and the space.',
 };
 
 export default function ForSchoolsPage() {
@@ -19,11 +19,11 @@ export default function ForSchoolsPage() {
       <main>
         <PageHero
           label="For Schools"
-          title="Plug a leadership programme into your school — without building it yourself."
+          title="Plug a leadership programme into your school, without building it yourself."
           lede="We provide the system, the training, and the support. You provide the students and the space."
         />
 
-        {/* Section 1 — What we provide */}
+        {/* Section 1 What we provide */}
         <section className="sec">
           <div className="wrap">
             <Reveal>
@@ -44,7 +44,7 @@ export default function ForSchoolsPage() {
                   {
                     num: '01',
                     title: 'Turnkey Curriculum',
-                    body: 'A full term-by-term session plan, facilitator guides, and student workbooks — ready to use from day one. No curriculum design required.',
+                    body: 'A full term-by-term session plan, facilitator guides, and student workbooks, ready to use from day one. No curriculum design required.',
                   },
                   {
                     num: '02',
@@ -73,7 +73,7 @@ export default function ForSchoolsPage() {
           </div>
         </section>
 
-        {/* Section 2 — What we ask of you */}
+        {/* Section 2 What we ask of you */}
         <section className="sec" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <Reveal>
@@ -90,12 +90,12 @@ export default function ForSchoolsPage() {
 
             <Reveal delay={80}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
-                {/* Left — checklist */}
+                {/* Left checklist */}
                 <div>
                   <ul className="involve-bullets">
                     {[
                       'A weekly 45-minute session slot in the school timetable',
-                      'Space for students to meet — a classroom is perfectly fine',
+                      'Space for students to meet, a classroom is perfectly fine',
                       'One faculty or student Champion willing to be trained',
                       'Promotion of the club to interested students at launch',
                     ].map((item, i) => (
@@ -109,7 +109,7 @@ export default function ForSchoolsPage() {
                   </ul>
                 </div>
 
-                {/* Right — stat card */}
+                {/* Right stat card */}
                 <div
                   style={{
                     border: '1px solid var(--line)',
@@ -150,7 +150,7 @@ export default function ForSchoolsPage() {
           </div>
         </section>
 
-        {/* Section 3 — Eligibility */}
+        {/* Section 3 Eligibility */}
         <section className="sec">
           <div className="wrap">
             <Reveal>
@@ -163,7 +163,7 @@ export default function ForSchoolsPage() {
                   Is your school a good fit?
                 </h2>
                 <p style={{ color: 'var(--muted)', fontSize: '17px', lineHeight: '1.65', maxWidth: '36em' }}>
-                  We welcome schools at every stage — from those with no leadership programme to those looking to formalise what already exists.
+                  We welcome schools at every stage, from those with no leadership programme to those looking to formalise what already exists.
                 </p>
               </div>
             </Reveal>
@@ -174,7 +174,7 @@ export default function ForSchoolsPage() {
                   {
                     n: '01',
                     title: 'Secondary school',
-                    body: 'Any secondary school on the African continent is eligible to apply — public, private, rural, or urban. The programme is built to adapt.',
+                    body: 'Any secondary school on the African continent is eligible to apply, public, private, rural, or urban. The programme is built to adapt.',
                   },
                   {
                     n: '02',
@@ -184,7 +184,7 @@ export default function ForSchoolsPage() {
                   {
                     n: '03',
                     title: 'One committed adult',
-                    body: 'A teacher or staff member willing to support the Champion and attend the training. This person does not need to run sessions — just show up.',
+                    body: 'A teacher or staff member willing to support the Champion and attend the training. This person does not need to run sessions, just show up.',
                   },
                 ].map((step) => (
                   <div key={step.n} className="step">
@@ -198,7 +198,7 @@ export default function ForSchoolsPage() {
           </div>
         </section>
 
-        {/* Section 4 — How to apply */}
+        {/* Section 4 How to apply */}
         <section className="sec" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <Reveal>

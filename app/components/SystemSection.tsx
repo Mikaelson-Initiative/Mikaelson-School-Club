@@ -3,7 +3,7 @@ import { IconCalendar, IconTrack, IconCompass, IconGlobe } from './Icons';
 
 const STEPS = [
   { Icon: IconCalendar, t: 'Weekly huddle', d: 'Every chapter meets to set intentions, review wins, and hold each other accountable.' },
-  { Icon: IconTrack, t: 'Habit tracking', d: 'Members log daily habits in a shared system — streaks turn intention into identity.' },
+  { Icon: IconTrack, t: 'Habit tracking', d: 'Members log daily habits in a shared system, streaks turn intention into identity.' },
   { Icon: IconCompass, t: 'Skill lab', d: 'Hands-on sessions on leadership, communication, and digital tools led by Champions.' },
   { Icon: IconGlobe, t: 'Community project', d: 'Each term, chapters ship a real project that serves their school or neighbourhood.' },
 ];
@@ -18,7 +18,7 @@ export default function SystemSection() {
             A weekly rhythm that compounds.
           </h2>
           <p className="muted sec-head" style={{ fontSize: 17, marginBottom: 42 }}>
-            The club isn&apos;t an event — it&apos;s an operating system. Here&apos;s the loop every chapter
+            The club isn&apos;t an event, it&apos;s an operating system. Here&apos;s the loop every chapter
             runs, week after week.
           </p>
         </Reveal>

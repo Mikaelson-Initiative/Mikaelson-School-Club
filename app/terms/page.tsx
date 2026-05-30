@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Terms of Use',
   description:
-    'Terms and conditions for using the Mikaelson School Club website and participating in the programme.',
+    'Terms and conditions for using the Club website and participating in the programme.',
   openGraph: {
-    title: 'Terms of Use | Mikaelson School Club',
-    description: 'Terms of Use for the Mikaelson School Club website.',
+    title: 'Terms of Use | Club',
+    description: 'Terms of Use for the Club website.',
   },
 };
 
@@ -28,7 +28,7 @@ const SECTIONS = [
     heading: 'Use of the Website',
     content: (
       <p>
-        This website is provided for informational purposes and to facilitate applications to the Mikaelson School Club
+        This website is provided for informational purposes and to facilitate applications to the Club
         programme. You may not use the site for any unlawful purpose, to distribute harmful content, or to attempt to
         gain unauthorised access to any part of the site or its systems.
       </p>
@@ -38,7 +38,7 @@ const SECTIONS = [
     heading: 'Intellectual Property',
     content: (
       <p>
-        All content on this website — including text, graphics, logos, and design — is the property of the Mikaelson
+        All content on this website, including text, graphics, logos, and design, is the property of the Mikaelson
         Initiative and is protected by applicable copyright and intellectual property laws. You may not reproduce,
         distribute, or create derivative works without written permission.
       </p>
@@ -48,7 +48,7 @@ const SECTIONS = [
     heading: 'Programme Participation',
     content: (
       <p>
-        Schools and students who join the Mikaelson School Club programme do so under a separate participation agreement,
+        Schools and students who join the Club programme do so under a separate participation agreement,
         which governs the rights and obligations of programme participants. These Terms of Use apply to the website only
         and do not constitute an offer to participate in the programme.
       </p>

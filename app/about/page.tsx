@@ -6,9 +6,9 @@ import Link from 'next/link';
 import { IconCheck } from '../components/Icons';
 
 export const metadata = {
-  title: 'About | Mikaelson School Club',
+  title: 'About | Club',
   description:
-    'The story behind Mikaelson School Club — born from a gap in how schools prepare young people for life after graduation.',
+    'The story behind Club, born from a gap in how schools prepare young people for life after graduation.',
 };
 
 export default function AboutPage() {
@@ -20,10 +20,10 @@ export default function AboutPage() {
         <PageHero
           label="Our Story"
           title="Born from a gap. Built for the next generation."
-          lede="Most schools teach students what to know. Mikaelson School Club teaches them who to be."
+          lede="Most schools teach students what to know. Club teaches them who to be."
         />
 
-        {/* Section 1 — The Problem */}
+        {/* Section 1 The Problem */}
         <section className="sec">
           <div className="wrap">
             <Reveal>
@@ -37,10 +37,10 @@ export default function AboutPage() {
                     Most students graduate without learning how to lead themselves.
                   </h2>
                   <p style={{ color: 'var(--muted)', fontSize: '16px', lineHeight: '1.7', marginBottom: '16px' }}>
-                    School curricula are built around knowledge delivery — exams, grades, and content. They measure what a student can recall, not who they are becoming. The habits, mindset, and community that determine long-term success fall entirely outside the classroom.
+                    School curricula are built around knowledge delivery, exams, grades, and content. They measure what a student can recall, not who they are becoming. The habits, mindset, and community that determine long-term success fall entirely outside the classroom.
                   </p>
                   <p style={{ color: 'var(--muted)', fontSize: '16px', lineHeight: '1.7' }}>
-                    The result is a generation of graduates who are academically capable but personally underprepared — without a peer network, a consistent routine, or a sense of their own leadership potential. That is the gap Mikaelson School Club was built to close.
+                    The result is a generation of graduates who are academically capable but personally underprepared, without a peer network, a consistent routine, or a sense of their own leadership potential. That is the gap Club was built to close.
                   </p>
                 </div>
 
@@ -76,7 +76,7 @@ export default function AboutPage() {
                       },
                       {
                         stat: '0',
-                        text: 'Most school clubs are social, not developmental — leaving a structured growth gap',
+                        text: 'Most school clubs are social, not developmental, leaving a structured growth gap',
                       },
                     ].map((item, i) => (
                       <div key={i} style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
@@ -106,7 +106,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Section 2 — The Solution */}
+        {/* Section 2 The Solution */}
         <section className="sec" style={{ background: 'var(--surface-2)' }}>
           <div className="wrap">
             <Reveal>
@@ -119,7 +119,7 @@ export default function AboutPage() {
                   A structured programme that lives inside your school.
                 </h2>
                 <p style={{ color: 'var(--muted)', fontSize: '17px', lineHeight: '1.65', maxWidth: '38em' }}>
-                  Mikaelson School Club is embedded in schools and runs as a weekly chapter meeting, combining habit systems, peer leadership, and digital literacy into one cohesive programme — no extra infrastructure required.
+                  Club is embedded in schools and runs as a weekly chapter meeting, combining habit systems, peer leadership, and digital literacy into one cohesive programme, no extra infrastructure required.
                 </p>
               </div>
             </Reveal>
@@ -140,7 +140,7 @@ export default function AboutPage() {
                   {
                     num: '03',
                     title: 'Digital Literacy',
-                    body: 'Practical tech skills for the real world — using AI tools responsibly, digital communication, and basic problem-solving with technology that school doesn\'t cover.',
+                    body: 'Practical tech skills for the real world, using AI tools responsibly, digital communication, and basic problem-solving with technology that school doesn\'t cover.',
                   },
                 ].map((card) => (
                   <div key={card.num} className="card">
@@ -154,7 +154,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Section 3 — The Initiative */}
+        {/* Section 3 The Initiative */}
         <section className="sec">
           <div className="wrap">
             <Reveal>
@@ -168,10 +168,10 @@ export default function AboutPage() {
                     Part of something bigger.
                   </h2>
                   <p style={{ color: 'var(--muted)', fontSize: '16px', lineHeight: '1.7', marginBottom: '16px' }}>
-                    The Mikaelson Initiative is a pan-African organisation focused on education, technology, and opportunity. It was founded on the belief that the continent's next generation of leaders is already in secondary schools — they simply need the right environment to emerge.
+                    The Mikaelson Initiative is a pan-African organisation focused on education, technology, and opportunity. It was founded on the belief that the continent's next generation of leaders is already in secondary schools, they simply need the right environment to emerge.
                   </p>
                   <p style={{ color: 'var(--muted)', fontSize: '16px', lineHeight: '1.7' }}>
-                    Mikaelson School Club is one of its flagship programmes, designed to scale across secondary schools on the continent. By embedding within existing school structures, the Club reaches students where they already are — making leadership development accessible to every student, not just a privileged few.
+                    Club is one of its flagship programmes, designed to scale across secondary schools on the continent. By embedding within existing school structures, the Club reaches students where they already are, making leadership development accessible to every student, not just a privileged few.
                   </p>
                 </div>
 
@@ -193,12 +193,12 @@ export default function AboutPage() {
                       marginBottom: '28px',
                     }}
                   >
-                    Mikaelson Values
+                    Club Values
                   </p>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     {[
                       { value: 'Unity', desc: 'We are stronger together than apart. Every chapter, every student, every continent.' },
-                      { value: 'Mutual Support', desc: 'We hold each other accountable and lift each other up — that is the foundation of the club.' },
+                      { value: 'Mutual Support', desc: 'We hold each other accountable and lift each other up, that is the foundation of the club.' },
                       { value: 'Shared Progress', desc: 'Individual growth compounds into community advancement. Our success is collective.' },
                     ].map((item, i) => (
                       <div key={i} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>

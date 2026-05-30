@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Our Team',
   description:
-    'The people behind the Mikaelson School Club programme — leadership, Champions, and the network building it chapter by chapter.',
+    'The people behind the Club programme, leadership, Champions, and the network building it chapter by chapter.',
   openGraph: {
-    title: 'Our Team | Mikaelson School Club',
-    description: 'Meet the team building Mikaelson School Club across Africa.',
+    title: 'Our Team | Club',
+    description: 'Meet the team building Club across Africa.',
   },
 };
 
@@ -22,7 +22,7 @@ const LEADERS = [
     name: 'Oluwaseun Adeleke',
     initials: 'OA',
     role: 'Founder & Director',
-    bio: 'Seun built Mikaelson School Club after noticing that the most capable students in his community lacked the structure to channel their potential.',
+    bio: 'Seun built Club after noticing that the most capable students in his community lacked the structure to channel their potential.',
     email: 'seun@mikaelsoninitiative.org',
   },
   {
@@ -63,7 +63,7 @@ export default function TeamPage() {
       <PageHero
         label="Our Team"
         title="The people behind the programme."
-        lede="Mikaelson School Club is built and run by people who believe deeply in what young Africans can do when given the right system."
+        lede="Club is built and run by people who believe deeply in what young Africans can do when given the right system."
       />
 
       <section className="sec" style={{ paddingTop: 56 }}>
@@ -144,7 +144,7 @@ export default function TeamPage() {
                 Want to become a Champion?
               </h2>
               <p>
-                Join our network of trained facilitators and run a Mikaelson School Club chapter in your school or community.
+                Join our network of trained facilitators and run a Club chapter in your school or community.
               </p>
               <div className="cta-actions">
                 <Link href="/apply" className="btn btn-turquoise">

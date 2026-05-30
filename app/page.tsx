@@ -7,11 +7,10 @@ import SystemSection from './components/SystemSection';
 import ChampionSection from './components/ChampionSection';
 import Testimonials from './components/Testimonials';
 import GetInvolvedSection from './components/GetInvolvedSection';
-import CTASection from './components/CTASection';
 import Footer from './components/Footer';
 
 export const metadata = {
-  title: 'Mikaelson School Club | Every student can lead.',
+  title: 'Mikaelson School Club - Every Student can lead.',
   description:
     'Building the next generation of African leaders through habit building, leadership, and digital literacy.',
 };
@@ -28,7 +27,6 @@ export default function Home() {
       <ChampionSection />
       <Testimonials />
       <GetInvolvedSection />
-      <CTASection />
       <Footer />
     </>
   );

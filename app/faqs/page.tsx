@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'FAQs',
   description:
-    'Answers to the most common questions from schools, students, and parents about the Mikaelson School Club programme.',
+    'Answers to the most common questions from schools, students, and parents about the Club programme.',
   openGraph: {
-    title: 'FAQs | Mikaelson School Club',
-    description: 'Common questions about the Mikaelson School Club answered.',
+    title: 'FAQs | Club',
+    description: 'Common questions about the Club answered.',
   },
 };
 
@@ -46,7 +46,7 @@ const FAQ_GROUPS = [
     faqs: [
       {
         q: 'Do I need to be a good student to join?',
-        a: 'No. The club is for any student who wants to grow — not just high achievers. Many of our most active members start with low confidence.',
+        a: 'No. The club is for any student who wants to grow, not just high achievers. Many of our most active members start with low confidence.',
       },
       {
         q: 'What if I miss sessions?',

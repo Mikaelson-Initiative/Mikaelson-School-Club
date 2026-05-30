@@ -27,8 +27,8 @@ export default function ChampionSection() {
           </h2>
           <p className="muted" style={{ fontSize: 17, margin: 0 }}>
             Each month we spotlight a standout chapter and the student Champion at its heart.
-            This chapter has gone above and beyond — building culture, holding members accountable,
-            and modelling what Mikaelson leadership looks like in practice.
+            This chapter has gone above and beyond, building culture, holding members accountable,
+            and modelling what Club leadership looks like in practice.
           </p>
           <div style={{ marginTop: 26 }}>
             <div className="feat">

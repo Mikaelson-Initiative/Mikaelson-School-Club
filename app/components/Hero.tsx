@@ -31,8 +31,8 @@ export default function Hero() {
               with practical leadership skills, personal growth systems, and digital literacy.
             </p>
             <div className="hero-actions">
-              <Link href="/get-involved" className="btn btn-primary">
-                Join the Club <IconArrow size={16} className="arr" />
+              <Link href="/apply" className="btn btn-primary">
+                Apply for a Chapter <IconArrow size={16} className="arr" />
               </Link>
               <Link href="/#pillars" className="btn btn-ghost">
                 Explore Programs

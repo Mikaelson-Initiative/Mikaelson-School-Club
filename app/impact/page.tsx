@@ -3,10 +3,10 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Impact & Results',
   description:
-    'How Mikaelson School Club measures and reports impact — attendance, habit data, student stories, and outcomes from our chapters.',
+    'How Club measures and reports impact, attendance, habit data, student stories, and outcomes from our chapters.',
   openGraph: {
-    title: 'Impact & Results | Mikaelson School Club',
-    description: 'Transparent impact reporting from Mikaelson School Club chapters.',
+    title: 'Impact & Results | Club',
+    description: 'Transparent impact reporting from Club chapters.',
   },
 };
 
@@ -18,9 +18,9 @@ import { IconArrow, IconCheck } from '../components/Icons';
 import Link from 'next/link';
 
 const STATS = [
-  { value: '—', label: 'Chapters', sub: 'Launching 2025' },
-  { value: '—', label: 'Students', sub: 'Enrolling now' },
-  { value: '—', label: 'Cities', sub: 'Starting Nigeria & Ghana' },
+  { value: 'TBA', label: 'Chapters', sub: 'Launching 2025' },
+  { value: 'TBA', label: 'Students', sub: 'Enrolling now' },
+  { value: 'TBA', label: 'Cities', sub: 'Starting Nigeria & Ghana' },
   { value: '30+', label: 'Champions', sub: 'Trained facilitators' },
 ];
 
@@ -39,7 +39,7 @@ export default function ImpactPage() {
       <PageHero
         label="Impact"
         title="What we're building towards."
-        lede="We're in our pilot phase. This page will grow as the programme runs — with attendance data, student stories, and outcomes from our early chapters."
+        lede="We're in our pilot phase. This page will grow as the programme runs, with attendance data, student stories, and outcomes from our early chapters."
       />
 
       <section className="sec" style={{ paddingTop: 56 }}>
@@ -145,7 +145,7 @@ export default function ImpactPage() {
               <h2 className="display" style={{ fontSize: 'clamp(28px,4vw,46px)' }}>
                 Want to see how we measure success?
               </h2>
-              <p>Our programme overview explains the outcomes we&apos;re building towards — and how we track them.</p>
+              <p>Our programme overview explains the outcomes we&apos;re building towards, and how we track them.</p>
               <div className="cta-actions">
                 <Link href="/programme" className="btn btn-turquoise">
                   Read the programme overview <IconArrow size={16} className="arr" />
