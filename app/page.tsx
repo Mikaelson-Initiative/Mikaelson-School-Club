@@ -1,28 +1,35 @@
 import Header from './components/Header';
 import Hero from './components/Hero';
+import StatBar from './components/StatBar';
 import MissionSection from './components/MissionSection';
 import CorePillars from './components/CorePillars';
+import SystemSection from './components/SystemSection';
 import ChampionSection from './components/ChampionSection';
+import Testimonials from './components/Testimonials';
+import GetInvolvedSection from './components/GetInvolvedSection';
 import CTASection from './components/CTASection';
 import Footer from './components/Footer';
 
 export const metadata = {
   title: 'Mikaelson School Club | Every student can lead.',
-  description: 'Building the next generation of African leaders through habit building, leadership, and digital literacy.',
+  description:
+    'Building the next generation of African leaders through habit building, leadership, and digital literacy.',
 };
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-surface text-on-surface">
+    <>
       <Header />
-      <main className="pt-20">
-        <Hero />
-        <MissionSection />
-        <CorePillars />
-        <ChampionSection />
-        <CTASection />
-      </main>
+      <Hero />
+      <StatBar />
+      <MissionSection />
+      <CorePillars />
+      <SystemSection />
+      <ChampionSection />
+      <Testimonials />
+      <GetInvolvedSection />
+      <CTASection />
       <Footer />
-    </div>
+    </>
   );
 }

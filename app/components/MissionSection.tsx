@@ -1,23 +1,29 @@
+import Reveal from './Reveal';
+
 export default function MissionSection() {
   return (
-    <section className="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto bg-surface">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-center">
-        <div className="md:col-span-5">
-          <div className="text-primary font-label-md text-label-md mb-stack-sm tracking-widest font-bold">
-            01 · OUR MISSION
-          </div>
-          <h2 className="font-headline-lg text-headline-lg mb-stack-md text-on-surface">
-            Nurturing Excellence and Intentional Growth.
+    <section className="sec" id="mission">
+      <div
+        className="wrap"
+        style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 56, alignItems: 'start' }}
+      >
+        <Reveal>
+          <span className="label">01 · Our Mission</span>
+          <h2 className="display" style={{ fontSize: 'clamp(30px,4vw,46px)', marginTop: 16 }}>
+            Nurturing excellence and intentional growth.
           </h2>
-          <div className="w-16 h-1 bg-primary-container mb-stack-lg"></div>
-        </div>
-        <div className="md:col-span-7">
-          <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-            Mikaelson School Club is a dedicated youth development space within our school ecosystem. We provide a structured
-            community where students build discipline through daily systems and shared accountability. We believe that leadership
-            isn&apos;t a title—it&apos;s a series of habits, consistent thinking, and an evolved identity.
+        </Reveal>
+        <Reveal delay={120}>
+          <p style={{ fontSize: 19, lineHeight: 1.65, margin: 0 }}>
+            Mikaelson School Club is a structured youth-development space inside your school.
+            We give students a community where they build discipline through daily habits and
+            shared accountability — because leadership isn&apos;t a title.
           </p>
-        </div>
+          <p className="muted" style={{ fontSize: 17, marginTop: 18 }}>
+            It&apos;s a series of habits, consistent thinking, and an evolved identity. We make that
+            growth measurable, repeatable, and contagious across a whole school.
+          </p>
+        </Reveal>
       </div>
     </section>
   );

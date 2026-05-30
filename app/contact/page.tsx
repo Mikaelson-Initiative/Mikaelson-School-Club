@@ -1,128 +1,354 @@
-import Footer from "../components/Footer";
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import PageHero from '../components/PageHero';
+import Reveal from '../components/Reveal';
+import { IconMail, IconGlobe, IconCompass } from '../components/Icons';
+import Link from 'next/link';
+
+const CONTACTS = [
+  {
+    Icon: IconMail,
+    title: 'General Enquiries',
+    email: 'hello@mikaelsoninitiative.org',
+    body: 'For questions about the programme, chapters, and membership.',
+  },
+  {
+    Icon: IconGlobe,
+    title: 'Partnerships & Sponsors',
+    email: 'partners@mikaelsoninitiative.org',
+    body: 'For organisations interested in supporting the initiative.',
+  },
+  {
+    Icon: IconCompass,
+    title: 'Media',
+    email: 'media@mikaelsoninitiative.org',
+    body: 'For press, interviews, and coverage requests.',
+  },
+];
+
+const SOCIALS = [
+  { label: 'X', href: '#' },
+  { label: 'in', href: '#' },
+  { label: 'ig', href: '#' },
+  { label: 'yt', href: '#' },
+];
 
 export default function ContactPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-black">
-      <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            Mikaelson School Club
-          </a>
-          <ul className="hidden md:flex gap-8 text-gray-700 dark:text-gray-300">
-            <li><a href="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a></li>
-            <li><a href="/events" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Events</a></li>
-            <li><a href="/leadership" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Leadership</a></li>
-            <li><a href="/get-involved" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Get Involved</a></li>
-            <li><a href="/resources" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Resources</a></li>
-            <li><a href="/partners" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Partners</a></li>
-            <li><a href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition font-medium">Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+    <>
+      <Header />
 
-      <main className="flex-1">
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">Get in Touch</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">We'd love to hear from you. Reach out anytime!</p>
-        </section>
+      <PageHero
+        label="Get in Touch"
+        title="We'd love to hear from you."
+        lede="Whether you're a school, a student, a potential partner, or media — reach out."
+      />
 
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Contact Information</h2>
+      <section className="sec">
+        <div className="wrap">
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 64,
+              alignItems: 'start',
+            }}
+          >
+            {/* Left — Contact blocks + socials */}
+            <div>
+              <Reveal>
+                <span className="label">Contact</span>
+                <h2
+                  className="display"
+                  style={{ fontSize: 'clamp(24px,2.8vw,36px)', margin: '14px 0 32px' }}
+                >
+                  Get in touch directly.
+                </h2>
+              </Reveal>
 
-            <div className="space-y-8">
-              <div className="flex gap-4">
-                <div className="text-3xl">📧</div>
-                <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">Email</h3>
-                  <p className="text-gray-600 dark:text-gray-400">For general inquiries:</p>
-                  <a href="mailto:info@mikaelsonclub.edu" className="text-blue-600 dark:text-blue-400 hover:underline">
-                    info@mikaelsonclub.edu
-                  </a>
-                </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+                {CONTACTS.map((c, i) => (
+                  <Reveal delay={i * 80} key={c.email}>
+                    <div className="feat">
+                      <div className="feat-ico">
+                        <c.Icon size={20} />
+                      </div>
+                      <div>
+                        <h5>{c.title}</h5>
+                        <a
+                          href={`mailto:${c.email}`}
+                          style={{
+                            color: 'var(--accent-ink)',
+                            textDecoration: 'none',
+                            fontWeight: 600,
+                            fontSize: 15,
+                            display: 'block',
+                            marginBottom: 4,
+                          }}
+                        >
+                          {c.email}
+                        </a>
+                        <p>{c.body}</p>
+                      </div>
+                    </div>
+                  </Reveal>
+                ))}
               </div>
 
-              <div className="flex gap-4">
-                <div className="text-3xl">📞</div>
-                <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">Phone</h3>
-                  <p className="text-gray-600 dark:text-gray-400">Club President:</p>
-                  <a href="tel:+1-555-0123" className="text-blue-600 dark:text-blue-400 hover:underline">
-                    (555) 0123
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="text-3xl">📍</div>
-                <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">Location</h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Room 301<br />
-                    Main School Building<br />
-                    123 School Street
+              {/* Social row */}
+              <Reveal delay={260}>
+                <div style={{ marginTop: 40 }}>
+                  <p
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      fontSize: 11,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.14em',
+                      color: 'var(--muted)',
+                      fontWeight: 700,
+                      margin: '0 0 14px',
+                    }}
+                  >
+                    Follow us
                   </p>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    {SOCIALS.map((s) => (
+                      <a
+                        key={s.label}
+                        href={s.href}
+                        aria-label={s.label}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: '50%',
+                          background: 'var(--accent-soft)',
+                          color: 'var(--accent-ink)',
+                          display: 'grid',
+                          placeItems: 'center',
+                          fontFamily: 'var(--font-mono)',
+                          fontSize: 13,
+                          fontWeight: 700,
+                          textDecoration: 'none',
+                          transition: 'background .2s, transform .2s',
+                        }}
+                      >
+                        {s.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              <div className="flex gap-4">
-                <div className="text-3xl">⏰</div>
-                <div>
-                  <h3 className="font-bold text-gray-900 dark:text-white mb-1">Office Hours</h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Tuesday & Thursday: 3:30 PM - 5:00 PM<br />
-                    Or by appointment
-                  </p>
-                </div>
-              </div>
+              </Reveal>
             </div>
 
-            <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800">
-              <h3 className="font-bold text-gray-900 dark:text-white mb-4">Follow Us</h3>
-              <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition">f</a>
-                <a href="#" className="w-10 h-10 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition">𝕏</a>
-                <a href="#" className="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition">📷</a>
-                <a href="#" className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition">in</a>
+            {/* Right — Simple contact form (mailto fallback, no JS required) */}
+            <Reveal delay={100}>
+              <div
+                style={{
+                  background: 'var(--surface-2)',
+                  border: '1px solid var(--line)',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: 36,
+                }}
+              >
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-display)',
+                    fontWeight: 600,
+                    fontSize: 22,
+                    margin: '0 0 8px',
+                    letterSpacing: '-0.01em',
+                  }}
+                >
+                  Send a message
+                </h3>
+                <p
+                  style={{
+                    color: 'var(--muted)',
+                    fontSize: 14.5,
+                    margin: '0 0 24px',
+                    lineHeight: 1.55,
+                  }}
+                >
+                  Use the email addresses above or fill in the form below:
+                </p>
+
+                <form
+                  action="mailto:hello@mikaelsoninitiative.org"
+                  method="GET"
+                  style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+                >
+                  <div>
+                    <label
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 11,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        color: 'var(--accent-ink)',
+                        fontWeight: 700,
+                        display: 'block',
+                        marginBottom: 7,
+                      }}
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      placeholder="Your name"
+                      style={{
+                        border: '1px solid var(--line)',
+                        borderRadius: 'var(--radius)',
+                        padding: '11px 14px',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 15,
+                        width: '100%',
+                        background: 'white',
+                        color: 'var(--text)',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 11,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        color: 'var(--accent-ink)',
+                        fontWeight: 700,
+                        display: 'block',
+                        marginBottom: 7,
+                      }}
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="you@email.com"
+                      style={{
+                        border: '1px solid var(--line)',
+                        borderRadius: 'var(--radius)',
+                        padding: '11px 14px',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 15,
+                        width: '100%',
+                        background: 'white',
+                        color: 'var(--text)',
+                        outline: 'none',
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 11,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        color: 'var(--accent-ink)',
+                        fontWeight: 700,
+                        display: 'block',
+                        marginBottom: 7,
+                      }}
+                    >
+                      Type
+                    </label>
+                    <select
+                      name="subject"
+                      style={{
+                        border: '1px solid var(--line)',
+                        borderRadius: 'var(--radius)',
+                        padding: '11px 14px',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 15,
+                        width: '100%',
+                        background: 'white',
+                        color: 'var(--text)',
+                        outline: 'none',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <option value="School enquiry">School enquiry</option>
+                      <option value="Partnership">Partnership</option>
+                      <option value="Media">Media</option>
+                      <option value="General">General</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 11,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        color: 'var(--accent-ink)',
+                        fontWeight: 700,
+                        display: 'block',
+                        marginBottom: 7,
+                      }}
+                    >
+                      Message
+                    </label>
+                    <textarea
+                      name="body"
+                      rows={4}
+                      placeholder="Tell us what&apos;s on your mind..."
+                      style={{
+                        border: '1px solid var(--line)',
+                        borderRadius: 'var(--radius)',
+                        padding: '11px 14px',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 15,
+                        width: '100%',
+                        background: 'white',
+                        color: 'var(--text)',
+                        outline: 'none',
+                        resize: 'vertical',
+                        lineHeight: 1.6,
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="btn btn-turquoise"
+                    style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}
+                  >
+                    Send message
+                  </button>
+                </form>
+
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: 'var(--muted)',
+                    margin: '16px 0 0',
+                    fontFamily: 'var(--font-mono)',
+                    letterSpacing: '0.02em',
+                  }}
+                >
+                  Or email{' '}
+                  <Link
+                    href="/contact"
+                    style={{ color: 'var(--accent-ink)', textDecoration: 'none', fontWeight: 700 }}
+                  >
+                    hello@mikaelsoninitiative.org
+                  </Link>{' '}
+                  directly.
+                </p>
               </div>
-            </div>
+            </Reveal>
           </div>
-
-          <div className="bg-gray-50 dark:bg-gray-900 p-8 rounded-lg">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Send us a Message</h2>
-            <form className="space-y-4">
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Name</label>
-                <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 dark:bg-gray-800 dark:text-white" placeholder="Your name" />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Email</label>
-                <input type="email" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 dark:bg-gray-800 dark:text-white" placeholder="your@email.com" />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Subject</label>
-                <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 dark:bg-gray-800 dark:text-white" placeholder="How can we help?" />
-              </div>
-
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 font-medium mb-2">Message</label>
-                <textarea rows={5} className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:border-blue-600 dark:bg-gray-800 dark:text-white" placeholder="Your message here..."></textarea>
-              </div>
-
-              <button type="submit" className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-bold">
-                Send Message
-              </button>
-            </form>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-4">
-              We'll get back to you within 24 hours during school days.
-            </p>
-          </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       <Footer />
-    </div>
+    </>
   );
 }

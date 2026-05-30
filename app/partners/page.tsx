@@ -1,176 +1,143 @@
-import Footer from "../components/Footer";
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import PageHero from '../components/PageHero';
+import Reveal from '../components/Reveal';
+import { IconArrow, IconCheck, IconGlobe, IconDigital, IconCompass, IconLead } from '../components/Icons';
+import Link from 'next/link';
+
+const PARTNERS = [
+  { name: 'Sahara Tech Group', cat: 'Technology Partner', Icon: IconDigital, d: 'Provides mentorship and internship opportunities for members interested in tech.' },
+  { name: 'Ubuntu Community Foundation', cat: 'Community Partner', Icon: IconGlobe, d: 'Collaborates with us on service projects and community initiatives.' },
+  { name: 'PanAfrican Education Network', cat: 'Educational Partner', Icon: IconCompass, d: 'Offers scholarships and educational resources for chapter members.' },
+  { name: 'Young Leaders Council', cat: 'Leadership Partner', Icon: IconLead, d: 'Provides leadership training and professional development programmes.' },
+];
+
+const TIERS = [
+  { tier: 'Platinum', companies: [{ name: 'Apex Capital' }] },
+  { tier: 'Gold', companies: [{ name: 'BrightFuture Education' }, { name: 'Unity Bank' }] },
+  { tier: 'Silver', companies: [{ name: 'Local Business Hub' }, { name: 'Innovation Labs' }, { name: 'Horizon Ventures' }] },
+];
+
+const BENEFITS = [
+  { h: 'Partner benefits', items: ['Brand visibility across chapters', 'Direct student engagement', 'Quarterly impact reporting'] },
+  { h: 'Sponsorship tiers', items: ['Platinum', 'Gold', 'Silver'] },
+  { h: 'Collaboration', items: ['Mentorship & internships', 'Co-branded projects', 'Event sponsorship'] },
+];
 
 export default function PartnersPage() {
-  const partners = [
-    {
-      name: "Tech Innovations Inc.",
-      category: "Technology Partner",
-      description: "Provides mentorship and internship opportunities for club members interested in tech.",
-      logo: "🏢",
-      website: "#"
-    },
-    {
-      name: "Community Development Foundation",
-      category: "Community Partner",
-      description: "Collaborates with us on service projects and community initiatives.",
-      logo: "🤝",
-      website: "#"
-    },
-    {
-      name: "Global Education Network",
-      category: "Educational Partner",
-      description: "Offers scholarships and educational resources for club members.",
-      logo: "📚",
-      website: "#"
-    },
-    {
-      name: "Young Leaders Council",
-      category: "Leadership Partner",
-      description: "Provides leadership training and professional development programs.",
-      logo: "👥",
-      website: "#"
-    }
-  ];
-
-  const sponsors = [
-    {
-      tier: "Platinum Sponsor",
-      companies: [
-        { name: "Premier Tech Solutions", logo: "💼" }
-      ]
-    },
-    {
-      tier: "Gold Sponsor",
-      companies: [
-        { name: "Excellence in Education", logo: "🎓" },
-        { name: "Community First Bank", logo: "🏦" }
-      ]
-    },
-    {
-      tier: "Silver Sponsor",
-      companies: [
-        { name: "Local Business Hub", logo: "🏪" },
-        { name: "Innovation Labs", logo: "🔬" },
-        { name: "Future Leaders Inc.", logo: "🚀" }
-      ]
-    }
-  ];
-
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-black">
-      <header className="sticky top-0 z-40 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <a href="/" className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-            Mikaelson School Club
-          </a>
-          <ul className="hidden md:flex gap-8 text-gray-700 dark:text-gray-300">
-            <li><a href="/about" className="hover:text-blue-600 dark:hover:text-blue-400 transition">About</a></li>
-            <li><a href="/events" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Events</a></li>
-            <li><a href="/leadership" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Leadership</a></li>
-            <li><a href="/get-involved" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Get Involved</a></li>
-            <li><a href="/resources" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Resources</a></li>
-            <li><a href="/partners" className="hover:text-blue-600 dark:hover:text-blue-400 transition font-medium">Partners</a></li>
-            <li><a href="/contact" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Contact</a></li>
-          </ul>
-        </nav>
-      </header>
+    <>
+      <Header />
+      <PageHero
+        label="Partners & Sponsors"
+        title="The people who back the next generation."
+        lede="Every chapter is powered by organisations that share our commitment to student development. Their support is tied to transparent, measurable outcomes."
+      />
 
-      <main className="flex-1">
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">Partners & Sponsors</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">Organizations supporting the Mikaelson School Club</p>
-        </section>
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12">Our Partners</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {partners.map((partner, index) => (
-              <div key={index} className="border border-gray-200 dark:border-gray-800 p-6 rounded-lg hover:shadow-lg transition">
-                <div className="flex items-start gap-4">
-                  <div className="text-5xl">{partner.logo}</div>
-                  <div className="flex-1">
-                    <span className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium mb-2">
-                      {partner.category}
-                    </span>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{partner.name}</h3>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">{partner.description}</p>
-                    <a href={partner.website} className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
-                      Learn More →
+      <section className="sec" style={{ paddingTop: 56 }}>
+        <div className="wrap">
+          <Reveal>
+            <span className="label">Our partners</span>
+            <h2 className="display" style={{ fontSize: 'clamp(26px,3.2vw,38px)', margin: '14px 0 36px' }}>
+              Who we work with
+            </h2>
+          </Reveal>
+          <div className="partners">
+            {PARTNERS.map((p, i) => (
+              <Reveal delay={i * 90} key={p.name}>
+                <div className="partner">
+                  <div className="partner-logo"><p.Icon size={26} /></div>
+                  <div>
+                    <span className="badge" style={{ marginBottom: 10 }}>{p.cat}</span>
+                    <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 20, margin: '10px 0 8px' }}>{p.name}</h3>
+                    <p className="muted" style={{ margin: '0 0 16px', fontSize: 14.5 }}>{p.d}</p>
+                    <a className="link-arrow" href="#">
+                      Learn more <IconArrow size={15} className="arr" />
                     </a>
                   </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="bg-gray-50 dark:bg-gray-900 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12">Our Sponsors</h2>
-            <div className="space-y-12">
-              {sponsors.map((sponsorLevel, index) => (
-                <div key={index}>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{sponsorLevel.tier}</h3>
-                  <div className={`grid gap-6 ${
-                    sponsorLevel.companies.length === 1
-                      ? "grid-cols-1"
-                      : sponsorLevel.companies.length === 2
-                      ? "grid-cols-1 md:grid-cols-2"
-                      : "grid-cols-1 md:grid-cols-3"
-                  }`}>
-                    {sponsorLevel.companies.map((company, idx) => (
-                      <div key={idx} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition text-center">
-                        <div className="text-5xl mb-3">{company.logo}</div>
-                        <h4 className="font-bold text-gray-900 dark:text-white">{company.name}</h4>
-                      </div>
-                    ))}
-                  </div>
+      <section className="sec" style={{ background: 'var(--surface-2)', paddingTop: 72 }}>
+        <div className="wrap">
+          <Reveal>
+            <span className="label">Our sponsors</span>
+            <h2 className="display" style={{ fontSize: 'clamp(26px,3.2vw,38px)', margin: '14px 0 40px' }}>
+              By tier
+            </h2>
+          </Reveal>
+          {TIERS.map((t, ti) => (
+            <Reveal delay={ti * 80} key={t.tier}>
+              <div className="tier">
+                <div className="tier-head">
+                  <h3>{t.tier}</h3>
+                  <span className="badge live">{t.companies.length} partner{t.companies.length > 1 ? 's' : ''}</span>
+                  <span className="tier-rule" />
                 </div>
-              ))}
+                <div
+                  className="sponsor-grid"
+                  style={{ gridTemplateColumns: `repeat(${Math.min(3, t.companies.length)}, 1fr)` }}
+                >
+                  {t.companies.map((c) => (
+                    <div className="sponsor-logo" key={c.name}>
+                      <div className="sponsor-mark">
+                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: 13, fontWeight: 700, color: 'var(--accent-ink)' }}>
+                          {c.name.charAt(0)}
+                        </span>
+                      </div>
+                      <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 16, margin: 0 }}>{c.name}</h4>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      <section className="sec">
+        <div className="wrap">
+          <Reveal>
+            <div className="cta-band" style={{ textAlign: 'left' }}>
+              <div className="cta-blob cta-blob-tr" />
+              <div className="cta-blob cta-blob-bl" />
+              <span className="label">Become a partner</span>
+              <h2 className="display" style={{ margin: '14px 0 12px', fontSize: 'clamp(28px,3.6vw,44px)', maxWidth: '16em' }}>
+                Invest in measurable youth impact.
+              </h2>
+              <p style={{ margin: 0 }}>
+                We partner with organisations that share our commitment to student development and community growth.
+              </p>
+              <div className="benefits-grid">
+                {BENEFITS.map((b) => (
+                  <div key={b.h}>
+                    <h4>{b.h}</h4>
+                    <ul>
+                      {b.items.map((item) => (
+                        <li key={item}>
+                          <span className="ck"><IconCheck size={17} /></span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+              <div className="cta-actions" style={{ justifyContent: 'flex-start' }}>
+                <Link href="/contact" className="btn btn-primary">
+                  Talk to us about partnering <IconArrow size={16} className="arr" />
+                </Link>
+              </div>
             </div>
-          </div>
-        </section>
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-900 dark:to-blue-950 p-8 rounded-lg text-white">
-            <h2 className="text-3xl font-bold mb-4">Interested in Partnering?</h2>
-            <p className="text-lg mb-6">We're always looking for organizations and businesses that share our commitment to student development and community growth.</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div>
-                <h3 className="font-bold mb-2 text-blue-100">Partner Benefits</h3>
-                <ul className="text-blue-50 text-sm space-y-1">
-                  <li>✓ Brand visibility</li>
-                  <li>✓ Student engagement</li>
-                  <li>✓ Community impact</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold mb-2 text-blue-100">Sponsorship Tiers</h3>
-                <ul className="text-blue-50 text-sm space-y-1">
-                  <li>✓ Platinum</li>
-                  <li>✓ Gold</li>
-                  <li>✓ Silver</li>
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-bold mb-2 text-blue-100">Collaboration Types</h3>
-                <ul className="text-blue-50 text-sm space-y-1">
-                  <li>✓ Mentorship</li>
-                  <li>✓ Internships</li>
-                  <li>✓ Events</li>
-                </ul>
-              </div>
-            </div>
-
-            <button className="px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition font-bold">
-              Contact Us About Partnership
-            </button>
-          </div>
-        </section>
-      </main>
+          </Reveal>
+        </div>
+      </section>
 
       <Footer />
-    </div>
+    </>
   );
 }
