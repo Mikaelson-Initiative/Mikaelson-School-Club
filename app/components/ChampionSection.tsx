@@ -21,14 +21,14 @@ export default function ChampionSection() {
           </div>
         </Reveal>
         <Reveal delay={120}>
-          <span className="label">The Mentor</span>
+          <span className="label">Chapter of the Month</span>
           <h2 className="display" style={{ fontSize: 'clamp(28px,3.6vw,42px)', margin: '16px 0 18px' }}>
-            Meet Your Club Champion
+            Chapter of the Month &amp; Their Champion
           </h2>
           <p className="muted" style={{ fontSize: 17, margin: 0 }}>
-            Every chapter is anchored by a dedicated Champion — a student leader or teacher trained
-            to facilitate our systems and nurture the club&apos;s growth. They&apos;re the catalyst for
-            transformation, ensuring every member is held accountable to their potential.
+            Each month we spotlight a standout chapter and the student Champion at its heart.
+            This chapter has gone above and beyond — building culture, holding members accountable,
+            and modelling what Mikaelson leadership looks like in practice.
           </p>
           <div style={{ marginTop: 26 }}>
             <div className="feat">

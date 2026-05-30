@@ -18,15 +18,15 @@ import { IconArrow } from '../components/Icons';
 import Link from 'next/link';
 
 const OFFICERS = [
-  { name: 'Amara Okafor', role: 'President', bio: 'Final-year student building community and academic excellence across chapters.', email: 'amara@mikaelson.org' },
-  { name: 'Kwame Mensah', role: 'Vice President', bio: 'Leads chapter expansion and member engagement initiatives.', email: 'kwame@mikaelson.org' },
-  { name: 'Zanele Dlamini', role: 'Secretary', bio: 'Manages communications and maintains the chapter playbook.', email: 'zanele@mikaelson.org' },
-  { name: 'Tunde Adeyemi', role: 'Treasurer', bio: 'Oversees budgets, grants, and sponsor partnerships.', email: 'tunde@mikaelson.org' },
+  { name: 'Mikaelson Initiative', role: 'Founder & Executive Director', bio: 'Driving the vision to equip every African secondary school student with the mindset and tools to lead.', email: 'hello@mikaelsoninitiative.org' },
+  { name: 'Programme Director', role: 'Head of Programmes', bio: 'Designs and oversees the weekly curriculum, chapter playbooks, and member assessment systems.', email: 'hello@mikaelsoninitiative.org' },
+  { name: 'Partnerships Lead', role: 'Head of Partnerships', bio: 'Builds relationships with schools, sponsors, and community organisations that power each chapter.', email: 'hello@mikaelsoninitiative.org' },
+  { name: 'Operations Lead', role: 'Head of Operations', bio: 'Manages chapter logistics, champion training, and cross-network communications.', email: 'hello@mikaelsoninitiative.org' },
 ];
 
 const ADVISORS = [
-  { name: 'Dr. Naledi Khumalo', role: 'Faculty Advisor', dept: 'Academic Affairs', bio: 'Mentor to the chapter leadership network and academic programme.' },
-  { name: 'Mr. Samuel Adeyemi', role: 'Co-Advisor', dept: 'Student Life', bio: 'Supports chapter activities and day-to-day student development.' },
+  { name: 'Advisory Board', role: 'Strategic Advisor', dept: 'Leadership & Education', bio: 'A council of educators, business leaders, and alumni who guide programme strategy and quality.' },
+  { name: 'School Liaison Officer', role: 'School Relations', dept: 'Partnerships', bio: 'The direct point of contact for principals and teachers onboarding new chapters.' },
 ];
 
 export default function LeadershipPage() {
@@ -34,17 +34,17 @@ export default function LeadershipPage() {
     <>
       <Header />
       <PageHero
-        label="The Team"
-        title="The students leading the movement."
-        lede="Mikaelson is student-run by design. Our officers and faculty advisors steer the network, support every chapter, and model the leadership we teach."
+        label="Our Team"
+        title="The team behind the movement."
+        lede="Mikaelson School Club is built and run by a dedicated team committed to one mission — giving every African secondary school student the habits, mindset, and community to lead."
       />
 
       <section className="sec" style={{ paddingTop: 56 }}>
         <div className="wrap">
           <Reveal>
-            <span className="label">01 · Club Officers</span>
+            <span className="label">01 · Core Team</span>
             <h2 className="display" style={{ fontSize: 'clamp(26px,3.2vw,38px)', margin: '14px 0 36px' }}>
-              Elected leadership
+              Who we are
             </h2>
           </Reveal>
           <div className="people">
@@ -70,9 +70,9 @@ export default function LeadershipPage() {
       <section className="sec" style={{ background: 'var(--surface-2)', paddingTop: 72 }}>
         <div className="wrap">
           <Reveal>
-            <span className="label">02 · Faculty Advisors</span>
+            <span className="label">02 · Advisors</span>
             <h2 className="display" style={{ fontSize: 'clamp(26px,3.2vw,38px)', margin: '14px 0 36px' }}>
-              Guiding hands
+              Our advisors
             </h2>
           </Reveal>
           <div className="advisors">

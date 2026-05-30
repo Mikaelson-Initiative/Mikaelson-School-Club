@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const NAV_LINKS = [
-  ['About', '/about'],
+  ['About Us', '/about'],
   ['The Programme', '/programme'],
-  ['For Schools', '/for-schools'],
-  ['For Students', '/for-students'],
+  ['Partners', '/partners'],
+  ['Chapters', '/chapters'],
+  ['Our Team', '/leadership'],
 ];
 
 export default function Header() {

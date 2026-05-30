@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
           {COLS.map((c) => (
             <div className="foot-col" key={c.h}>
-              <h6>{c.h}</h6>
+              <h6 style={{ color: 'var(--accent-2)' }}>{c.h}</h6>
               {c.links.map(([label, href]) => (
                 <Link key={label} href={href}>{label}</Link>
               ))}
