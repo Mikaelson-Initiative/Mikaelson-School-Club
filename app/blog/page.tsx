@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Blog & Stories',
+  description:
+    'Student spotlights, session recaps, and programme updates from Mikaelson School Club chapters across Africa.',
+  openGraph: {
+    title: 'Blog & Stories | Mikaelson School Club',
+    description: 'Voices from the club — student stories and chapter updates.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

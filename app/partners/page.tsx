@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Partners & Sponsors',
+  description:
+    'Organisations supporting the Mikaelson School Club — technology partners, educational partners, and programme sponsors.',
+  openGraph: {
+    title: 'Partners & Sponsors | Mikaelson School Club',
+    description: 'Partners and sponsors backing the next generation of African leaders.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

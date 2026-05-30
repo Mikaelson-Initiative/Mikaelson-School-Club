@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Terms of Use',
+  description:
+    'Terms and conditions for using the Mikaelson School Club website and participating in the programme.',
+  openGraph: {
+    title: 'Terms of Use | Mikaelson School Club',
+    description: 'Terms of Use for the Mikaelson School Club website.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Reveal from '../components/Reveal';

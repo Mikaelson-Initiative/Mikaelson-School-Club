@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Impact & Results',
+  description:
+    'How Mikaelson School Club measures and reports impact — attendance, habit data, student stories, and outcomes from our chapters.',
+  openGraph: {
+    title: 'Impact & Results | Mikaelson School Club',
+    description: 'Transparent impact reporting from Mikaelson School Club chapters.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Our Team',
+  description:
+    'The people behind the Mikaelson School Club programme — leadership, Champions, and the network building it chapter by chapter.',
+  openGraph: {
+    title: 'Our Team | Mikaelson School Club',
+    description: 'Meet the team building Mikaelson School Club across Africa.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

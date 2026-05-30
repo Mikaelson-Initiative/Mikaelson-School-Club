@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'FAQs',
+  description:
+    'Answers to the most common questions from schools, students, and parents about the Mikaelson School Club programme.',
+  openGraph: {
+    title: 'FAQs | Mikaelson School Club',
+    description: 'Common questions about the Mikaelson School Club answered.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

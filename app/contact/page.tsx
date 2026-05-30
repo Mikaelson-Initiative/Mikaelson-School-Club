@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact',
+  description:
+    'Get in touch with Mikaelson School Club — general enquiries, school partnerships, sponsorship, and media contact.',
+  openGraph: {
+    title: 'Contact | Mikaelson School Club',
+    description: 'Contact Mikaelson School Club for enquiries, partnerships, and media.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

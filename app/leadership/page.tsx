@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Leadership',
+  description:
+    'Meet the elected student officers and faculty advisors leading the Mikaelson School Club network across Africa.',
+  openGraph: {
+    title: 'Leadership | Mikaelson School Club',
+    description: 'The students and advisors leading the Mikaelson School Club network.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';

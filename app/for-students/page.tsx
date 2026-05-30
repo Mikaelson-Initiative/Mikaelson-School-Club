@@ -1,3 +1,15 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'For Students',
+  description:
+    'What students experience in the Mikaelson School Club — weekly sessions, leadership roles, habit tracking, and community projects.',
+  openGraph: {
+    title: 'For Students | Mikaelson School Club',
+    description: 'For students — what you will experience, do, and gain in the club.',
+  },
+};
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
