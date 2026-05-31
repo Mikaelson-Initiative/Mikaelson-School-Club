@@ -231,6 +231,9 @@ section { position: relative; }
 .sec { padding: 92px 0; }
 .sec-head { max-width: 720px; }
 
+/* ── Mission Grid ── */
+.mission-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 56px; align-items: start; }
+
 /* ── Stat Bar ── */
 .stats {
   display: grid;
@@ -702,22 +705,38 @@ section { position: relative; }
   .chapter .badge { display: none; }
   .sec { padding: 72px 0; }
   .involve-panel { padding: 36px; }
+  .mission-grid { grid-template-columns: 1fr; gap: 32px; }
+  .hero { padding-top: 120px; padding-bottom: 72px; }
 }
 @media (max-width: 600px) {
-  .wrap { padding: 0 20px; }
+  .wrap { padding: 0 18px; }
   .stats, .cards, .rhythm, .tgrid, .foot-grid { grid-template-columns: 1fr; }
   .sec { padding: 56px 0; }
-  .hero { padding-top: 100px; padding-bottom: 56px; }
-  .hero-lede { font-size: 16px; margin: 20px 0 26px; }
-  .hero-actions { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .page-hero { padding-top: 96px; }
+  .hero { padding-top: 96px; padding-bottom: 56px; }
+  .hero-lede { font-size: 15.5px; margin: 18px 0 24px; }
+  .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+  .hero-actions .btn { justify-content: center; text-align: center; }
+  .page-hero { padding-top: 92px; }
   .people { grid-template-columns: 1fr; }
   .cta-band { padding: 40px 24px; }
   .involve-panel { padding: 24px; gap: 24px; }
   .foot-bottom { flex-direction: column; gap: 10px; text-align: center; }
   .modal { padding: 28px 20px; }
   .quote-chip { bottom: 14px; right: 12px; }
-  .mobile-nav { padding: 70px 20px 24px; }
-  .nav-inner { padding: 14px 20px; }
-  .nav.scrolled .nav-inner { padding: 10px 20px; }
+  .mobile-nav { padding: 68px 18px 24px; }
+  .mobile-nav-back { background: rgba(0, 0, 0, 0.25); }
+  .nav-inner { padding: 13px 18px; }
+  .nav.scrolled .nav-inner { padding: 10px 18px; }
+}
+
+@media (max-width: 430px) {
+  .wrap { padding: 0 16px; }
+  .hero h1 { font-size: 38px; }
+  .hero-lede { font-size: 15px; }
+  .btn { font-size: 14px; padding: 13px 20px; }
+  .stat-num { font-size: 34px; }
+  .involve-panel { padding: 20px; }
+  .cta-band { padding: 32px 18px; }
+  .modal { padding: 24px 16px; }
+  .person-avatar { width: 78px; height: 78px; }
 }

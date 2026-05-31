@@ -3,10 +3,7 @@ import Reveal from './Reveal';
 export default function MissionSection() {
   return (
     <section className="sec" id="mission">
-      <div
-        className="wrap"
-        style={{ display: 'grid', gridTemplateColumns: '0.85fr 1.15fr', gap: 56, alignItems: 'start' }}
-      >
+      <div className="wrap mission-grid">
         <Reveal>
           <span className="label">01 · Our Mission</span>
           <h2 className="display" style={{ fontSize: 'clamp(30px,4vw,46px)', marginTop: 16 }}>
