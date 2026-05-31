@@ -169,7 +169,7 @@ export default function ForStudentsPage() {
                   </div>
                   <div>
                     <p className="nm">Kwame</p>
-                    <p className="rl">Grade 12 , Accra</p>
+                    <p className="rl">JSS 3 , Accra</p>
                   </div>
                 </div>
               </div>

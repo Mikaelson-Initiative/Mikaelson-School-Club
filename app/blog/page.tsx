@@ -21,7 +21,7 @@ const POSTS = [
   {
     category: 'Student Story',
     title: 'How tracking my habits for 30 days changed my relationship with school',
-    author: 'Amara O., Grade 11, Lagos',
+    author: 'Amara O., JSS 2, Lagos',
     excerpt: 'A student shares how the habit tracking system helped her go from inconsistent to her most productive term yet.',
   },
   {
