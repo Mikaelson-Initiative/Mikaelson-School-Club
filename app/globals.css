@@ -130,13 +130,14 @@ body {
   left: 0;
   right: 0;
   z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
   transition: background .3s ease, box-shadow .3s ease, border-color .3s ease, padding .3s ease;
-  border-bottom: 1px solid transparent;
 }
 .nav.scrolled {
-  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 20px -8px rgba(0,0,0,.1);
 }
 .nav-inner {
   display: flex;
@@ -159,11 +160,11 @@ body {
   color: var(--text);
   text-decoration: none;
 }
-.brand-logo { height: 38px; width: auto; display: block; }
+.brand-logo { height: 35px; width: 35px; display: block; object-fit: contain; }
 .brand-name {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
   letter-spacing: -0.01em;
   color: var(--accent-ink);
   white-space: nowrap;
