@@ -27,7 +27,7 @@ export default function AboutPage() {
         <section className="sec">
           <div className="wrap">
             <Reveal>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '56px', alignItems: 'start' }}>
+              <div className="grid-2col">
                 <div>
                   <span className="label">The Problem</span>
                   <h2
@@ -158,7 +158,7 @@ export default function AboutPage() {
         <section className="sec">
           <div className="wrap">
             <Reveal>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '56px', alignItems: 'start' }}>
+              <div className="grid-2col">
                 <div>
                   <span className="label">The Initiative</span>
                   <h2

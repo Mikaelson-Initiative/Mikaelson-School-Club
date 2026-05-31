@@ -57,14 +57,7 @@ export default function ApplyPage() {
 
       <section className="sec">
         <div className="wrap">
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 0.72fr',
-              gap: 56,
-              alignItems: 'start',
-            }}
-          >
+          <div className="grid-form">
             {/* Left Form */}
             <div>
               {submitted ? (
