@@ -108,7 +108,7 @@ export default function GetInvolvedPage() {
               </div>
               <input type="email" placeholder="Email Address" className="w-full px-4 py-2 rounded-lg text-gray-900" />
               <select className="w-full px-4 py-2 rounded-lg text-gray-900">
-                <option>Select Grade Level</option>
+                <option>Select Class</option>
                 <option>Freshman</option>
                 <option>Sophomore</option>
                 <option>Junior</option>

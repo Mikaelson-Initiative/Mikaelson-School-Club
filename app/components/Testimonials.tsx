@@ -4,7 +4,7 @@ const QUOTES = [
   {
     q: "I used to wait to be picked. Now I run our chapter's project and three of my friends joined because of it.",
     nm: 'Amara O.',
-    rl: 'Grade 11 · Lagos',
+    rl: 'JSS 2 · Lagos',
   },
   {
     q: 'The habit tracking changed how my students show up, to the club and to class. It\'s the most useful thing we\'ve added all year.',

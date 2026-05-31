@@ -179,7 +179,7 @@ export default function ProgrammePage() {
                     </div>
                     <div>
                       <p className="nm">Amara</p>
-                      <p className="rl">Grade 11 · Lagos</p>
+                      <p className="rl">JSS 2 · Lagos</p>
                     </div>
                   </div>
                 </div>
