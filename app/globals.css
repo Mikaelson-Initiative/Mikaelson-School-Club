@@ -415,6 +415,9 @@ section { position: relative; }
 .foot-col a:hover { opacity: 1; color: var(--accent-ink); }
 .foot-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 56px; padding-top: 26px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 .foot-about { color: var(--muted); font-size: 14.5px; max-width: 26em; margin: 18px 0 0; }
+.foot-socials { display: flex; gap: 14px; margin-top: 20px; }
+.foot-socials a { color: var(--muted); transition: color .2s; }
+.foot-socials a:hover { color: var(--accent-ink); }
 
 /* ── Subpage Hero ── */
 .page-hero { padding: 150px 0 6px; position: relative; }

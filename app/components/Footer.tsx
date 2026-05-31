@@ -1,4 +1,4 @@
-import { IconGlobe, IconMail, IconLink } from './Icons';
+import { IconGlobe, IconMail, IconInstagram } from './Icons';
 import Link from 'next/link';
 
 const COLS = [
@@ -55,10 +55,10 @@ export default function Footer() {
             <p className="foot-about">
               Build excellence through trusted leadership.
             </p>
-            <div style={{ display: 'flex', gap: 12, marginTop: 20, color: 'var(--muted)' }}>
-              <IconGlobe size={20} />
-              <IconMail size={20} />
-              <IconLink size={20} />
+            <div className="foot-socials">
+              <a href="https://instagram.com/mikaelsonschoolclub" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><IconInstagram size={20} /></a>
+              <a href="mailto:hello@mikaelsoninitiative.org" aria-label="Email"><IconMail size={20} /></a>
+              <a href="https://mikaelsoninitiative.org" aria-label="Website" target="_blank" rel="noopener noreferrer"><IconGlobe size={20} /></a>
             </div>
           </div>
           {COLS.map((c) => (
