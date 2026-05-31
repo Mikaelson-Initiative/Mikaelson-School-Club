@@ -143,7 +143,7 @@ export default function ProgrammePage() {
             </Reveal>
 
             <Reveal delay={80}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
+              <div className="grid-2col">
                 {/* Left outcomes list */}
                 <div>
                   <ul className="involve-bullets">

@@ -39,7 +39,7 @@ export default function ForSchoolsPage() {
             </Reveal>
 
             <Reveal delay={80}>
-              <div className="cards" style={{ gridTemplateColumns: 'repeat(2, 1fr)' }}>
+              <div className="cards cards-2">
                 {[
                   {
                     num: '01',
@@ -89,7 +89,7 @@ export default function ForSchoolsPage() {
             </Reveal>
 
             <Reveal delay={80}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }}>
+              <div className="grid-2col">
                 {/* Left checklist */}
                 <div>
                   <ul className="involve-bullets">

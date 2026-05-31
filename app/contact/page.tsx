@@ -58,14 +58,7 @@ export default function ContactPage() {
 
       <section className="sec">
         <div className="wrap">
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 64,
-              alignItems: 'start',
-            }}
-          >
+          <div className="grid-2col">
             {/* Left Contact blocks + socials */}
             <div>
               <Reveal>

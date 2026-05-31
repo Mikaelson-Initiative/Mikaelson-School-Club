@@ -77,6 +77,13 @@ export const metadata: Metadata = {
   alternates: {
     canonical: BASE_URL,
   },
+  icons: {
+    icon: '/MSC%20logo.png',
+    apple: '/MSC%20logo.png',
+  },
+  verification: {
+    google: 'CyGGGZptjbYyyiMNb0mi9frcF1QKDTWZm2rYwfNXD_o',
+  },
 };
 
 export const viewport: Viewport = {

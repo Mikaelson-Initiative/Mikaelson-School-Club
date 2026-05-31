@@ -127,14 +127,7 @@ export default function ForStudentsPage() {
               Skills that don&apos;t show up on the timetable.
             </h2>
           </Reveal>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 48,
-              alignItems: 'start',
-            }}
-          >
+          <div className="grid-2col">
             <Reveal delay={60}>
               <ul className="involve-bullets">
                 {GAINS.map((g) => (
@@ -196,10 +189,7 @@ export default function ForStudentsPage() {
               These roles are elected each term. Anyone can run.
             </p>
           </Reveal>
-          <div
-            className="cards"
-            style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}
-          >
+          <div className="cards cards-4">
             {ROLES.map((r, i) => (
               <Reveal delay={i * 70} key={r.title}>
                 <div className="card">
