@@ -130,13 +130,14 @@ body {
   left: 0;
   right: 0;
   z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
   transition: background .3s ease, box-shadow .3s ease, border-color .3s ease, padding .3s ease;
-  border-bottom: 1px solid transparent;
 }
 .nav.scrolled {
-  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  background: color-mix(in srgb, var(--bg) 95%, transparent);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 20px -8px rgba(0,0,0,.1);
 }
 .nav-inner {
   display: flex;
