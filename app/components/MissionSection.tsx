@@ -11,7 +11,7 @@ export default function MissionSection() {
           </h2>
         </Reveal>
         <Reveal delay={120}>
-          <p style={{ fontSize: 19, lineHeight: 1.65, margin: 0 }}>
+          <p style={{ fontSize: 14, lineHeight: 1.65, margin: 0 }}>
             Mikaelson School Club is a structured youth-development space inside your school.
             We give students a community where they build discipline through daily habits and
             shared accountability, because leadership isn&apos;t a title.
