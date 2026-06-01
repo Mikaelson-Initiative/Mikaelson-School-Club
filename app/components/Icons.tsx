@@ -33,3 +33,4 @@ export const IconGlobe = mk(<><circle cx="12" cy="12" r="9" /><path d="M3 12h18M
 export const IconMentor = mk(<><path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /><path d="M5 20a7 7 0 0 1 14 0" /></>);
 export const IconMail = mk(<><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M4 7l8 6 8-6" /></>);
 export const IconLink = mk(<><path d="M10 14a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1" /><path d="M14 10a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1" /></>);
+export const IconInstagram = mk(<><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="5" /><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" /></>);
