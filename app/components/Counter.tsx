@@ -39,7 +39,7 @@ export default function Counter({ to, suffix = '', dur = 1400 }: CounterProps) {
 
   return (
     <span ref={ref}>
-      {val}<span className="suffix">{suffix}</span>
+      {val}<span className="text-accent-2">{suffix}</span>
     </span>
   );
 }

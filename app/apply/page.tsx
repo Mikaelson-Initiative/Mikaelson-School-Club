@@ -6,29 +6,8 @@ import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Link from 'next/link';
 
-const labelStyle: React.CSSProperties = {
-  fontFamily: 'var(--font-mono)',
-  fontSize: 12,
-  textTransform: 'uppercase',
-  letterSpacing: '0.08em',
-  marginBottom: 8,
-  display: 'block',
-  color: 'var(--accent-ink)',
-  fontWeight: 700,
-};
-
-const inputStyle: React.CSSProperties = {
-  border: '1px solid var(--line)',
-  borderRadius: 'var(--radius)',
-  padding: '12px 16px',
-  fontFamily: 'var(--font-body)',
-  width: '100%',
-  background: 'white',
-  color: 'var(--text)',
-  fontSize: 15,
-  outline: 'none',
-  transition: 'border-color .2s',
-};
+const FIELD_INPUT = 'bg-white border border-line rounded-[14px] font-body text-site-text py-3 px-4 text-[15px] w-full box-border outline-none transition-[border-color] duration-200 focus:border-accent-2';
+const LABEL_CLS = 'font-mono text-accent-ink text-[12px] tracking-[0.08em] uppercase font-bold block mb-2';
 
 const STEPS = [
   { n: '01', text: 'We review your application' },
@@ -48,78 +27,41 @@ export default function ApplyPage() {
   return (
     <>
       <Header />
+      <PageHero label="Apply" title="Bring Club to your school." lede="Complete this short form and we'll be in touch within 3 working days to discuss next steps." />
 
-      <PageHero
-        label="Apply"
-        title="Bring Club to your school."
-        lede="Complete this short form and we'll be in touch within 3 working days to discuss next steps."
-      />
+      <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]">
+        <div className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4">
+          {/* Grid: form | sidebar */}
+          <div className="grid items-start max-md:grid-cols-1 gap-10" style={{ gridTemplateColumns: '1fr 0.7fr' }}>
 
-      <section className="sec">
-        <div className="wrap">
-          <div className="grid-form">
-            {/* Left Form */}
+            {/* Form */}
             <div>
               {submitted ? (
-                <div
-                  style={{
-                    background: 'var(--accent-soft)',
-                    border: '1px solid var(--accent-2)',
-                    borderRadius: 'var(--radius-lg)',
-                    padding: '40px 36px',
-                    textAlign: 'center',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      fontSize: 12,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.12em',
-                      color: 'var(--accent-ink)',
-                      fontWeight: 700,
-                    }}
-                  >
-                    Application received
-                  </span>
-                  <h2
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      fontWeight: 700,
-                      fontSize: 'clamp(22px,2.6vw,30px)',
-                      letterSpacing: '-0.02em',
-                      margin: '16px 0 12px',
-                      color: 'var(--text)',
-                    }}
-                  >
-                    We&apos;ll be in touch within 3 working days.
-                  </h2>
-                  <p style={{ color: 'var(--muted)', fontSize: 16, margin: 0 }}>
+                <div className="bg-accent-soft border border-accent-2 rounded-[22px] p-[40px] text-center">
+                  <span className="font-mono text-[12px] uppercase tracking-[0.12em] text-accent-ink font-bold">Application received</span>
+                  <h2 className="font-display font-bold tracking-[-0.02em] mt-4 mb-3" style={{ fontSize: 'clamp(22px,2.6vw,30px)' }}>We&apos;ll be in touch within 3 working days.</h2>
+                  <p className="text-muted text-[16px] m-0">
                     Keep an eye on your inbox. If you have any urgent questions, email{' '}
-                    <a
-                      href="mailto:hello@mikaelsoninitiative.org"
-                      style={{ color: 'var(--accent-ink)', textDecoration: 'none', fontWeight: 600 }}
-                    >
-                      hello@mikaelsoninitiative.org
-                    </a>
-                    .
+                    <a href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink font-semibold">hello@mikaelsoninitiative.org</a>.
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                  {[
+                    { label: 'School Name', name: 'school', type: 'text', placeholder: 'e.g. Accra Academy' },
+                    { label: 'Your Name', name: 'name', type: 'text', placeholder: 'First and last name' },
+                    { label: 'Email Address', name: 'email', type: 'email', placeholder: 'you@yourschool.edu' },
+                    { label: 'Phone Number', name: 'phone', type: 'tel', placeholder: '+233 000 000 000' },
+                    { label: 'City & Country', name: 'location', type: 'text', placeholder: 'e.g. Accra, Ghana' },
+                  ].map((f) => (
+                    <div key={f.name}>
+                      <label className={LABEL_CLS}>{f.label}</label>
+                      <input className={FIELD_INPUT} type={f.type} name={f.name} required={f.name !== 'phone'} placeholder={f.placeholder} />
+                    </div>
+                  ))}
                   <div>
-                    <label style={labelStyle}>School Name</label>
-                    <input style={inputStyle} type="text" name="school" required placeholder="e.g. Accra Academy" />
-                  </div>
-
-                  <div>
-                    <label style={labelStyle}>Your Name</label>
-                    <input style={inputStyle} type="text" name="name" required placeholder="First and last name" />
-                  </div>
-
-                  <div>
-                    <label style={labelStyle}>Your Role</label>
-                    <select style={{ ...inputStyle, cursor: 'pointer' }} name="role">
+                    <label className={LABEL_CLS}>Your Role</label>
+                    <select className={FIELD_INPUT + ' appearance-none cursor-pointer'} name="role">
                       <option value="">Select your role</option>
                       <option>Principal</option>
                       <option>Deputy Principal</option>
@@ -129,139 +71,42 @@ export default function ApplyPage() {
                       <option>Other</option>
                     </select>
                   </div>
-
                   <div>
-                    <label style={labelStyle}>Email Address</label>
-                    <input
-                      style={inputStyle}
-                      type="email"
-                      name="email"
-                      required
-                      placeholder="you@yourschool.edu"
-                    />
+                    <label className={LABEL_CLS}>Approximate number of students interested</label>
+                    <input className={FIELD_INPUT} type="number" name="students" min={1} placeholder="e.g. 25" />
                   </div>
-
                   <div>
-                    <label style={labelStyle}>Phone Number</label>
-                    <input style={inputStyle} type="tel" name="phone" placeholder="+233 000 000 000" />
+                    <label className={LABEL_CLS}>Tell us about your school and why you want to run a Club chapter</label>
+                    <textarea className={FIELD_INPUT + ' resize-y leading-[1.6]'} name="message" rows={4} placeholder="Tell us a bit about your school, the students you're thinking of, and what motivated you to apply..." />
                   </div>
-
-                  <div>
-                    <label style={labelStyle}>City &amp; Country</label>
-                    <input
-                      style={inputStyle}
-                      type="text"
-                      name="location"
-                      required
-                      placeholder="e.g. Accra, Ghana"
-                    />
-                  </div>
-
-                  <div>
-                    <label style={labelStyle}>Approximate number of students interested</label>
-                    <input
-                      style={inputStyle}
-                      type="number"
-                      name="students"
-                      min={1}
-                      placeholder="e.g. 25"
-                    />
-                  </div>
-
-                  <div>
-                    <label style={labelStyle}>Tell us about your school and why you want to run a Club chapter</label>
-                    <textarea
-                      style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
-                      name="message"
-                      rows={4}
-                      placeholder="Tell us a bit about your school, the students you're thinking of, and what motivated you to apply..."
-                    />
-                  </div>
-
                   <button
                     type="submit"
-                    className="btn btn-turquoise"
-                    style={{ width: '100%', justifyContent: 'center', marginTop: 4 }}
+                    className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center justify-center gap-[9px] whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] mt-1 w-full"
                   >
-                    Submit Application &rarr;
+                    Submit Application →
                   </button>
                 </form>
               )}
             </div>
 
-            {/* Right Info box */}
-            <div
-              style={{
-                background: 'var(--surface-2)',
-                border: '1px solid var(--line)',
-                borderRadius: 'var(--radius-lg)',
-                padding: 32,
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 11,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.14em',
-                  color: 'var(--accent-ink)',
-                  fontWeight: 700,
-                  display: 'block',
-                  marginBottom: 20,
-                }}
-              >
-                What happens next
-              </span>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {/* Sidebar */}
+            <div className="bg-[var(--surface-2)] border border-line rounded-[22px] p-8">
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-ink font-bold block mb-5">What happens next</span>
+              <div className="flex flex-col gap-4">
                 {STEPS.map((s) => (
-                  <div key={s.n} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        fontSize: 13,
-                        fontWeight: 700,
-                        color: 'var(--accent-ink)',
-                        flexShrink: 0,
-                        marginTop: 1,
-                      }}
-                    >
-                      {s.n}
-                    </span>
-                    <p style={{ margin: 0, fontSize: 15, color: 'var(--text)', lineHeight: 1.5 }}>{s.text}</p>
+                  <div key={s.n} className="flex gap-4 items-start">
+                    <span className="font-mono text-[13px] font-bold text-accent-ink shrink-0 mt-px">{s.n}</span>
+                    <p className="m-0 text-[15px] leading-[1.5]">{s.text}</p>
                   </div>
                 ))}
               </div>
-
-              <hr style={{ border: 'none', borderTop: '1px solid var(--line)', margin: '28px 0' }} />
-
-              <span
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: 11,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.14em',
-                  color: 'var(--accent-ink)',
-                  fontWeight: 700,
-                  display: 'block',
-                  marginBottom: 10,
-                }}
-              >
-                Questions?
-              </span>
-              <p style={{ margin: 0, fontSize: 14.5, color: 'var(--muted)', lineHeight: 1.65 }}>
+              <hr className="border-none border-t border-line my-7" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-ink font-bold block mb-[10px]">Questions?</span>
+              <p className="m-0 text-[14.5px] text-muted leading-[1.65]">
                 Email us at{' '}
-                <a
-                  href="mailto:hello@mikaelsoninitiative.org"
-                  style={{ color: 'var(--accent-ink)', textDecoration: 'none', fontWeight: 600 }}
-                >
-                  hello@mikaelsoninitiative.org
-                </a>{' '}
-                or use the{' '}
-                <Link href="/contact" style={{ color: 'var(--accent-ink)', textDecoration: 'none', fontWeight: 600 }}>
-                  contact form
-                </Link>
-                .
+                <a href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink font-semibold no-underline">hello@mikaelsoninitiative.org</a>
+                {' '}or use the{' '}
+                <Link href="/contact" className="text-accent-ink font-semibold no-underline">contact form</Link>.
               </p>
             </div>
           </div>
