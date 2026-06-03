@@ -1,150 +1,185 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Resources',
+  description: 'Documents, links, and tools for Club members, handbooks, session templates, and useful links.',
+  openGraph: { title: 'Resources | Club', description: 'Documents and tools for club members.' },
+};
+
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import PageHero from '../components/PageHero';
+import Reveal from '../components/Reveal';
+import { IconArrow } from '../components/Icons';
+import Link from 'next/link';
+
+import { WRAP, SEC, LABEL } from '../lib/tw';
+
+const DOCUMENTS = [
+  { title: 'Club Constitution', description: 'Official bylaws and governance structure', format: 'PDF', date: 'Updated May 2026' },
+  { title: 'Meeting Minutes – May 2026', description: 'Summary of monthly leadership meeting', format: 'PDF', date: 'May 28, 2026' },
+  { title: 'Member Handbook', description: 'Guide for new and existing members', format: 'PDF', date: 'Updated March 2026' },
+  { title: 'Event Planning Template', description: 'Template for organising club events', format: 'Google Doc', date: 'Updated April 2026' },
+];
+
+const USEFUL_LINKS = [
+  {
+    category: 'School Resources',
+    links: [
+      { name: 'School Website', url: '#' },
+      { name: 'Student Portal', url: '#' },
+      { name: 'Academic Calendar', url: '#' },
+      { name: 'Campus Map', url: '#' },
+    ],
+  },
+  {
+    category: 'External Resources',
+    links: [
+      { name: 'Leadership Development', url: '#' },
+      { name: 'Career Exploration', url: '#' },
+      { name: 'Community Service', url: '#' },
+      { name: 'Online Learning', url: '#' },
+    ],
+  },
+  {
+    category: 'Club Tools',
+    links: [
+      { name: 'Club Calendar', url: '#' },
+      { name: 'Member Directory', url: '#' },
+      { name: 'Event Registration', url: '#' },
+      { name: 'Feedback Form', url: '#' },
+    ],
+  },
+];
+
+const FAQS = [
+  { q: 'When are club meetings held?', a: 'We meet every Tuesday at 3:30 PM in Room 301. Everyone is welcome!' },
+  { q: 'Do I need prior experience to join?', a: 'No! We welcome members of all experience levels. Come as you are.' },
+  { q: 'Are there membership fees?', a: 'Membership is free for all students at our school.' },
+  { q: 'How can I get involved in leadership?', a: 'Leadership positions open each fall. Check our Get Involved page for more details.' },
+];
 
 export default function ResourcesPage() {
-  const documents = [
-    {
-      title: "Club Constitution",
-      description: "Official bylaws and governance structure",
-      format: "PDF",
-      date: "Updated May 2026"
-    },
-    {
-      title: "Meeting Minutes - May 2026",
-      description: "Summary of monthly leadership meeting",
-      format: "PDF",
-      date: "May 28, 2026"
-    },
-    {
-      title: "Member Handbook",
-      description: "Guide for new and existing members",
-      format: "PDF",
-      date: "Updated March 2026"
-    },
-    {
-      title: "Event Planning Template",
-      description: "Template for organizing club events",
-      format: "Google Doc",
-      date: "Updated April 2026"
-    }
-  ];
-
-  const usefulLinks = [
-    {
-      category: "School Resources",
-      links: [
-        { name: "School Website", url: "#" },
-        { name: "Student Portal", url: "#" },
-        { name: "Academic Calendar", url: "#" },
-        { name: "Campus Map", url: "#" }
-      ]
-    },
-    {
-      category: "External Resources",
-      links: [
-        { name: "Leadership Development", url: "#" },
-        { name: "Career Exploration", url: "#" },
-        { name: "Community Service", url: "#" },
-        { name: "Online Learning", url: "#" }
-      ]
-    },
-    {
-      category: "Club Tools",
-      links: [
-        { name: "Club Calendar", url: "#" },
-        { name: "Member Directory", url: "#" },
-        { name: "Event Registration", url: "#" },
-        { name: "Feedback Form", url: "#" }
-      ]
-    }
-  ];
-
   return (
-    <div className="flex flex-col min-h-screen bg-surface text-on-surface">
+    <>
       <Header />
+      <PageHero
+        label="Resources"
+        title="Documents, links & tools."
+        lede="Everything members need to stay informed, prepared, and connected."
+      />
 
-      <main className="flex-1 pt-24">
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h1 className="text-4xl sm:text-5xl font-bold text-primary mb-4">Resources</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400">Documents, links, and tools for club members</p>
-        </section>
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Club Documents</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {documents.map((doc, index) => (
-              <div key={index} className="border border-gray-200 dark:border-gray-800 p-6 rounded-lg hover:shadow-lg transition">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">{doc.title}</h3>
-                    <p className="text-gray-600 dark:text-gray-400">{doc.description}</p>
+      {/* Documents */}
+      <section className={SEC} style={{ paddingTop: 56 }}>
+        <div className={WRAP}>
+          <Reveal>
+            <span className={LABEL}>Club documents</span>
+            <h2
+              className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-10"
+              style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}
+            >
+              Official documents.
+            </h2>
+          </Reveal>
+          <div className="grid grid-cols-2 max-md:grid-cols-1 gap-[22px]">
+            {DOCUMENTS.map((doc, i) => (
+              <Reveal delay={i * 80} key={doc.title}>
+                <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[28px] flex items-start justify-between gap-5 transition-[transform,border-color] duration-200 hover:border-accent hover:-translate-y-[2px] max-sm:flex-col">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display font-semibold text-[17px] m-0 mb-1">{doc.title}</h3>
+                    <p className="text-muted text-[14px] m-0 mb-3">{doc.description}</p>
+                    <span className="font-mono text-muted text-[11px] uppercase tracking-[.06em]">{doc.date}</span>
                   </div>
-                  <span className="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 px-3 py-1 rounded text-sm font-medium">
-                    {doc.format}
-                  </span>
+                  <div className="flex flex-col items-end gap-3 max-sm:items-start max-sm:flex-row max-sm:items-center">
+                    <span className="font-mono text-accent-ink border border-accent-2 bg-accent-soft text-[11px] tracking-[.07em] uppercase py-[5px] px-[11px] rounded-full font-bold whitespace-nowrap">
+                      {doc.format}
+                    </span>
+                    <button className="font-mono text-[12px] tracking-[.04em] uppercase text-muted border border-line rounded-full py-[7px] px-4 font-bold transition-[border-color,color] duration-200 hover:border-accent hover:text-site-text cursor-not-allowed opacity-50 whitespace-nowrap">
+                      Coming soon
+                    </button>
+                  </div>
                 </div>
-                <p className="text-gray-500 dark:text-gray-500 text-sm mb-4">{doc.date}</p>
-                <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">
-                  Download
-                </button>
-              </div>
+              </Reveal>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="bg-gray-50 dark:bg-gray-900 py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-12">Useful Links</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {usefulLinks.map((section, index) => (
-                <div key={index}>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">{section.category}</h3>
-                  <ul className="space-y-3">
-                    {section.links.map((link, idx) => (
-                      <li key={idx}>
-                        <a href={link.url} className="text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2">
-                          🔗 {link.name}
+      {/* Useful links */}
+      <section className={`${SEC} bg-[var(--surface-2)]`}>
+        <div className={WRAP}>
+          <Reveal>
+            <span className={LABEL}>Useful links</span>
+            <h2
+              className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-10"
+              style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}
+            >
+              Helpful links.
+            </h2>
+          </Reveal>
+          <div className="grid grid-cols-3 max-md:grid-cols-1 gap-8">
+            {USEFUL_LINKS.map((section, si) => (
+              <Reveal delay={si * 80} key={section.category}>
+                <div>
+                  <h3 className="font-display font-semibold text-[18px] m-0 mb-5">{section.category}</h3>
+                  <ul className="list-none p-0 flex flex-col gap-3 m-0">
+                    {section.links.map((link) => (
+                      <li key={link.name}>
+                        <a
+                          href={link.url}
+                          className="font-mono text-[13px] tracking-[.04em] text-accent-ink no-underline inline-flex items-center gap-[7px] font-bold transition-opacity duration-150 hover:opacity-75 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                        >
+                          {link.name} <IconArrow size={12} className="arr" />
                         </a>
                       </li>
                     ))}
                   </ul>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">FAQ</h2>
-          <div className="space-y-4">
-            {[
-              {
-                q: "When are club meetings held?",
-                a: "We meet every Tuesday at 3:30 PM in Room 301. Everyone is welcome!"
-              },
-              {
-                q: "Do I need prior experience to join?",
-                a: "No! We welcome members of all experience levels. Come as you are."
-              },
-              {
-                q: "Are there membership fees?",
-                a: "Membership is free for all students at our school."
-              },
-              {
-                q: "How can I get involved in leadership?",
-                a: "Leadership positions open each fall. Check our Get Involved page for more details."
-              }
-            ].map((item, index) => (
-              <details key={index} className="border border-gray-200 dark:border-gray-800 p-4 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition">
-                <summary className="font-semibold text-gray-900 dark:text-white">{item.q}</summary>
-                <p className="text-gray-600 dark:text-gray-400 mt-3">{item.a}</p>
-              </details>
+              </Reveal>
             ))}
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section className={SEC}>
+        <div className={WRAP}>
+          <Reveal>
+            <span className={LABEL}>FAQ</span>
+            <h2
+              className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-10"
+              style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}
+            >
+              Quick answers.
+            </h2>
+          </Reveal>
+          <div className="max-w-[760px] flex flex-col gap-0">
+            {FAQS.map((item, i) => (
+              <Reveal delay={i * 60} key={item.q}>
+                <details className={`group ${i < FAQS.length - 1 ? 'border-b border-line' : ''} py-5 cursor-pointer`}>
+                  <summary className="font-display font-semibold text-[17px] list-none flex items-center justify-between gap-4 select-none">
+                    {item.q}
+                    <span className="text-accent-ink text-[20px] font-bold shrink-0 transition-transform duration-200 group-open:rotate-45">+</span>
+                  </summary>
+                  <p className="text-muted text-[15.5px] leading-[1.65] mt-3 mb-0">{item.a}</p>
+                </details>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={200}>
+            <div className="mt-10">
+              <Link
+                href="/faqs"
+                className="font-mono text-[13px] tracking-[.04em] uppercase text-accent-ink no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+              >
+                See all FAQs <IconArrow size={13} className="arr" />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
 
       <Footer />
-    </div>
+    </>
   );
 }

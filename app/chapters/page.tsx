@@ -9,6 +9,9 @@ import Counter from '../components/Counter';
 import { IconArrow } from '../components/Icons';
 import Link from 'next/link';
 
+import { WRAP, LABEL } from '../lib/tw';
+const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]';
+
 const CHAPTERS = [
   { school: 'Igbobi College', city: 'Lagos, Nigeria', code: 'IC', members: 0, live: false },
   { school: 'St Finbars College', city: 'Lagos, Nigeria', code: 'SF', members: 0, live: false },
@@ -51,32 +54,43 @@ export default function ChaptersPage() {
         lede="A chapter is a school running the Club system, a community of students building habits, leadership, and digital fluency together. Find one near you, or start your own."
       />
 
-      <section className="sec" style={{ paddingTop: 56 }}>
-        <div className="wrap">
+      <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]" style={{ paddingTop: 56 }}>
+        <div className={WRAP}>
+          {/* Stats bar */}
           <Reveal>
-            <div className="stats" style={{ marginBottom: 48 }}>
+            <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-2 border border-line rounded-[22px] mb-12">
               {[
                 { n: 12, s: '', l: 'Active chapters' },
                 { n: 9, s: '', l: 'Partner schools' },
                 { n: 5, s: '', l: 'Cities' },
                 { n: 480, s: '+', l: 'Students' },
               ].map((s) => (
-                <div className="stat" key={s.l}>
-                  <div className="stat-num"><Counter to={s.n} suffix={s.s} /></div>
-                  <div className="stat-label">{s.l}</div>
+                <div key={s.l} className="py-[26px] px-[24px] text-center">
+                  <div className="font-display font-[800] text-[38px] tracking-[-0.03em] leading-none"><Counter to={s.n} suffix={s.s} /></div>
+                  <div className="font-mono text-muted text-[12px] uppercase tracking-[.06em] mt-[8px]">{s.l}</div>
                 </div>
               ))}
             </div>
           </Reveal>
 
+          {/* Filter tabs */}
           <Reveal>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, marginBottom: 22 }}>
-              <span className="label nodash" style={{ color: 'var(--muted)' }}>
+            <div className="flex items-center justify-between flex-wrap gap-4 mb-[22px]">
+              <span className="font-mono text-muted text-[12px] tracking-[0.18em] uppercase">
                 {list.length} chapters {filter !== 'All' ? `in ${filter}` : 'listed'}
               </span>
-              <div className="tabs" style={{ margin: 0 }}>
+              <div className="flex gap-2 flex-wrap">
                 {COUNTRIES.map((c) => (
-                  <button key={c} className={`tab ${filter === c ? 'active' : ''}`} onClick={() => setFilter(c)}>
+                  <button
+                    key={c}
+                    className={[
+                      'font-mono text-[13px] tracking-[0.04em] py-[9px] px-4 rounded-full cursor-pointer font-bold uppercase transition-all duration-[220ms]',
+                      filter === c
+                        ? 'bg-accent text-accent-contrast border border-accent'
+                        : 'bg-surface text-muted border border-line hover:text-site-text hover:border-accent',
+                    ].join(' ')}
+                    onClick={() => setFilter(c)}
+                  >
                     {c}
                   </button>
                 ))}
@@ -84,21 +98,27 @@ export default function ChaptersPage() {
             </div>
           </Reveal>
 
-          <div className="chapter-list">
+          {/* Chapter list */}
+          <div className="flex flex-col gap-3">
             {list.map((c, i) => (
               <Reveal delay={i * 50} key={c.school}>
-                <div className="chapter">
-                  <div className="chapter-flag">{c.code}</div>
-                  <div>
-                    <div className="chapter-name">{c.school}</div>
-                    <div className="chapter-city">{c.city}</div>
+                <div className="bg-surface border border-line rounded-[14px] py-[18px] px-5 flex items-center gap-4 transition-[transform,border-color] duration-200 hover:border-accent hover:-translate-y-[1px] max-sm:flex-col max-sm:items-start max-sm:gap-3">
+                  {/* Code badge */}
+                  <div className="font-mono text-[13px] font-bold text-accent-ink bg-accent-soft py-[6px] px-[10px] rounded-[8px] shrink-0">{c.code}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-display font-semibold text-[16px]">{c.school}</div>
+                    <div className="font-mono text-muted text-[12px] uppercase tracking-[.06em]">{c.city}</div>
                   </div>
-                  <span className={`badge ${c.live ? 'live' : ''}`}>
-                    <span className="d" />
+                  {/* Status badge */}
+                  <span className={[
+                    'font-mono border inline-flex items-center gap-[7px] text-[11px] tracking-[0.07em] uppercase py-[5px] px-[11px] rounded-full font-bold shrink-0',
+                    c.live ? 'text-accent-ink border-accent-2 bg-accent-soft' : 'text-muted border-line bg-transparent',
+                  ].join(' ')}>
+                    <span className={`w-[6px] h-[6px] rounded-full ${c.live ? 'bg-accent-2' : 'bg-muted'}`} />
                     {c.live ? 'Active' : 'Launching'}
                   </span>
-                  <div className="chapter-members" style={{ textAlign: 'right' }}>
-                    {c.members}<span>members</span>
+                  <div className="font-display font-semibold text-[18px] text-right shrink-0 max-sm:text-left">
+                    {c.members}<span className="text-muted font-normal text-[13px] ml-1">members</span>
                   </div>
                 </div>
               </Reveal>
@@ -107,31 +127,28 @@ export default function ChaptersPage() {
         </div>
       </section>
 
-      <section className="sec" style={{ background: 'var(--surface-2)' }}>
-        <div className="wrap">
+      {/* Start a chapter section */}
+      <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px] bg-[var(--surface-2)]">
+        <div className={WRAP}>
           <Reveal>
-            <span className="label">Start a chapter</span>
-            <h2 className="display sec-head" style={{ fontSize: 'clamp(28px,3.6vw,42px)', margin: '16px 0 8px' }}>
-              Bring Club to your school in four steps.
-            </h2>
-            <p className="muted sec-head" style={{ fontSize: 17, marginBottom: 42 }}>
-              We handle the system and training, you bring the students. Most chapters launch within a term.
-            </p>
+            <span className={LABEL}>Start a chapter</span>
+            <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-4 mb-2" style={{ fontSize: 'clamp(28px,3.6vw,42px)' }}>Bring Club to your school in four steps.</h2>
+            <p className="text-muted text-[17px] mb-[42px]">We handle the system and training, you bring the students. Most chapters launch within a term.</p>
           </Reveal>
-          <div className="rhythm">
+          <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[18px]">
             {STEPS.map((s, i) => (
               <Reveal delay={i * 90} key={s.t}>
-                <div className="step">
-                  <span className="step-n">0{i + 1}</span>
-                  <h4>{s.t}</h4>
-                  <p>{s.d}</p>
+                <div className="bg-surface border border-line rounded-[14px] py-[28px] px-[24px] transition-[background,border-color] duration-200 hover:border-accent">
+                  <span className="font-mono text-accent-ink text-[13px] font-bold">0{i + 1}</span>
+                  <h4 className="font-display font-semibold text-[18px] mt-[14px] mb-2">{s.t}</h4>
+                  <p className="text-muted text-[14px] m-0">{s.d}</p>
                 </div>
               </Reveal>
             ))}
           </div>
           <Reveal>
-            <div style={{ marginTop: 36 }}>
-              <Link href="/get-involved" className="btn btn-primary">
+            <div className="mt-9">
+              <Link href="/get-involved" className={BTN_P}>
                 Start a chapter <IconArrow size={16} className="arr" />
               </Link>
             </div>

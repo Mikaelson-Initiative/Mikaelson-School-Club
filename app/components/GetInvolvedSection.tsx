@@ -73,6 +73,10 @@ const AUDIENCES = [
   { key: 'sponsors', tab: 'Sponsors', h: 'Partner with the movement.', p: 'Fund chapters, sponsor a school, or back the digital-literacy programme. Every contribution is tied to transparent, measurable student outcomes.', bullets: ['Sponsor a chapter for a full year', 'Quarterly impact reporting', 'Co-branded community projects'], cta: 'Partner with us', stat: 5, ss: '', sl: 'cities reached' },
 ];
 
+/* ── Shared class strings ── */
+const FIELD_INPUT =
+  'bg-[var(--surface-2)] border-[1.5px] border-line rounded-[14px] font-body text-site-text py-[13px] px-4 text-[15px] w-full box-border outline-none transition-[border-color] duration-200 focus:border-accent-2';
+
 function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => void }) {
   const form = FORMS[audienceKey];
   const [values, setValues] = useState<Record<string, string>>({});
@@ -84,28 +88,57 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
   }
 
   return (
-    <div className="modal-back" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="modal">
-        <button className="modal-close" onClick={onClose} aria-label="Close">×</button>
+    <div
+      className="fixed inset-0 z-[200] grid place-items-center p-6 bg-[rgba(8,14,12,.6)] backdrop-blur-[6px]"
+      style={{ animation: 'modalFadeIn .22s ease' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div
+        className="bg-surface text-site-text border border-line rounded-[22px] max-w-[460px] w-full p-10 relative max-h-[90vh] overflow-y-auto max-sm:p-[28px] max-sm:px-5 xs:p-6 xs:px-4"
+        style={{ animation: 'modalFadeIn .28s ease' }}
+      >
+        <button
+          className="text-muted absolute top-4 right-[18px] bg-transparent border-none cursor-pointer text-[20px] leading-none transition-colors duration-150 hover:text-site-text"
+          onClick={onClose}
+          aria-label="Close"
+        >
+          ×
+        </button>
+
         {submitted ? (
-          <div className="modal-success">
-            <div className="check">✓</div>
-            <h3>You&apos;re on the list.</h3>
-            <p>We&apos;ve received your details and will be in touch within 3 working days.</p>
+          <div className="text-center py-5">
+            <div className="bg-accent-soft text-accent-ink w-[58px] h-[58px] rounded-full grid place-items-center mx-auto mb-[18px] text-[26px]">
+              ✓
+            </div>
+            <h3 className="font-display font-bold text-[22px] m-0 mb-[10px]">You&apos;re on the list.</h3>
+            <p className="text-muted m-0 text-[15px]">We&apos;ve received your details and will be in touch within 3 working days.</p>
           </div>
         ) : (
           <>
-            <p className="modal-label">{form.label}</p>
-            <h2>{form.heading}</h2>
-            <p className="modal-sub">{form.sub}</p>
+            <p className="font-mono text-accent-ink text-[11px] tracking-[0.18em] uppercase mb-3">
+              {form.label}
+            </p>
+            <h2
+              className="font-display font-extrabold tracking-[-0.02em] m-0 mb-[10px]"
+              style={{ fontSize: 'clamp(22px,3vw,28px)' }}
+            >
+              {form.heading}
+            </h2>
+            <p className="text-muted text-[14.5px] m-0 mb-7">{form.sub}</p>
             <form onSubmit={handleSubmit}>
               {form.fields.map((f) => (
-                <div className="modal-field" key={f.name}>
-                  <label htmlFor={f.name}>{f.label}</label>
+                <div className="flex flex-col gap-[6px] mb-4" key={f.name}>
+                  <label
+                    htmlFor={f.name}
+                    className="font-mono text-muted text-[11px] tracking-[0.1em] uppercase"
+                  >
+                    {f.label}
+                  </label>
                   {f.type === 'select' ? (
                     <select
                       id={f.name}
                       required
+                      className={FIELD_INPUT + ' appearance-none cursor-pointer'}
                       value={values[f.name] || ''}
                       onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
                     >
@@ -116,6 +149,7 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
                     <textarea
                       id={f.name}
                       placeholder={f.placeholder}
+                      className={FIELD_INPUT + ' resize-y min-h-[90px]'}
                       value={values[f.name] || ''}
                       onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
                     />
@@ -125,13 +159,17 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
                       type={f.type}
                       placeholder={f.placeholder}
                       required={!f.label.includes('optional')}
+                      className={FIELD_INPUT}
                       value={values[f.name] || ''}
                       onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
                     />
                   )}
                 </div>
               ))}
-              <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 8 }}>
+              <button
+                type="submit"
+                className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+              >
                 Submit application <IconArrow size={16} className="arr" />
               </button>
             </form>
@@ -149,18 +187,33 @@ export default function GetInvolvedSection() {
 
   return (
     <>
-      <section className="sec" id="involved" style={{ background: 'var(--surface-2)' }}>
-        <div className="wrap">
+      <section
+        className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px] bg-[var(--surface-2)]"
+        id="involved"
+      >
+        <div className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4">
           <Reveal>
-            <span className="label">05 · Get involved</span>
-            <h2 className="display sec-head" style={{ fontSize: 'clamp(30px,4vw,46px)', marginTop: 16, marginBottom: 4 }}>
+            <span className="label-dash font-mono text-accent-ink text-[12px] tracking-[0.18em] uppercase inline-flex items-center">
+              05 · Get involved
+            </span>
+            <h2
+              className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-4 mb-1 max-w-[720px]"
+              style={{ fontSize: 'clamp(30px,4vw,46px)' }}
+            >
               There&apos;s a way in for everyone.
             </h2>
-            <div className="tabs">
+
+            {/* Tabs */}
+            <div className="flex gap-2 flex-wrap mt-[30px] mb-[34px]">
               {AUDIENCES.map((x) => (
                 <button
                   key={x.key}
-                  className={`tab ${tab === x.key ? 'active' : ''}`}
+                  className={[
+                    'font-mono text-[13px] tracking-[0.04em] py-[11px] px-5 rounded-full cursor-pointer font-bold uppercase transition-all duration-[220ms]',
+                    tab === x.key
+                      ? 'bg-accent text-accent-contrast border border-accent'
+                      : 'bg-surface text-muted border border-line hover:text-site-text hover:border-accent',
+                  ].join(' ')}
                   onClick={() => setTab(x.key)}
                 >
                   {x.tab}
@@ -168,30 +221,52 @@ export default function GetInvolvedSection() {
               ))}
             </div>
           </Reveal>
-          <div className="involve-panel" key={tab}>
+
+          {/* Involve panel: 1fr 0.85fr → 1col tablet */}
+          <div
+            className="bg-surface border border-line rounded-[22px] grid items-center max-md:grid-cols-1 p-12 max-sm:p-9 xs:p-5"
+            style={{ gridTemplateColumns: '1fr 0.85fr', gap: 48 }}
+            key={tab}
+          >
             <div>
-              <span className="label nodash" style={{ color: 'var(--muted)' }}>For {a.tab}</span>
-              <h3>{a.h}</h3>
-              <p>{a.p}</p>
-              <ul className="involve-bullets">
+              <span className="font-mono text-muted text-[12px] tracking-[0.18em] uppercase inline-flex items-center gap-2">
+                For {a.tab}
+              </span>
+              <h3
+                className="font-display font-semibold mt-[14px] mb-4"
+                style={{ fontSize: 'clamp(26px,3vw,36px)' }}
+              >
+                {a.h}
+              </h3>
+              <p className="text-muted text-[16px] m-0 mb-6 max-w-[34em]">{a.p}</p>
+              <ul className="list-none p-0 flex flex-col gap-3 m-0 mb-7">
                 {a.bullets.map((b) => (
-                  <li key={b}>
-                    <span className="ck"><IconCheck size={18} /></span>
+                  <li key={b} className="flex items-start gap-[11px] text-[15px]">
+                    <span className="text-accent-2 shrink-0 mt-[2px]"><IconCheck size={18} /></span>
                     {b}
                   </li>
                 ))}
               </ul>
-              <button className="btn btn-primary" onClick={() => setModalOpen(true)}>
+              <button
+                className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                onClick={() => setModalOpen(true)}
+              >
                 {a.cta} <IconArrow size={16} className="arr" />
               </button>
             </div>
-            <div className="involve-aside">
-              <div className="big"><Counter to={a.stat} suffix={a.ss} /></div>
-              <div className="muted" style={{ fontFamily: 'var(--font-mono)', fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.06em', marginTop: 10 }}>
+
+            {/* Aside stat panel */}
+            <div className="bg-[var(--surface-2)] rounded-[14px] p-8">
+              <div
+                className="font-display font-[800] text-[46px] tracking-[-0.02em] leading-none"
+              >
+                <Counter to={a.stat} suffix={a.ss} />
+              </div>
+              <div className="text-muted font-mono text-[13px] uppercase tracking-[0.06em] mt-[10px]">
                 {a.sl}
               </div>
-              <div style={{ height: 1, background: 'var(--line)', margin: '24px 0' }} />
-              <p className="muted" style={{ fontSize: 14.5, margin: 0 }}>
+              <div className="h-px bg-line my-6" />
+              <p className="text-muted text-[14.5px] m-0">
                 Not sure where you fit? Reach out and we&apos;ll point you to the right chapter or contact.
               </p>
             </div>

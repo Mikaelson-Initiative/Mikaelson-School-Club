@@ -64,7 +64,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
 
   return (
     <div className="min-h-screen bg-[#f3eee5] flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl border border-[#e7e0d4] p-10 w-full max-w-sm shadow-sm">
+      <div className="bg-white rounded-2xl border border-[#e7e0d4] p-10 shadow-sm">
         <div className="flex items-center gap-3 mb-8">
           <img src="/MSC%20logo.png" alt="MSC" className="w-10 h-10 object-contain" />
           <div>
@@ -144,7 +144,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         {/* Overview tab */}
         {activeTab === 'overview' && (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-10">
+            <div className="grid grid-cols-2 max-sm:grid-cols-3 max-lg:grid-cols-4 gap-4 mb-10">
               {METRICS.map(m => (
                 <div key={m.label} className={`${m.color} rounded-2xl p-5`}>
                   <div className={`text-4xl font-extrabold tracking-tight leading-none ${m.text}`} style={{ fontFamily: 'var(--font-display)' }}>
@@ -157,7 +157,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             </div>
 
             {/* Status overview */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 max-md:grid-cols-2 gap-6">
               <div className="bg-white rounded-2xl border border-[#e7e0d4] p-6">
                 <h2 className="text-sm font-mono uppercase tracking-widest text-[#003e45] font-bold mb-4">Programme Status</h2>
                 {[

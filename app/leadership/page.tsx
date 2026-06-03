@@ -2,12 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Leadership',
-  description:
-    'Meet the elected student officers and faculty advisors leading the Club network across Africa.',
-  openGraph: {
-    title: 'Leadership | Club',
-    description: 'The students and advisors leading the Club network.',
-  },
+  description: 'Meet the elected student officers and faculty advisors leading the Club network across Africa.',
+  openGraph: { title: 'Leadership | Club', description: 'The students and advisors leading the Club network.' },
 };
 
 import Header from '../components/Header';
@@ -15,6 +11,8 @@ import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import VolunteerModal from '../components/VolunteerModal';
+
+import { WRAP, SEC, LABEL } from '../lib/tw';
 
 const OFFICERS = [
   { name: 'Michael Olukayode', role: 'Team Lead', email: 'michael@mikaelsoninitiative.org', img: '/team/Michael%20Olukayode.jpg' },
@@ -39,36 +37,30 @@ export default function LeadershipPage() {
   return (
     <>
       <Header />
-      <PageHero
-        label="Our Team"
-        title="The team behind the movement."
-        lede="Club is built and run by a dedicated team committed to one mission, giving every African secondary school student the habits, mindset, and community to lead."
-      />
+      <PageHero label="Our Team" title="The team behind the movement." lede="Club is built and run by a dedicated team committed to one mission, giving every African secondary school student the habits, mindset, and community to lead." />
 
-      <section className="sec" style={{ paddingTop: 56 }}>
-        <div className="wrap">
+      {/* Officers section */}
+      <section className={SEC} style={{ paddingTop: 56 }}>
+        <div className={WRAP}>
           <Reveal>
-            <span className="label">01 · Core Team</span>
-            <h2 className="display" style={{ fontSize: 'clamp(26px,3.2vw,38px)', margin: '14px 0 36px' }}>
-              Who we are
-            </h2>
+            <span className={LABEL}>01 · Core Team</span>
+            <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-9" style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}>Who we are</h2>
           </Reveal>
-          <div className="people">
+          {/* Officers grid: 5 cols → 3 → 2 → 1 */}
+          <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-5">
             {OFFICERS.map((o, i) => (
-              <Reveal delay={i * 90} key={o.name}>
-                <div className="person">
-                  <div className="person-avatar">
+              <Reveal delay={i * 60} key={o.name}>
+                <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[22px] text-center transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-36px_rgba(0,0,0,.45)] hover:border-[color-mix(in_srgb,var(--accent)_35%,var(--line))]">
+                  <div className="bg-[var(--surface-2)] border-2 border-accent-soft w-[80px] h-[80px] rounded-full overflow-hidden mx-auto mb-[14px] grid place-items-center">
                     {o.img ? (
-                      <img src={o.img} alt={o.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={o.img} alt={o.name} className="w-full h-full object-cover" />
                     ) : (
-                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: 22, fontWeight: 700, color: 'var(--accent-ink)' }}>
-                        {o.name.charAt(0)}
-                      </span>
+                      <span className="font-mono text-[20px] font-bold text-accent-ink">{o.name.charAt(0)}</span>
                     )}
                   </div>
-                  <h3>{o.name}</h3>
-                  <div className="role">{o.role}</div>
-                  <a className="email" href={`mailto:${o.email}`}>{o.email}</a>
+                  <h3 className="font-display font-semibold text-[16px] m-0">{o.name}</h3>
+                  <div className="font-mono text-accent-ink text-[11px] uppercase tracking-[0.06em] font-bold my-[6px]">{o.role}</div>
+                  <a className="font-mono text-muted text-[11px] no-underline hover:text-accent-ink" href={`mailto:${o.email}`}>{o.email}</a>
                 </div>
               </Reveal>
             ))}
@@ -76,28 +68,25 @@ export default function LeadershipPage() {
         </div>
       </section>
 
-      <section className="sec" style={{ background: 'var(--surface-2)', paddingTop: 72 }}>
-        <div className="wrap">
+      {/* Advisors section */}
+      <section className={`${SEC} bg-[var(--surface-2)]`} style={{ paddingTop: 72 }}>
+        <div className={WRAP}>
           <Reveal>
-            <span className="label">02 · Advisors</span>
-            <h2 className="display" style={{ fontSize: 'clamp(26px,3.2vw,38px)', margin: '14px 0 36px' }}>
-              Our advisors
-            </h2>
+            <span className={LABEL}>02 · Advisors</span>
+            <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-9" style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}>Our advisors</h2>
           </Reveal>
-          <div className="advisors">
+          <div className="flex flex-col gap-5">
             {ADVISORS.map((a, i) => (
               <Reveal delay={i * 100} key={a.name}>
-                <div className="advisor">
-                  <div className="advisor-avatar">
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: 18, fontWeight: 700, color: 'var(--accent-ink)' }}>
-                      {a.name.charAt(0)}
-                    </span>
+                <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[30px] flex items-center gap-5 max-sm:flex-col max-sm:text-center">
+                  <div className="bg-[var(--surface-2)] border-2 border-accent-soft w-[64px] h-[64px] rounded-full grid place-items-center shrink-0">
+                    <span className="font-mono text-[18px] font-bold text-accent-ink">{a.name.charAt(0)}</span>
                   </div>
                   <div>
-                    <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 19, margin: 0 }}>{a.name}</h3>
-                    <div className="role" style={{ color: 'var(--accent-ink)', fontFamily: 'var(--font-mono)', fontSize: 12, textTransform: 'uppercase', letterSpacing: '.06em', margin: '6px 0 2px', fontWeight: 700 }}>{a.role}</div>
-                    <div className="muted" style={{ fontFamily: 'var(--font-mono)', fontSize: 12, marginBottom: 10 }}>{a.dept}</div>
-                    <p className="muted" style={{ margin: 0, fontSize: 14.5 }}>{a.bio}</p>
+                    <h3 className="font-display font-semibold text-[19px] m-0">{a.name}</h3>
+                    <div className="font-mono text-accent-ink text-[12px] uppercase tracking-[.06em] font-bold my-[6px]">{a.role}</div>
+                    <div className="font-mono text-muted text-[12px] mb-[10px]">{a.dept}</div>
+                    <p className="text-muted m-0 text-[14.5px]">{a.bio}</p>
                   </div>
                 </div>
               </Reveal>
@@ -106,22 +95,16 @@ export default function LeadershipPage() {
         </div>
       </section>
 
-      <section className="sec">
-        <div className="wrap">
+      {/* CTA with volunteer modal */}
+      <section className={SEC}>
+        <div className={WRAP}>
           <Reveal>
-            <div className="cta-band">
-              <div className="cta-blob cta-blob-tr" />
-              <div className="cta-blob cta-blob-bl" />
-              <span className="label nodash" style={{ justifyContent: 'center', display: 'flex' }}>
-                Applications open each September
-              </span>
-              <h2 className="display" style={{ marginTop: 14, fontSize: 'clamp(30px,4vw,48px)' }}>
-                Interested in leading?
-              </h2>
-              <p>
-                We&apos;re always looking for passionate students to join the leadership team and run new chapters.
-                Step up and we&apos;ll give you the playbook.
-              </p>
+            <div className="bg-[var(--surface-2)] border border-line rounded-[22px] text-center relative overflow-hidden px-[56px] py-[72px] max-sm:px-6 max-sm:py-10">
+              <div className="absolute rounded-full pointer-events-none w-[300px] h-[300px]" style={{ top: -110, right: -110, background: 'color-mix(in srgb, var(--accent) 26%, transparent)', filter: 'blur(64px)' }} />
+              <div className="absolute rounded-full pointer-events-none w-[300px] h-[300px]" style={{ bottom: -120, left: -120, background: 'color-mix(in srgb, var(--accent-2) 16%, transparent)', filter: 'blur(64px)' }} />
+              <span className="font-mono text-accent-ink text-[12px] tracking-[0.18em] uppercase inline-flex items-center justify-center gap-2 mb-4">Applications open each September</span>
+              <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mb-4 mt-4" style={{ fontSize: 'clamp(30px,4vw,48px)' }}>Interested in leading?</h2>
+              <p className="text-muted text-[18px] max-w-[36em] mx-auto mt-0 mb-8">We&apos;re always looking for passionate students to join the leadership team and run new chapters. Step up and we&apos;ll give you the playbook.</p>
               <VolunteerModal />
             </div>
           </Reveal>
