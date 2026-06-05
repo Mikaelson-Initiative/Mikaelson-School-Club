@@ -7,7 +7,7 @@ const COLS = [
     links: [
       ['About Us', '/about'],
       ['The Programme', '/programme'],
-      ['Our Team', '/team'],
+      ['Our Team', '/leadership'],
       ['Impact & Results', '/impact'],
     ],
   },
@@ -23,6 +23,8 @@ const COLS = [
   {
     h: 'Resources',
     links: [
+      ['Events', '/events'],
+      ['Resources', '/resources'],
       ['Blog & Stories', '/blog'],
       ['FAQs', '/faqs'],
       ['Partners', '/partners'],

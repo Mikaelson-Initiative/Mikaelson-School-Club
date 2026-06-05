@@ -17,9 +17,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const secondary = [
     { url: `${BASE_URL}/chapters`, priority: 0.7, changeFrequency: 'weekly' as const },
     { url: `${BASE_URL}/leadership`, priority: 0.6, changeFrequency: 'monthly' as const },
-    { url: `${BASE_URL}/team`, priority: 0.6, changeFrequency: 'monthly' as const },
     { url: `${BASE_URL}/impact`, priority: 0.7, changeFrequency: 'weekly' as const },
     { url: `${BASE_URL}/partners`, priority: 0.6, changeFrequency: 'monthly' as const },
+    { url: `${BASE_URL}/resources`, priority: 0.6, changeFrequency: 'monthly' as const },
+    { url: `${BASE_URL}/events`, priority: 0.6, changeFrequency: 'weekly' as const },
     { url: `${BASE_URL}/blog`, priority: 0.8, changeFrequency: 'weekly' as const },
     { url: `${BASE_URL}/faqs`, priority: 0.7, changeFrequency: 'monthly' as const },
     { url: `${BASE_URL}/contact`, priority: 0.6, changeFrequency: 'yearly' as const },

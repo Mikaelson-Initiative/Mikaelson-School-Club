@@ -148,7 +148,7 @@ export default function ChaptersPage() {
           </div>
           <Reveal>
             <div className="mt-9">
-              <Link href="/get-involved" className={BTN_P}>
+              <Link href="/apply" className={BTN_P}>
                 Start a chapter <IconArrow size={16} className="arr" />
               </Link>
             </div>

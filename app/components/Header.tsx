@@ -4,17 +4,32 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const NAV_LINKS = [
-  ['About Us', '/about'],
-  ['Club Programme', '/programme'],
-  ['Partners', '/partners'],
-  ['Chapters', '/chapters'],
-  ['Our Team', '/leadership'],
+type NavItem = {
+  label: string;
+  href: string;
+  children?: [string, string][];
+};
+
+const NAV_ITEMS: NavItem[] = [
+  {
+    label: 'About Us',
+    href: '/about',
+    children: [
+      ['About Us', '/about'],
+      ['Our Team', '/leadership'],
+      ['Partners', '/partners'],
+      ['Resources', '/resources'],
+    ],
+  },
+  { label: 'Club Programme', href: '/programme' },
+  { label: 'Chapters', href: '/chapters' },
+  { label: 'Events', href: '/events' },
 ];
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileSub, setMobileSub] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -26,7 +41,11 @@ export default function Header() {
 
   useEffect(() => {
     setMenuOpen(false);
+    setMobileSub(null);
   }, [pathname]);
+
+  const isItemActive = (item: NavItem) =>
+    pathname === item.href || item.children?.some(([, href]) => pathname === href);
 
   return (
     <>
@@ -63,18 +82,66 @@ export default function Header() {
 
           {/* Desktop nav links */}
           <div className="flex items-center gap-[30px] max-md:hidden">
-            {NAV_LINKS.map(([label, href]) => (
-              <Link
-                key={href}
-                href={href}
-                className={[
-                  'no-underline text-[14.5px] font-medium relative transition-colors duration-200',
-                  pathname === href ? 'text-site-text' : 'text-muted hover:text-site-text',
-                ].join(' ')}
-              >
-                {label}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.children ? (
+                <div key={item.label} className="relative group">
+                  <button
+                    type="button"
+                    aria-haspopup="true"
+                    className={[
+                      'font-body bg-transparent border-none cursor-pointer inline-flex items-center gap-[5px] p-0',
+                      'text-[14.5px] font-medium transition-colors duration-200',
+                      isItemActive(item) ? 'text-site-text' : 'text-muted group-hover:text-site-text',
+                    ].join(' ')}
+                  >
+                    {item.label}
+                    <svg
+                      className="transition-transform duration-200 group-hover:rotate-180"
+                      width="11" height="11" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  {/* hover bridge */}
+                  <div className="absolute left-0 right-0 top-full h-3" />
+                  <div
+                    className={[
+                      'absolute left-0 top-full mt-3 min-w-[200px] flex flex-col p-2 z-50',
+                      'bg-surface border border-line rounded-[14px] shadow-[0_18px_40px_-22px_rgba(0,0,0,.28)]',
+                      'opacity-0 invisible translate-y-1 transition-[opacity,transform,visibility] duration-200',
+                      'group-hover:opacity-100 group-hover:visible group-hover:translate-y-0',
+                    ].join(' ')}
+                  >
+                    {item.children.map(([label, href]) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className={[
+                          'no-underline text-[14px] font-medium px-3 py-[9px] rounded-[9px] transition-colors duration-200',
+                          pathname === href
+                            ? 'text-accent-ink bg-accent-soft'
+                            : 'text-muted hover:text-accent-ink hover:bg-[var(--surface-2)]',
+                        ].join(' ')}
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={[
+                    'no-underline text-[14.5px] font-medium relative transition-colors duration-200',
+                    pathname === item.href ? 'text-site-text' : 'text-muted hover:text-site-text',
+                  ].join(' ')}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </div>
 
           {/* Desktop CTA */}
@@ -122,19 +189,61 @@ export default function Header() {
             className="fixed top-0 left-0 right-0 flex flex-col z-[49] pt-[76px] px-8 pb-7 max-sm:pt-[68px] max-sm:px-[18px] max-sm:pb-6 bg-[var(--bg)] border-b border-line shadow-[0_12px_40px_-20px_rgba(0,0,0,.15)]"
             style={{ animation: 'mobileNavIn .22s ease' }}
           >
-            {NAV_LINKS.map(([label, href]) => (
-              <Link
-                key={href}
-                href={href}
-                className={[
-                  'no-underline text-[16px] font-medium py-[13px] block border-b border-line text-site-text transition-colors duration-200 hover:text-accent-ink',
-                  pathname === href ? 'text-accent-ink font-bold' : '',
-                ].join(' ')}
-                onClick={() => setMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            ))}
+            {NAV_ITEMS.map((item) =>
+              item.children ? (
+                <div key={item.label} className="border-b border-line">
+                  <button
+                    type="button"
+                    aria-expanded={mobileSub === item.label}
+                    onClick={() => setMobileSub(mobileSub === item.label ? null : item.label)}
+                    className={[
+                      'font-body bg-transparent border-none cursor-pointer w-full flex items-center justify-between',
+                      'text-[16px] font-medium py-[13px] transition-colors duration-200',
+                      mobileSub === item.label ? 'text-accent-ink' : 'text-site-text hover:text-accent-ink',
+                    ].join(' ')}
+                  >
+                    {item.label}
+                    <svg
+                      className="transition-transform duration-200"
+                      style={mobileSub === item.label ? { transform: 'rotate(180deg)' } : {}}
+                      width="14" height="14" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"
+                    >
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                  {mobileSub === item.label && (
+                    <div className="flex flex-col pb-2 pl-3">
+                      {item.children.map(([label, href]) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className={[
+                            'no-underline text-[15px] font-medium py-[10px] block transition-colors duration-200',
+                            pathname === href ? 'text-accent-ink font-bold' : 'text-muted hover:text-accent-ink',
+                          ].join(' ')}
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={[
+                    'no-underline text-[16px] font-medium py-[13px] block border-b border-line text-site-text transition-colors duration-200 hover:text-accent-ink',
+                    pathname === item.href ? 'text-accent-ink font-bold' : '',
+                  ].join(' ')}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
             <Link
               href="/partners"
               className="mt-5 flex w-full justify-center box-border font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)]"

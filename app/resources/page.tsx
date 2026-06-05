@@ -56,7 +56,7 @@ const FAQS = [
   { q: 'When are club meetings held?', a: 'We meet every Tuesday at 3:30 PM in Room 301. Everyone is welcome!' },
   { q: 'Do I need prior experience to join?', a: 'No! We welcome members of all experience levels. Come as you are.' },
   { q: 'Are there membership fees?', a: 'Membership is free for all students at our school.' },
-  { q: 'How can I get involved in leadership?', a: 'Leadership positions open each fall. Check our Get Involved page for more details.' },
+  { q: 'How can I get involved in leadership?', a: 'Leadership roles are elected each term and open to all members. Apply through the chapters page or ask your Champion.' },
 ];
 
 export default function ResourcesPage() {

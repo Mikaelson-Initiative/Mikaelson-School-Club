@@ -61,7 +61,7 @@ export default function CorePillars() {
                 </h3>
                 <p className="text-muted text-[15px] m-0 mb-[22px]">{p.d}</p>
                 <Link
-                  href="/get-involved"
+                  href="/programme"
                   className="font-mono text-accent-ink text-[12.5px] tracking-[0.06em] uppercase no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[4px]"
                 >
                   {p.cta} <IconArrow size={15} className="arr" />
