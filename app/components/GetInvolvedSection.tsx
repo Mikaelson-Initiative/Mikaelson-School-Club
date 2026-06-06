@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import Reveal from './Reveal';
 import Counter from './Counter';
 import { IconArrow, IconCheck } from './Icons';
@@ -66,9 +67,12 @@ const FORMS: Record<string, {
   },
 };
 
-const AUDIENCES = [
+const AUDIENCES: {
+  key: string; tab: string; h: string; p: string; bullets: string[];
+  cta: string; href?: string; stat: number; ss: string; sl: string;
+}[] = [
   { key: 'students', tab: 'Students', h: 'Join a chapter at your school.', p: 'Become part of a community that takes your growth seriously. Build habits, lead projects, and graduate with skills school doesn\'t teach.', bullets: ['Weekly sessions with your peers', 'A habit system that actually sticks', 'Real leadership experience for your CV'], cta: 'Apply as a Student', stat: 480, ss: '+', sl: 'students already in' },
-  { key: 'schools', tab: 'Schools', h: 'Start a chapter on your campus.', p: 'Bring a structured leadership and habit programme into your school with full facilitation support. We handle the system, you watch your culture shift.', bullets: ['Turnkey curriculum & Champion training', 'Measurable engagement reporting', 'Zero setup cost to pilot a chapter'], cta: 'Bring us to your school', stat: 9, ss: '', sl: 'partner schools' },
+  { key: 'schools', tab: 'Schools', h: 'Start a chapter on your campus.', p: 'Bring a structured leadership and habit programme into your school with full facilitation support. We handle the system, you watch your culture shift.', bullets: ['Turnkey curriculum & Champion training', 'Measurable engagement reporting', 'Zero setup cost to pilot a chapter'], cta: 'Bring us to your school', href: '/apply', stat: 9, ss: '', sl: 'partner schools' },
   { key: 'mentors', tab: 'Mentors', h: 'Become a Champion.', p: 'Teachers and student leaders: train with us to facilitate a chapter. We give you the playbook, the tools, and a community of fellow Champions.', bullets: ['Facilitator training & certification', 'Ready-to-run session plans', 'A network of mentors across cities'], cta: 'Train as a Champion', stat: 30, ss: '+', sl: 'trained Champions' },
   { key: 'sponsors', tab: 'Sponsors', h: 'Partner with the movement.', p: 'Fund chapters, sponsor a school, or back the digital-literacy programme. Every contribution is tied to transparent, measurable student outcomes.', bullets: ['Sponsor a chapter for a full year', 'Quarterly impact reporting', 'Co-branded community projects'], cta: 'Partner with us', stat: 5, ss: '', sl: 'cities reached' },
 ];
@@ -247,12 +251,21 @@ export default function GetInvolvedSection() {
                   </li>
                 ))}
               </ul>
-              <button
-                className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
-                onClick={() => setModalOpen(true)}
-              >
-                {a.cta} <IconArrow size={16} className="arr" />
-              </button>
+              {a.href ? (
+                <Link
+                  href={a.href}
+                  className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                >
+                  {a.cta} <IconArrow size={16} className="arr" />
+                </Link>
+              ) : (
+                <button
+                  className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                  onClick={() => setModalOpen(true)}
+                >
+                  {a.cta} <IconArrow size={16} className="arr" />
+                </button>
+              )}
             </div>
 
             {/* Aside stat panel */}

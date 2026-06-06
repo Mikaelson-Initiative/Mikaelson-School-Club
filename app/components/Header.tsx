@@ -17,13 +17,22 @@ const NAV_ITEMS: NavItem[] = [
     children: [
       ['About Us', '/about'],
       ['Our Team', '/leadership'],
-      ['Partners', '/partners'],
       ['Resources', '/resources'],
     ],
   },
   { label: 'Club Programme', href: '/programme' },
   { label: 'Chapters', href: '/chapters' },
   { label: 'Events', href: '/events' },
+  {
+    label: 'Get Involved',
+    href: '/apply',
+    children: [
+      ['For Students', '/for-students'],
+      ['For Schools', '/for-schools'],
+      ['Partners', '/partners'],
+      ['Apply Now', '/apply'],
+    ],
+  },
 ];
 
 export default function Header() {
