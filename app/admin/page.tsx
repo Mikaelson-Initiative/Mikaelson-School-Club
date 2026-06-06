@@ -117,8 +117,8 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#f3eee5] flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl border border-[#e7e0d4] p-10 w-full max-w-sm shadow-sm">
+    <div className="min-h-screen bg-[#f3eee5] grid place-items-center p-6">
+      <div className="bg-white rounded-2xl border border-[#e7e0d4] p-10 w-[min(92vw,400px)] shadow-sm">
         <div className="flex items-center gap-3 mb-8">
           <img src="/MSC%20logo.png" alt="MSC" className="w-10 h-10 object-contain" />
           <div>
@@ -277,7 +277,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </div>
 
         {/* Nav */}
-        <nav className="flex lg:flex-col gap-1 p-3 lg:p-3 overflow-x-auto flex-1">
+        <nav className="flex lg:flex-col gap-1 p-3 lg:p-3 overflow-x-auto flex-1 min-w-0">
           {NAV.map(item => {
             const active = activeTab === item.key;
             const badge = item.key === 'applications' && stats.pendingApps > 0 ? stats.pendingApps : null;
