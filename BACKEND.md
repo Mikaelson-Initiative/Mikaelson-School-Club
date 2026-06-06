@@ -59,6 +59,7 @@ model SchoolChapter {
   name             String        @unique // e.g. "Igbobi College"
   city             String        // e.g. "Lagos"
   country          String        // e.g. "Nigeria"
+  region           String?       // e.g. "Yaba", "Lekki" — admin UI + Analytics group by this
   status           ChapterStatus @default(REGISTERED)
   studentsCount    Int           @default(0) // Active students in this chapter
   registrationDate DateTime      @default(now())
@@ -123,6 +124,12 @@ enum MessageStatus {
 }
 
 // Activity & Event Calendar (/events)
+// NOTE: A working frontend store already exists at app/lib/events.ts. Its EventItem
+// shape is { id, title, date, time, location, description, category, type, attendees? }
+// where `type: 'upcoming' | 'past'` maps to `isPast` here (type === 'past' ⇔ isPast === true),
+// and `date` is a human display string (e.g. "June 15, 2026"), not an ISO date. The admin
+// Events form collects free-text date/time; either store displayDate as String or parse to
+// DateTime + keep a formatted label. `category` below is required by the current UI.
 model Event {
   id          String   @id @default(uuid())
   title       String
@@ -130,10 +137,27 @@ model Event {
   time        String   // e.g. "6:00 PM - 8:00 PM"
   location    String   // e.g. "School Auditorium"
   description String   @db.Text
+  category    String   @default("Workshop") // Workshop | Networking | Career | Community | Seminar | Other
   isPast      Boolean  @default(false)
   attendees   String?  // e.g. "120 attendees" (visible for past events)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// Volunteer / Champion applications (home "Get Involved" → Mentors tab, and /leadership "Apply to volunteer")
+// Backs the `volunteerApplications` metric.
+model VolunteerApplication {
+  id         String            @id @default(uuid())
+  name       String
+  email      String
+  phone      String?
+  role       String            // Teacher, Senior Student/Prefect, Community Leader, etc.
+  org        String?           // School / Organisation
+  location   String?           // City / Country
+  motivation String?           @db.Text // "why volunteer" / experience
+  status     ApplicationStatus @default(PENDING)
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 }
 
 // Stories & Blog Posts (/blog)
@@ -152,7 +176,7 @@ model BlogPost {
   updatedAt   DateTime  @updatedAt
 }
 
-// Core Team Members (/team)
+// Core Team Members (shown on /leadership — the standalone /team route was removed)
 model TeamMember {
   id        String   @id @default(uuid())
   name      String
@@ -313,6 +337,14 @@ All administrative endpoints must require authorization. Standard error codes (`
 * **`PATCH /api/admin/contacts/[id]`** (Admin Only)
   * Payload: `{ "status": "READ" | "RESPONDED" }`
 
+### 3.2b. Volunteer / Champion Applications
+* **`POST /api/volunteer`** (Public - Rate limited)
+  * Source: home "Get Involved" → **Mentors** tab modal, and the **/leadership** "Apply to volunteer" modal (`app/components/VolunteerModal.tsx`).
+  * Payload: `{ name, email, phone?, role, org?, location?, motivation? }`
+  * Responses: `201 Created`: `{ "success": true, "id": "uuid" }`
+* **`GET /api/admin/volunteers`** (Admin Only) — array sorted by `createdAt` desc.
+* **`PATCH /api/admin/volunteers/[id]`** (Admin Only) — `{ status }`.
+
 ### 3.3. Chapter Management
 * **`GET /api/schools`** (Public)
   * Responses:
@@ -441,7 +473,38 @@ Integrate transactional emails using **Resend** or SMTP Nodemailer.
 ## 6. Seed Configuration
 
 To migrate existing layouts successfully, write database seeding code (e.g. `prisma/seed.ts` for Prisma ORM) that reads the static mock values from the current codebase and inserts them into the database tables:
-* **Initial Chapters:** 10 registered schools located in `app/admin/page.tsx` (`SCHOOLS`).
-* **Initial Core Team:** 11 members located in `app/admin/page.tsx` (`TEAM`).
+* **Initial Chapters:** 10 registered Lagos schools located in `app/admin/page.tsx` (`INITIAL_SCHOOLS`, with `region`/`status`/`studentCount`). The public list in `app/chapters/page.tsx` (`CHAPTERS`) also includes other-country chapters.
+* **Initial Core Team:** 11 members in `app/leadership/page.tsx` (`OFFICERS`, includes `email` + `img` avatar paths under `public/team/`). A name/role-only copy lives in `app/admin/page.tsx` (`TEAM`).
 * **Initial Blog Posts:** 3 stories located in `app/blog/page.tsx` (`POSTS`).
-* **Initial Calendar Events:** 3 upcoming and 3 past events located in `app/events/page.tsx` (`upcomingEvents`, `pastEvents`).
+* **Initial Calendar Events:** 6 events (3 upcoming + 3 past) in `app/lib/events.ts` (`SEED_EVENTS`) — this is the current source of truth, not `app/events/page.tsx`.
+* **Sample admin records:** `app/admin/page.tsx` also has `INITIAL_APPLICATIONS` (demo applications) for reference.
+
+---
+
+## 7. Recent Frontend Changes & Integration Notes
+
+This section reflects the current state of the frontend (updated after the original spec) so the backend wires into what actually exists.
+
+### 7.1. Interim client-side storage to replace
+The frontend currently runs **without a backend**, using `localStorage` as a stand-in. Replace these with the APIs above:
+* `msc_admin` — admin "session" flag set after the client-side PIN (`PIN = '2026'`, `app/admin/page.tsx`). **Not secure** — replace with the Auth.js/session flow in §4.
+* `msc_applications` — admin Applications tab data (seeded from `INITIAL_APPLICATIONS`).
+* `msc_schools` — admin Schools tab data (seeded from `INITIAL_SCHOOLS`).
+* `msc_events` — shared events store written by `saveEvents()` / read by `loadEvents()` in `app/lib/events.ts`; consumed by both the admin Events tab and the public `/events` page (`app/components/EventsList.tsx`). Swap `loadEvents`/`saveEvents` for `GET /api/events` / `POST|PATCH|DELETE /api/admin/events` and the UI keeps working.
+
+### 7.2. Forms that currently submit nowhere (need wiring)
+* **`/apply`** (`app/apply/page.tsx`) — on submit only sets local `submitted=true`; data is discarded. Wire to `POST /api/apply`.
+* **Home "Get Involved" modals** (`app/components/GetInvolvedSection.tsx`) — Students / Mentors / Sponsors tabs each open a modal that only sets `submitted`. Suggested routing:
+  * **Students** ("Apply as a Student") → `POST /api/apply` with `role: "Student"`.
+  * **Mentors** ("Train as a Champion") → `POST /api/volunteer`.
+  * **Sponsors** ("Partner with us") → `POST /api/contact` with `type: "PARTNERSHIP"` (feeds `sponsorEnquiries`).
+  * **Schools** ("Bring us to your school") → already a link to the `/apply` page (modal removed); no modal endpoint needed.
+* **`/leadership` "Apply to volunteer"** (`app/components/VolunteerModal.tsx`) → `POST /api/volunteer`.
+* **`/contact`** (`app/contact/page.tsx`) — currently a `mailto:` form (opens the visitor's mail client). Replace with `POST /api/contact`.
+
+### 7.3. Navigation / routing changes
+* Removed routes: **`/get-involved`** (superseded by the home Get Involved section + `/apply`) and **`/team`** (superseded by **`/leadership`**). Do not recreate them.
+* Nav now has a **"Get Involved"** dropdown (For Students, For Schools, Partners, Apply Now); Partners moved out of the "About Us" dropdown.
+
+### 7.4. Admin dashboard
+`app/admin/page.tsx` is a sidebar-layout dashboard with tabs: **Overview, Applications, Schools, Events, Analytics, Team**. The Events tab is full CRUD against the `app/lib/events.ts` store. Analytics groups schools by `region` and computes enrollment/conversion client-side — `GET /api/admin/metrics` should serve these instead.
