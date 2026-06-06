@@ -14,7 +14,6 @@ import { IconArrow, IconCheck, IconGlobe, IconDigital, IconCompass, IconLead } f
 import Link from 'next/link';
 
 import { WRAP, SEC, LABEL } from '../lib/tw';
-const LINK_ARROW = 'font-mono text-accent-ink text-[12.5px] tracking-[0.06em] uppercase no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[4px]';
 const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]';
 
 const PARTNERS = [
@@ -58,8 +57,7 @@ export default function PartnersPage() {
                     {/* Category badge */}
                     <span className="font-mono text-muted border border-line inline-flex items-center text-[11px] tracking-[0.07em] uppercase py-[4px] px-[10px] rounded-full font-bold mb-[10px]">{p.cat}</span>
                     <h3 className="font-display font-semibold text-[20px] m-0 mt-[10px] mb-2">{p.name}</h3>
-                    <p className="text-muted m-0 mb-4 text-[14.5px]">{p.d}</p>
-                    <a className={LINK_ARROW} href="#">Learn more <IconArrow size={15} className="arr" /></a>
+                    <p className="text-muted m-0 text-[14.5px]">{p.d}</p>
                   </div>
                 </div>
               </Reveal>
