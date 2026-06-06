@@ -65,7 +65,7 @@ export default function ImpactPage() {
             <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-9" style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}>We report what we measure.</h2>
           </Reveal>
           <Reveal delay={70}>
-            <div className="grid items-start max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 1fr' }}>
+            <div className="grid items-start max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_1fr]">
               <div>
                 <p className="text-muted text-[16px] m-0 mb-[18px]">We believe impact reporting only means something when it starts from honest data. From our first chapter, we track attendance at every session, record which habit goals are completed, and follow up with students at the end of each term.</p>
                 <p className="text-muted text-[16px] m-0 mb-[18px]">Attendance is tracked per chapter each week. Habit completion rates are reported termly and shared with partner schools. Student case studies are captured with explicit consent and reviewed by our programme team.</p>

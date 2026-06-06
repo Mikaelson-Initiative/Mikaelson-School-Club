@@ -96,7 +96,7 @@ export default function ProgrammePage() {
               </div>
             </Reveal>
             <Reveal delay={80}>
-              <div className="grid items-center max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 0.85fr' }}>
+              <div className="grid items-center max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_0.85fr]">
                 <ul className="list-none p-0 flex flex-col gap-3 m-0">
                   {GAINS.map((item) => (
                     <li key={item} className="flex items-start gap-[11px] text-[15px]">

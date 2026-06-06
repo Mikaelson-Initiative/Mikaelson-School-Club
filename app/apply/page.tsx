@@ -32,7 +32,7 @@ export default function ApplyPage() {
       <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]">
         <div className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4">
           {/* Grid: form | sidebar */}
-          <div className="grid items-start max-md:grid-cols-1 gap-10" style={{ gridTemplateColumns: '1fr 0.7fr' }}>
+          <div className="grid items-start max-md:grid-cols-1 gap-10 md:[grid-template-columns:1fr_0.7fr]">
 
             {/* Form */}
             <div>

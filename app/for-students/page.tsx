@@ -71,7 +71,7 @@ export default function ForStudentsPage() {
             <span className={LABEL}>What you&apos;ll gain</span>
             <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-10 max-w-[18em]" style={{ fontSize: 'clamp(28px,3.4vw,44px)' }}>Skills that don&apos;t show up on the timetable.</h2>
           </Reveal>
-          <div className="grid items-center max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 0.85fr' }}>
+          <div className="grid items-center max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_0.85fr]">
             <Reveal delay={60}>
               <ul className="list-none p-0 flex flex-col gap-3 m-0">
                 {GAINS.map((g) => (

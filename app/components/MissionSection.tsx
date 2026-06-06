@@ -5,8 +5,7 @@ export default function MissionSection() {
     <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]" id="mission">
       {/* Mission grid: 0.85fr 1.15fr → 1col on tablet */}
       <div
-        className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4 grid items-start max-md:grid-cols-1"
-        style={{ gridTemplateColumns: '0.85fr 1.15fr', gap: 56 }}
+        className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4 grid items-start gap-14 max-md:gap-8 max-md:grid-cols-1 md:[grid-template-columns:0.85fr_1.15fr]"
       >
         <Reveal>
           <span className="label-dash font-mono text-accent-ink text-[12px] tracking-[0.18em] uppercase inline-flex items-center">

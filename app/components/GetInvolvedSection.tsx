@@ -228,8 +228,7 @@ export default function GetInvolvedSection() {
 
           {/* Involve panel: 1fr 0.85fr → 1col tablet */}
           <div
-            className="bg-surface border border-line rounded-[22px] grid items-center max-md:grid-cols-1 p-12 max-sm:p-9 xs:p-5"
-            style={{ gridTemplateColumns: '1fr 0.85fr', gap: 48 }}
+            className="bg-surface border border-line rounded-[22px] grid items-center gap-12 max-md:grid-cols-1 p-12 max-sm:p-9 xs:p-5 md:[grid-template-columns:1fr_0.85fr]"
             key={tab}
           >
             <div>

@@ -85,7 +85,7 @@ export default function PartnersPage() {
                   <div className="flex-1 h-px bg-line" />
                 </div>
                 {/* Sponsor grid */}
-                <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${Math.min(3, t.companies.length)}, 1fr)` }}>
+                <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${Math.min(3, t.companies.length)}, minmax(0, 1fr))` }}>
                   {t.companies.map((c) => (
                     <div key={c.name} className="bg-surface border border-line rounded-[14px] py-[24px] px-[20px] text-center flex flex-col items-center gap-3">
                       <div className="bg-accent-soft text-accent-ink w-[44px] h-[44px] rounded-full grid place-items-center">

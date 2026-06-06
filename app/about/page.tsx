@@ -37,7 +37,7 @@ export default function AboutPage() {
         <section className={SEC}>
           <div className={WRAP}>
             <Reveal>
-              <div className="grid items-start max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 0.85fr' }}>
+              <div className="grid items-start max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_0.85fr]">
                 <div>
                   <span className={LABEL}>The Problem</span>
                   <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[18px] mb-6" style={{ fontSize: 'clamp(30px,3.8vw,46px)' }}>Most students graduate without learning how to lead themselves.</h2>
@@ -92,7 +92,7 @@ export default function AboutPage() {
         <section className={SEC}>
           <div className={WRAP}>
             <Reveal>
-              <div className="grid items-start max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 0.85fr' }}>
+              <div className="grid items-start max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_0.85fr]">
                 <div>
                   <span className={LABEL}>The Initiative</span>
                   <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[18px] mb-6" style={{ fontSize: 'clamp(30px,3.8vw,46px)' }}>Part of something bigger.</h2>

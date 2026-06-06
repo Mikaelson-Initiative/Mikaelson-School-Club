@@ -9,8 +9,7 @@ export default function ChampionSection() {
     >
       {/* Champ grid: 0.92fr 1.08fr → 1col tablet, gap reduces */}
       <div
-        className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4 grid items-center max-md:grid-cols-1 max-md:gap-8"
-        style={{ gridTemplateColumns: '0.92fr 1.08fr', gap: 56 }}
+        className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4 grid items-center gap-14 max-md:grid-cols-1 max-md:gap-8 md:[grid-template-columns:0.92fr_1.08fr]"
       >
         <Reveal>
           {/* Photo */}

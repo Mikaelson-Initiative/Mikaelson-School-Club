@@ -81,7 +81,7 @@ export default function ForSchoolsPage() {
               </div>
             </Reveal>
             <Reveal delay={80}>
-              <div className="grid items-start max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 0.85fr' }}>
+              <div className="grid items-start max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_0.85fr]">
                 <ul className="list-none p-0 flex flex-col gap-3 m-0">
                   {['A weekly 45-minute session slot in the school timetable', 'Space for students to meet, a classroom is perfectly fine', 'One faculty or student Champion willing to be trained', 'Promotion of the club to interested students at launch'].map((item) => (
                     <li key={item} className="flex items-start gap-[11px] text-[15px]">

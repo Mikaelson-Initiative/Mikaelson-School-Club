@@ -38,7 +38,7 @@ export default function ContactPage() {
 
       <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]">
         <div className={WRAP}>
-          <div className="grid items-start max-md:grid-cols-1 gap-12" style={{ gridTemplateColumns: '1fr 0.85fr' }}>
+          <div className="grid items-start max-md:grid-cols-1 gap-12 md:[grid-template-columns:1fr_0.85fr]">
 
             {/* Left: Contact blocks + socials */}
             <div>

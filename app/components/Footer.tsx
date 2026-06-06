@@ -46,8 +46,7 @@ export default function Footer() {
       <div className="max-w-295 mx-auto px-8 max-sm:px-4.5 xs:px-4">
         {/* Footer grid: 1.4fr 1fr 1fr 1fr 0.7fr → 2col tablet → 1col mobile */}
         <div
-          className="grid gap-10 max-md:grid-cols-2 max-sm:grid-cols-1"
-          style={{ gridTemplateColumns: '1.4fr 1fr 1fr 1fr 0.7fr' }}
+          className="grid gap-10 grid-cols-1 sm:grid-cols-2 md:[grid-template-columns:1.4fr_1fr_1fr_1fr_0.7fr]"
         >
           {/* Brand column */}
           <div>
