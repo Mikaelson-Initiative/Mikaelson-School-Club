@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Local pre-commit guard. Enable once per clone with:
+#   git config core.hooksPath .githooks
+bash scripts/check-responsive-grids.sh || {
+  echo ""
+  echo "Commit blocked by responsive-grid guard. Fix the lines above, then re-commit."
+  exit 1
+}

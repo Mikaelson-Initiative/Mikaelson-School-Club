@@ -1,0 +1,17 @@
+name: Responsive Guard
+
+# Fails if a fragile inline `gridTemplateColumns` style is reintroduced — this is the
+# pattern that has repeatedly broken the mobile layout by overriding responsive classes.
+
+on:
+  pull_request:
+  push:
+    branches: [main, fix/mobileResponsiveness]
+
+jobs:
+  check-grids:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for inline gridTemplateColumns
+        run: bash scripts/check-responsive-grids.sh
