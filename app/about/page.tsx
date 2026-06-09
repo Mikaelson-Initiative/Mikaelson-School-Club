@@ -26,6 +26,14 @@ const VALUES = [
   { value: 'Shared Progress', desc: 'Individual growth compounds into community advancement. Our success is collective.' },
 ];
 
+const SDGS = [
+  { img: '/sdg/sdg-4.png', alt: 'SDG 4 — Quality Education', text: 'Our weekly programme extends formal schooling with leadership, habit systems, and digital literacy — the developmental skills classrooms leave out.' },
+  { img: '/sdg/sdg-8.png', alt: 'SDG 8 — Decent Work & Economic Growth', text: 'Members graduate with real leadership experience, employable skills, and an entrepreneurial mindset that prepares them for work and economic independence.' },
+  { img: '/sdg/sdg-9.png', alt: 'SDG 9 — Industry, Innovation & Infrastructure', text: 'Digital-literacy sessions — including responsible use of AI tools — build the innovation capacity Africa needs in its next generation.' },
+  { img: '/sdg/sdg-11.png', alt: 'SDG 11 — Sustainable Cities & Communities', text: 'Every chapter runs community projects, turning students into engaged, accountable members who strengthen the places they live.' },
+  { img: '/sdg/sdg-17.png', alt: 'SDG 17 — Partnerships for the Goals', text: 'The club runs on partnership — between schools, sponsors, mentors, and communities working together across the continent.' },
+];
+
 export default function AboutPage() {
   return (
     <>
@@ -113,6 +121,29 @@ export default function AboutPage() {
                     ))}
                   </div>
                 </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* Section 4: SDGs */}
+        <section className={`${SEC} bg-[var(--surface-2)]`}>
+          <div className={WRAP}>
+            <Reveal>
+              <div className="mb-12 max-w-[42em]">
+                <span className={LABEL}>Global Goals</span>
+                <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[18px] mb-5" style={{ fontSize: 'clamp(30px,3.8vw,46px)' }}>The UN goals we&apos;re advancing.</h2>
+                <p className="text-muted text-[17px] leading-[1.65] m-0">Mikaelson School Club contributes directly to the United Nations Sustainable Development Goals, turning everyday school activity into measurable progress on the world&apos;s shared agenda.</p>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[22px]">
+                {SDGS.map((g) => (
+                  <div key={g.img} className="bg-surface border border-line rounded-[22px] p-[26px] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-36px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_35%,var(--line))]">
+                    <img src={g.img} alt={g.alt} className="w-[88px] h-[88px] rounded-[12px] object-contain mb-5" />
+                    <p className="text-muted text-[15px] m-0 leading-[1.6]">{g.text}</p>
+                  </div>
+                ))}
               </div>
             </Reveal>
           </div>

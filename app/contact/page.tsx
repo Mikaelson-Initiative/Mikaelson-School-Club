@@ -10,7 +10,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
-import { IconMail, IconGlobe, IconCompass } from '../components/Icons';
+import { IconMail, IconGlobe, IconCompass, IconInstagram, IconX, IconLinkedin, IconYoutube } from '../components/Icons';
 import Link from 'next/link';
 
 import { WRAP, LABEL } from '../lib/tw';
@@ -19,15 +19,15 @@ const FIELD_LABEL = 'font-mono text-[11px] uppercase tracking-[0.1em] text-accen
 
 const CONTACTS = [
   { Icon: IconMail, title: 'General Enquiries', email: 'hello@mikaelsoninitiative.org', body: 'For questions about the programme, chapters, and membership.' },
-  { Icon: IconGlobe, title: 'Partnerships & Sponsors', email: 'partners@mikaelsoninitiative.org', body: 'For organisations interested in supporting the initiative.' },
-  { Icon: IconCompass, title: 'Media', email: 'media@mikaelsoninitiative.org', body: 'For press, interviews, and coverage requests.' },
+  { Icon: IconGlobe, title: 'Partnerships & Sponsors', email: 'partnership@mikaelsoninitiative.org', body: 'For organisations interested in supporting the initiative.' },
+  { Icon: IconCompass, title: 'Media', email: 'hello@mikaelsoninitiative.org', body: 'For press, interviews, and coverage requests.' },
 ];
 
 const SOCIALS = [
-  { label: 'X', href: '#' },
-  { label: 'in', href: '#' },
-  { label: 'ig', href: '#' },
-  { label: 'yt', href: '#' },
+  { label: 'Instagram', href: 'https://instagram.com/mikaelsonschoolclub', Icon: IconInstagram },
+  { label: 'X', href: '#', Icon: IconX },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/mikaelson-initiative', Icon: IconLinkedin },
+  { label: 'YouTube', href: '#', Icon: IconYoutube },
 ];
 
 export default function ContactPage() {
@@ -73,9 +73,11 @@ export default function ContactPage() {
                         key={s.label}
                         href={s.href}
                         aria-label={s.label}
-                        className="bg-accent-soft text-accent-ink w-10 h-10 rounded-full grid place-items-center font-mono text-[13px] font-bold no-underline transition-[background,transform] duration-200 hover:bg-accent-2 hover:-translate-y-[2px]"
+                        target={s.href.startsWith('http') ? '_blank' : undefined}
+                        rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                        className="bg-accent-soft text-accent-ink w-10 h-10 rounded-full grid place-items-center no-underline transition-[background,transform] duration-200 hover:bg-accent-2 hover:-translate-y-[2px]"
                       >
-                        {s.label}
+                        <s.Icon size={18} />
                       </a>
                     ))}
                   </div>

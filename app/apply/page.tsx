@@ -27,7 +27,7 @@ export default function ApplyPage() {
   return (
     <>
       <Header />
-      <PageHero label="Apply" title="Bring Club to your school." lede="Complete this short form and we'll be in touch within 3 working days to discuss next steps." />
+      <PageHero label="Apply" title="Bring Mikaelson School Club to your school." lede="Complete this short form and we'll be in touch within 3 working days to discuss next steps." />
 
       <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]">
         <div className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4">
