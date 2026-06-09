@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Events & Activities',
-  description: 'Upcoming and past events from Club, workshops, networking sessions, career fairs, and community projects.',
-  openGraph: { title: 'Events & Activities | Club', description: 'Join us for engaging events throughout the year.' },
+  description: 'Upcoming and past events from Mikaelson School Club, workshops, networking sessions, career fairs, and community projects.',
+  openGraph: { title: 'Events & Activities | Mikaelson School Club', description: 'Join us for engaging events throughout the year.' },
 };
 
 import Header from '../components/Header';

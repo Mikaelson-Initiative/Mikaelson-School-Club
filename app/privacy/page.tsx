@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'How Club collects, stores, and uses personal data, including student data consent and your rights.',
-  openGraph: { title: 'Privacy Policy | Club', description: 'Privacy Policy, how we handle your data.' },
+  description: 'How Mikaelson School Club collects, stores, and uses personal data, including student data consent and your rights.',
+  openGraph: { title: 'Privacy Policy | Mikaelson School Club', description: 'Privacy Policy, how we handle your data.' },
 };
 
 import Header from '../components/Header';

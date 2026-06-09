@@ -44,7 +44,7 @@ export default function ChampionSection() {
           <p className="text-muted text-[17px] m-0">
             Each month we spotlight a standout chapter and the student Champion at its heart.
             This chapter has gone above and beyond, building culture, holding members accountable,
-            and modelling what Club leadership looks like in practice.
+            and modelling what Mikaelson School Club leadership looks like in practice.
           </p>
 
           <div className="mt-[26px]">

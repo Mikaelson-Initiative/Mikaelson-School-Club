@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Leadership',
-  description: 'Meet the elected student officers and faculty advisors leading the Club network across Africa.',
-  openGraph: { title: 'Leadership | Club', description: 'The students and advisors leading the Club network.' },
+  description: 'Meet the elected student officers and faculty advisors leading the Mikaelson School Club network across Africa.',
+  openGraph: { title: 'Leadership | Mikaelson School Club', description: 'The students and advisors leading the Mikaelson School Club network.' },
 };
 
 import Header from '../components/Header';
@@ -41,7 +41,7 @@ export default function LeadershipPage() {
   return (
     <>
       <Header />
-      <PageHero label="Our Team" title="The team behind the movement." lede="Club is built and run by a dedicated team committed to one mission, giving every African secondary school student the habits, mindset, and community to lead." />
+      <PageHero label="Our Team" title="The team behind the movement." lede="Mikaelson School Club is built and run by a dedicated team committed to one mission, giving every African secondary school student the habits, mindset, and community to lead." />
 
       {/* Officers section */}
       <section className={SEC} style={{ paddingTop: 56 }}>

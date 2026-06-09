@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'For Students',
-  description: 'What students experience in the Club, weekly sessions, leadership roles, habit tracking, and community projects.',
-  openGraph: { title: 'For Students | Club', description: 'For students, what you will experience, do, and gain in the club.' },
+  description: 'What students experience in Mikaelson School Club, weekly sessions, leadership roles, habit tracking, and community projects.',
+  openGraph: { title: 'For Students | Mikaelson School Club', description: 'For students, what you will experience, do, and gain in the club.' },
 };
 
 import Header from '../components/Header';
@@ -135,7 +135,7 @@ export default function ForStudentsPage() {
           </Reveal>
           <Reveal delay={80}>
             <p className="text-[18px] leading-[1.7] max-w-[52em]">
-              Most students are told to wait. Wait until university. Wait until you have a job. Wait until someone gives you the title. Club is built on the opposite idea: that leadership is a practice, not a reward. Students who go through the programme leave with a documented record of what they did, sessions run, habits tracked, projects delivered. That&apos;s the thing that makes an application stand out.
+              Most students are told to wait. Wait until university. Wait until you have a job. Wait until someone gives you the title. Mikaelson School Club is built on the opposite idea: that leadership is a practice, not a reward. Students who go through the programme leave with a documented record of what they did, sessions run, habits tracked, projects delivered. That&apos;s the thing that makes an application stand out.
             </p>
           </Reveal>
         </div>

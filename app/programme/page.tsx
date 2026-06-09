@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { IconBuild, IconLead, IconDigital, IconCheck } from '../components/Icons';
 
 export const metadata = {
-  title: 'The Programme | Club',
-  description: 'How the Club programme works, a weekly rhythm that builds habits, leadership, and digital fluency term by term.',
+  title: 'The Programme | Mikaelson School Club',
+  description: 'How the Mikaelson School Club programme works, a weekly rhythm that builds habits, leadership, and digital fluency term by term.',
 };
 
 import { WRAP, SEC, LABEL } from '../lib/tw';

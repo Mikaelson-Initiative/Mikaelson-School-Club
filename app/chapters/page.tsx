@@ -51,7 +51,7 @@ export default function ChaptersPage() {
       <PageHero
         label="Our Network"
         title="Chapters across the continent."
-        lede="A chapter is a school running the Club system, a community of students building habits, leadership, and digital fluency together. Find one near you, or start your own."
+        lede="A chapter is a school running the Mikaelson School Club system, a community of students building habits, leadership, and digital fluency together. Find one near you, or start your own."
       />
 
       <section className="relative py-[92px] max-md:py-[72px] max-sm:py-[56px]" style={{ paddingTop: 56 }}>
@@ -132,7 +132,7 @@ export default function ChaptersPage() {
         <div className={WRAP}>
           <Reveal>
             <span className={LABEL}>Start a chapter</span>
-            <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-4 mb-2" style={{ fontSize: 'clamp(28px,3.6vw,42px)' }}>Bring Club to your school in four steps.</h2>
+            <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-4 mb-2" style={{ fontSize: 'clamp(28px,3.6vw,42px)' }}>Bring Mikaelson School Club to your school in four steps.</h2>
             <p className="text-muted text-[17px] mb-[42px]">We handle the system and training, you bring the students. Most chapters launch within a term.</p>
           </Reveal>
           <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[18px]">

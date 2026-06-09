@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'FAQs',
-  description: 'Answers to the most common questions from schools, students, and parents about the Club programme.',
-  openGraph: { title: 'FAQs | Club', description: 'Common questions about the Club answered.' },
+  description: 'Answers to the most common questions from schools, students, and parents about the Mikaelson School Club programme.',
+  openGraph: { title: 'FAQs | Mikaelson School Club', description: 'Common questions about Mikaelson School Club answered.' },
 };
 
 import Header from '../components/Header';

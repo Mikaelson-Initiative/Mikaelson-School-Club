@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { IconCheck } from '../components/Icons';
 
 export const metadata = {
-  title: 'For Schools | Club',
+  title: 'For Schools | Mikaelson School Club',
   description: 'Bring a structured leadership programme to your school, we provide the system, training, and support. You provide the students and the space.',
 };
 

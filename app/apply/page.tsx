@@ -76,7 +76,7 @@ export default function ApplyPage() {
                     <input className={FIELD_INPUT} type="number" name="students" min={1} placeholder="e.g. 25" />
                   </div>
                   <div>
-                    <label className={LABEL_CLS}>Tell us about your school and why you want to run a Club chapter</label>
+                    <label className={LABEL_CLS}>Tell us about your school and why you want to run a Mikaelson School Club chapter</label>
                     <textarea className={FIELD_INPUT + ' resize-y leading-[1.6]'} name="message" rows={4} placeholder="Tell us a bit about your school, the students you're thinking of, and what motivated you to apply..." />
                   </div>
                   <button

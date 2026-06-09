@@ -6,8 +6,8 @@ import Link from 'next/link';
 import { IconCheck } from '../components/Icons';
 
 export const metadata = {
-  title: 'About | Club',
-  description: 'The story behind Club, born from a gap in how schools prepare young people for life after graduation.',
+  title: 'About | Mikaelson School Club',
+  description: 'The story behind Mikaelson School Club, born from a gap in how schools prepare young people for life after graduation.',
 };
 
 import { WRAP, SEC, LABEL } from '../lib/tw';
@@ -39,7 +39,7 @@ export default function AboutPage() {
     <>
       <Header />
       <main>
-        <PageHero label="Our Story" title="Born from a gap. Built for the next generation." lede="Most schools teach students what to know. Club teaches them who to be." />
+        <PageHero label="Our Story" title="Born from a gap. Built for the next generation." lede="Most schools teach students what to know. Mikaelson School Club teaches them who to be." />
 
         {/* Section 1: The Problem */}
         <section className={SEC}>
@@ -50,7 +50,7 @@ export default function AboutPage() {
                   <span className={LABEL}>The Problem</span>
                   <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[18px] mb-6" style={{ fontSize: 'clamp(30px,3.8vw,46px)' }}>Most students graduate without learning how to lead themselves.</h2>
                   <p className="text-muted text-[16px] leading-[1.7] mb-4">School curricula are built around knowledge delivery, exams, grades, and content. They measure what a student can recall, not who they are becoming. The habits, mindset, and community that determine long-term success fall entirely outside the classroom.</p>
-                  <p className="text-muted text-[16px] leading-[1.7] m-0">The result is a generation of graduates who are academically capable but personally underprepared, without a peer network, a consistent routine, or a sense of their own leadership potential. That is the gap Club was built to close.</p>
+                  <p className="text-muted text-[16px] leading-[1.7] m-0">The result is a generation of graduates who are academically capable but personally underprepared, without a peer network, a consistent routine, or a sense of their own leadership potential. That is the gap Mikaelson School Club was built to close.</p>
                 </div>
                 <div className="bg-[var(--surface-2)] border border-line rounded-[22px] p-9">
                   <p className="font-mono text-[12px] tracking-[0.1em] uppercase text-muted mb-6">The data</p>
@@ -75,7 +75,7 @@ export default function AboutPage() {
               <div className="mb-12">
                 <span className={LABEL}>The Solution</span>
                 <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[18px] mb-5" style={{ fontSize: 'clamp(30px,3.8vw,46px)' }}>A structured programme that lives inside your school.</h2>
-                <p className="text-muted text-[17px] leading-[1.65] max-w-[38em] m-0">Club is embedded in schools and runs as a weekly chapter meeting, combining habit systems, peer leadership, and digital literacy into one cohesive programme, no extra infrastructure required.</p>
+                <p className="text-muted text-[17px] leading-[1.65] max-w-[38em] m-0">Mikaelson School Club is embedded in schools and runs as a weekly chapter meeting, combining habit systems, peer leadership, and digital literacy into one cohesive programme, no extra infrastructure required.</p>
               </div>
             </Reveal>
             <Reveal delay={80}>
@@ -105,7 +105,7 @@ export default function AboutPage() {
                   <span className={LABEL}>The Initiative</span>
                   <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[18px] mb-6" style={{ fontSize: 'clamp(30px,3.8vw,46px)' }}>Part of something bigger.</h2>
                   <p className="text-muted text-[16px] leading-[1.7] mb-4">The Mikaelson Initiative is a pan-African organisation focused on education, technology, and opportunity. It was founded on the belief that the continent&apos;s next generation of leaders is already in secondary schools, they simply need the right environment to emerge.</p>
-                  <p className="text-muted text-[16px] leading-[1.7] m-0">Club is one of its flagship programmes, designed to scale across secondary schools on the continent. By embedding within existing school structures, the Club reaches students where they already are, making leadership development accessible to every student, not just a privileged few.</p>
+                  <p className="text-muted text-[16px] leading-[1.7] m-0">Mikaelson School Club is one of its flagship programmes, designed to scale across secondary schools on the continent. By embedding within existing school structures, Mikaelson School Club reaches students where they already are, making leadership development accessible to every student, not just a privileged few.</p>
                 </div>
                 <div className="bg-surface border border-line rounded-[22px] p-10">
                   <p className="font-mono text-[12px] tracking-[0.1em] uppercase text-muted mb-7">Club Values</p>

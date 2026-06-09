@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Terms of Use',
-  description: 'Terms and conditions for using the Club website and participating in the programme.',
-  openGraph: { title: 'Terms of Use | Club', description: 'Terms of Use for the Club website.' },
+  description: 'Terms and conditions for using the Mikaelson School Club website and participating in the programme.',
+  openGraph: { title: 'Terms of Use | Mikaelson School Club', description: 'Terms of Use for the Mikaelson School Club website.' },
 };
 
 import Header from '../components/Header';
@@ -14,9 +14,9 @@ import { WRAP, LABEL } from '../lib/tw';
 
 const SECTIONS = [
   { heading: 'Acceptance of Terms', content: (<p>By accessing or using this website, you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the site.</p>) },
-  { heading: 'Use of the Website', content: (<p>This website is provided for informational purposes and to facilitate applications to the Club programme. You may not use the site for any unlawful purpose, to distribute harmful content, or to attempt to gain unauthorised access to any part of the site or its systems.</p>) },
+  { heading: 'Use of the Website', content: (<p>This website is provided for informational purposes and to facilitate applications to the Mikaelson School Club programme. You may not use the site for any unlawful purpose, to distribute harmful content, or to attempt to gain unauthorised access to any part of the site or its systems.</p>) },
   { heading: 'Intellectual Property', content: (<p>All content on this website, including text, graphics, logos, and design, is the property of the Mikaelson Initiative and is protected by applicable copyright and intellectual property laws. You may not reproduce, distribute, or create derivative works without written permission.</p>) },
-  { heading: 'Programme Participation', content: (<p>Schools and students who join the Club programme do so under a separate participation agreement, which governs the rights and obligations of programme participants. These Terms of Use apply to the website only and do not constitute an offer to participate in the programme.</p>) },
+  { heading: 'Programme Participation', content: (<p>Schools and students who join the Mikaelson School Club programme do so under a separate participation agreement, which governs the rights and obligations of programme participants. These Terms of Use apply to the website only and do not constitute an offer to participate in the programme.</p>) },
   { heading: 'Limitation of Liability', content: (<p>The Mikaelson Initiative provides this website on an &quot;as is&quot; basis. We make no warranties, express or implied, regarding the accuracy or completeness of the content. To the fullest extent permitted by law, the Mikaelson Initiative is not liable for any indirect, incidental, or consequential losses arising from your use of this website.</p>) },
   { heading: 'Changes to Terms', content: (<p>We may update these Terms of Use from time to time. Changes will be posted on this page with an updated date. Where changes are significant, we will notify users by email where contact details are held. Your continued use of the site after changes are posted constitutes your acceptance of the updated terms.</p>) },
   { heading: 'Contact', content: (<p>For any questions about these Terms of Use, please contact us at{' '}<a href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink">hello@mikaelsoninitiative.org</a>.</p>) },
