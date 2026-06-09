@@ -11,21 +11,25 @@ import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import VolunteerModal from '../components/VolunteerModal';
+import { IconLinkedin } from '../components/Icons';
 
 import { WRAP, SEC, LABEL } from '../lib/tw';
 
-const OFFICERS = [
-  { name: 'Michael Olukayode', role: 'Team Lead', email: 'michael@mikaelsoninitiative.org', img: '/team/Michael%20Olukayode.jpg' },
-  { name: 'Boluwatife Adeleke', role: 'Project Manager', email: 'boluwatife@mikaelsoninitiative.org', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg' },
-  { name: 'Irene Ezechi', role: 'Program Manager', email: 'irene@mikaelsoninitiative.org', img: '/team/Irene%20Ezechi.jpg' },
-  { name: 'Mariam Jimoh', role: 'ESG and Impact', email: 'mariam@mikaelsoninitiative.org', img: '/team/Mariam%20Jimoh.jpeg' },
-  { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', email: 'bright@mikaelsoninitiative.org', img: '/team/Ayegbusi%20Bright%20Temitope.jpg' },
-  { name: 'Feranmi Oluwole', role: 'Operations Manager', email: 'feranmi@mikaelsoninitiative.org', img: '/team/Feranmi%20Oluwole.JPG' },
-  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', email: 'theresa@mikaelsoninitiative.org', img: '/team/Asiedu%20Gyamfi.png' },
-  { name: 'Esther Adeoye', role: 'Social Media Manager', email: 'esther@mikaelsoninitiative.org', img: '/team/Adeoye%20Esther.jpg' },
-  { name: 'Ariyo Aresa', role: 'Front-end Engineer', email: 'ariyo@mikaelsoninitiative.org', img: '/team/Ariyo%20Aresa.jpg' },
-  { name: 'Blessing Olusola', role: 'Technical Writer', email: 'blessing@mikaelsoninitiative.org', img: '/team/Blessing%20Olusola.jpeg' },
-  { name: 'Ayomide Idowu', role: 'Visuals and Designs', email: 'ayomide@mikaelsoninitiative.org', img: '/team/Ayomide%20Idowu.jpg' },
+// Fallback used until each member's individual profile URL is added via `linkedin`.
+const TEAM_LINKEDIN = 'https://www.linkedin.com/company/mikaelson-initiative';
+
+const OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[] = [
+  { name: 'Michael Olukayode', role: 'Team Lead', img: '/team/Michael%20Olukayode.jpg' },
+  { name: 'Boluwatife Adeleke', role: 'Project Manager', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg' },
+  { name: 'Irene Ezechi', role: 'Program Manager', img: '/team/Irene%20Ezechi.jpg' },
+  { name: 'Mariam Jimoh', role: 'ESG and Impact', img: '/team/Mariam%20Jimoh.jpeg' },
+  { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', img: '/team/Ayegbusi%20Bright%20Temitope.jpg' },
+  { name: 'Feranmi Oluwole', role: 'Operations Manager', img: '/team/Feranmi%20Oluwole.JPG' },
+  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.png' },
+  { name: 'Esther Adeoye', role: 'Social Media Manager', img: '/team/Adeoye%20Esther.jpg' },
+  { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/Ariyo%20Aresa.jpg' },
+  { name: 'Blessing Olusola', role: 'Technical Writer', img: '/team/Blessing%20Olusola.jpeg' },
+  { name: 'Ayomide Idowu', role: 'Visuals and Designs', img: '/team/Ayomide%20Idowu.jpg' },
 ];
 
 const ADVISORS = [
@@ -60,7 +64,15 @@ export default function LeadershipPage() {
                   </div>
                   <h3 className="font-display font-semibold text-[16px] m-0">{o.name}</h3>
                   <div className="font-mono text-accent-ink text-[11px] uppercase tracking-[0.06em] font-bold my-[6px]">{o.role}</div>
-                  <a className="font-mono text-muted text-[11px] no-underline hover:text-accent-ink" href={`mailto:${o.email}`}>{o.email}</a>
+                  <a
+                    className="inline-flex items-center justify-center text-muted hover:text-accent-ink transition-colors duration-200 mt-1"
+                    href={o.linkedin || TEAM_LINKEDIN}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${o.name} on LinkedIn`}
+                  >
+                    <IconLinkedin size={18} />
+                  </a>
                 </div>
               </Reveal>
             ))}
