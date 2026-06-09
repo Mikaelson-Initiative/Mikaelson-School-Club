@@ -20,7 +20,7 @@ const jetBrainsMono = JetBrains_Mono({
   weight: ['400', '500', '700'],
 });
 
-const BASE_URL = 'https://mikaelsonschoolclub.org';
+const BASE_URL = 'https://club.mikaelsoninitiative.org';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

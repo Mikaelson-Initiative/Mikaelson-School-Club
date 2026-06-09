@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = 'https://mikaelsonschoolclub.org';
+const BASE_URL = 'https://club.mikaelsoninitiative.org';
 
 export default function robots(): MetadataRoute.Robots {
   return {
