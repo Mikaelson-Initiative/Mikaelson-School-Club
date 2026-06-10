@@ -10,12 +10,13 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
-import { IconMail, IconGlobe, IconCompass, IconInstagram, IconX, IconLinkedin, IconYoutube } from '../components/Icons';
+import { IconMail, IconGlobe, IconCompass, IconInstagram, IconX, IconLinkedin, IconYoutube, IconCalendar, IconArrow } from '../components/Icons';
 import Link from 'next/link';
 
 import { WRAP, LABEL } from '../lib/tw';
 const FIELD_INPUT = 'bg-white border border-line rounded-[14px] font-body text-site-text py-[11px] px-[14px] text-[15px] w-full box-border outline-none transition-[border-color] duration-200 focus:border-accent-2';
 const FIELD_LABEL = 'font-mono text-[11px] uppercase tracking-[0.1em] text-accent-ink font-bold block mb-[7px]';
+const BOOKING_URL = 'https://calendar.google.com/appointments/schedules/AcZssZ1JVLcmrQSO15PwdFlP3GVv8YDwb74-Ey_unMB6kNXziUKoGUkWhzc9UsTlPlqp-3JUZvWbfkuo';
 
 const CONTACTS = [
   { Icon: IconMail, title: 'General Enquiries', email: 'hello@mikaelsoninitiative.org', body: 'For questions about the programme, chapters, and membership.' },
@@ -62,6 +63,25 @@ export default function ContactPage() {
                   </Reveal>
                 ))}
               </div>
+
+              {/* Schedule a call */}
+              <Reveal delay={220}>
+                <div className="mt-9 bg-[var(--surface-2)] border border-line rounded-[18px] p-6">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-accent-ink"><IconCalendar size={18} /></span>
+                    <h5 className="font-display font-semibold text-[16px] m-0">Prefer to talk?</h5>
+                  </div>
+                  <p className="text-muted text-[14.5px] m-0 mb-4">Book a free call with our team at a time that suits you.</p>
+                  <a
+                    href={BOOKING_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                  >
+                    Schedule a call <IconArrow size={16} className="arr" />
+                  </a>
+                </div>
+              </Reveal>
 
               {/* Social row */}
               <Reveal delay={260}>
