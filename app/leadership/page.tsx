@@ -27,8 +27,9 @@ const OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[
   { name: 'Feranmi Oluwole', role: 'Operations Manager', img: '/team/Feranmi%20Oluwole.JPG', linkedin: 'https://www.linkedin.com/in/feranmi-oluwole-675712339/' },
   { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.png', linkedin: 'https://www.linkedin.com/in/theresa-gyamfi/' },
   { name: 'Esther Adeoye', role: 'Social Media Manager', img: '/team/Adeoye%20Esther.jpg', linkedin: 'https://www.linkedin.com/in/adeoye-esther-4151a62b8/' },
-  { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/Ariyo%20Aresa.jpg', linkedin: 'https://www.linkedin.com/in/ariyoaresa/' },
+  { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/AriyoAresa.avif', linkedin: 'https://www.linkedin.com/in/ariyoaresa/' },
   { name: 'Ayomide Idowu', role: 'Visuals and Designs', img: '/team/Ayomide%20Idowu.jpg', linkedin: 'https://www.linkedin.com/in/ayomide-idowu-4a852623a/' },
+  { name: 'Happiness Obochi', role: 'Team Member', img: '/team/Happiness%20Obochi.jpg', linkedin: 'https://www.linkedin.com/in/happinessobochi/' },
 ];
 
 const ADVISORS = [

@@ -67,6 +67,7 @@ const TEAM = [
   { name: 'Esther Adeoye', role: 'Social Media Manager' },
   { name: 'Ariyo Aresa', role: 'Front-end Engineer' },
   { name: 'Ayomide Idowu', role: 'Visuals and Designs' },
+  { name: 'Happiness Obochi', role: 'Team Member' },
 ];
 
 type TabKey = 'overview' | 'applications' | 'schools' | 'events' | 'analytics' | 'team';
