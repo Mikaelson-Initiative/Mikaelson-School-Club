@@ -66,7 +66,6 @@ const TEAM = [
   { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer' },
   { name: 'Esther Adeoye', role: 'Social Media Manager' },
   { name: 'Ariyo Aresa', role: 'Front-end Engineer' },
-  { name: 'Blessing Olusola', role: 'Technical Writer' },
   { name: 'Ayomide Idowu', role: 'Visuals and Designs' },
 ];
 
@@ -343,7 +342,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                   { label: 'Students', value: stats.totalStudents, sub: 'Enrolled', color: 'bg-white', text: 'text-[#003e45]' },
                   { label: 'Pending Apps', value: stats.pendingApps, sub: 'To review', color: 'bg-[#5ce1e6]', text: 'text-[#003e45]' },
                   { label: 'Events', value: upcomingCount, sub: 'Upcoming', color: 'bg-white', text: 'text-[#003e45]' },
-                  { label: 'Team', value: 11, sub: 'Core team', color: 'bg-[#003e45]', text: 'text-white' },
+                  { label: 'Team', value: TEAM.length, sub: 'Core team', color: 'bg-[#003e45]', text: 'text-white' },
                 ].map(m => (
                   <div key={m.label} className={`${m.color} rounded-2xl p-5 shadow-sm border border-[#e7e0d4]`}>
                     <div className={`text-3xl font-extrabold tracking-tight leading-none ${m.text}`} style={{ fontFamily: 'var(--font-display)' }}>{m.value}</div>

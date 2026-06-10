@@ -19,17 +19,16 @@ import { WRAP, SEC, LABEL } from '../lib/tw';
 const TEAM_LINKEDIN = 'https://www.linkedin.com/company/mikaelson-initiative';
 
 const OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[] = [
-  { name: 'Michael Olukayode', role: 'Team Lead', img: '/team/Michael%20Olukayode.jpg' },
-  { name: 'Boluwatife Adeleke', role: 'Project Manager', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg' },
-  { name: 'Irene Ezechi', role: 'Program Manager', img: '/team/Irene%20Ezechi.jpg' },
-  { name: 'Mariam Jimoh', role: 'ESG and Impact', img: '/team/Mariam%20Jimoh.jpeg' },
+  { name: 'Michael Olukayode', role: 'Team Lead', img: '/team/Michael%20Olukayode.jpg', linkedin: 'https://www.linkedin.com/in/michael-olukayode-73890b214/' },
+  { name: 'Boluwatife Adeleke', role: 'Project Manager', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg', linkedin: 'https://www.linkedin.com/in/boluwatifemercyadeleke/' },
+  { name: 'Irene Ezechi', role: 'Program Manager', img: '/team/Irene%20Ezechi.jpg', linkedin: 'https://www.linkedin.com/in/ireneezechi/' },
+  { name: 'Mariam Jimoh', role: 'ESG and Impact', img: '/team/Mariam%20Jimoh.jpeg', linkedin: 'https://www.linkedin.com/in/jimohmariamajoke/' },
   { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', img: '/team/Ayegbusi%20Bright%20Temitope.jpg' },
-  { name: 'Feranmi Oluwole', role: 'Operations Manager', img: '/team/Feranmi%20Oluwole.JPG' },
-  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.png' },
-  { name: 'Esther Adeoye', role: 'Social Media Manager', img: '/team/Adeoye%20Esther.jpg' },
-  { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/Ariyo%20Aresa.jpg' },
-  { name: 'Blessing Olusola', role: 'Technical Writer', img: '/team/Blessing%20Olusola.jpeg' },
-  { name: 'Ayomide Idowu', role: 'Visuals and Designs', img: '/team/Ayomide%20Idowu.jpg' },
+  { name: 'Feranmi Oluwole', role: 'Operations Manager', img: '/team/Feranmi%20Oluwole.JPG', linkedin: 'https://www.linkedin.com/in/feranmi-oluwole-675712339/' },
+  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.png', linkedin: 'https://www.linkedin.com/in/theresa-gyamfi/' },
+  { name: 'Esther Adeoye', role: 'Social Media Manager', img: '/team/Adeoye%20Esther.jpg', linkedin: 'https://www.linkedin.com/in/adeoye-esther-4151a62b8/' },
+  { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/Ariyo%20Aresa.jpg', linkedin: 'https://www.linkedin.com/in/ariyoaresa/' },
+  { name: 'Ayomide Idowu', role: 'Visuals and Designs', img: '/team/Ayomide%20Idowu.jpg', linkedin: 'https://www.linkedin.com/in/ayomide-idowu-4a852623a/' },
 ];
 
 const ADVISORS = [
