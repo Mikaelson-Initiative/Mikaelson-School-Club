@@ -18,6 +18,7 @@ const NAV_ITEMS: NavItem[] = [
       ['About Us', '/about'],
       ['Our Team', '/leadership'],
       ['Resources', '/resources'],
+      ['Contact Us', '/contact'],
     ],
   },
   { label: 'Club Programme', href: '/programme' },
