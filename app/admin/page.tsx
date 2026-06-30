@@ -92,19 +92,20 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
         }),
       });
 
-      const data = await loginRes.json();
-      
-      // NextAuth returns { error: "CredentialsSignin" } on failure
-      if (data?.error) {
-        console.error("Login failed:", data.error);
-        setError(true);
-      } else {
+      // NextAuth returns ok: true or redirects on success!
+      if (loginRes.ok || loginRes.redirected) {
         // Success! 
         sessionStorage.setItem('msc_admin', '1');
         onLogin();
+        return; // Exit early!
       }
+
+      // If we reach here, it failed. NOW we can safely parse the error JSON.
+      const data = await loginRes.json();
+      console.error("Login failed:", data.error);
+      setError(true);
     } catch (err) {
-      console.error("Network error:", err);
+      console.error("Network/Parsing error:", err);
       setError(true);
     } finally {
       setLoading(false);
