@@ -3,16 +3,10 @@ import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import Link from 'next/link';
+import Image from 'next/image';
 import { IconCheck } from '../components/Icons';
 
-export const metadata = {
-  title: 'About | Mikaelson School Club',
-  description: 'The story behind Mikaelson School Club, born from a gap in how schools prepare young people for life after graduation.',
-};
-
-import { WRAP, SEC, LABEL } from '../lib/tw';
-const BTN_P = 'font-body font-bold text-[16px] border-none rounded-full px-8 py-4 cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)]';
-const BTN_G = 'font-body font-semibold text-[15px] rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-transparent text-site-text border-[1.5px] border-line transition-[transform,border-color,color] duration-200 hover:border-accent hover:text-accent-ink hover:-translate-y-[2px]';
+import { WRAP, SEC, LABEL, BTN_TURQUOISE as BTN_P, BTN_GHOST as BTN_G } from '../lib/tw';
 
 const STATS = [
   { stat: '70%', text: 'of students report feeling unprepared for life after school' },
@@ -33,6 +27,11 @@ const SDGS = [
   { img: '/sdg/sdg-11.png', alt: 'SDG 11 — Sustainable Cities & Communities', text: 'Every chapter runs community projects, turning students into engaged, accountable members who strengthen the places they live.' },
   { img: '/sdg/sdg-17.png', alt: 'SDG 17 — Partnerships for the Goals', text: 'The club runs on partnership — between schools, sponsors, mentors, and communities working together across the continent.' },
 ];
+
+export const metadata = {
+  title: 'About | Mikaelson School Club',
+  description: 'The story behind Mikaelson School Club, born from a gap in how schools prepare young people for life after graduation.',
+};
 
 export default function AboutPage() {
   return (
@@ -56,7 +55,7 @@ export default function AboutPage() {
                   <p className="font-mono text-[12px] tracking-[0.1em] uppercase text-muted mb-6">The data</p>
                   <div className="flex flex-col gap-6">
                     {STATS.map((item, i) => (
-                      <div key={i} className="flex gap-[18px] items-start">
+                      <div key={item.stat} className="flex gap-[18px] items-start">
                         <div className="font-display font-[800] leading-[1] tracking-[-0.03em] text-accent shrink-0 pt-[2px]" style={{ fontSize: i === 1 ? 22 : 32 }}>{item.stat}</div>
                         <p className="m-0 text-muted text-[15px] leading-[1.55]">{item.text}</p>
                       </div>
@@ -140,7 +139,13 @@ export default function AboutPage() {
               <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[22px]">
                 {SDGS.map((g) => (
                   <div key={g.img} className="bg-surface border border-line rounded-[22px] p-[26px] transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-36px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_35%,var(--line))]">
-                    <img src={g.img} alt={g.alt} className="w-[88px] h-[88px] rounded-[12px] object-contain mb-5" />
+                    <Image
+                      src={g.img}
+                      alt={g.alt}
+                      width={88}
+                      height={88}
+                      className="rounded-[12px] object-contain mb-5"
+                    />
                     <p className="text-muted text-[15px] m-0 leading-[1.6]">{g.text}</p>
                   </div>
                 ))}

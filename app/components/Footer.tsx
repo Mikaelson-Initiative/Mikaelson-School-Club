@@ -1,5 +1,6 @@
 import { IconGlobe, IconMail, IconInstagram } from './Icons';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const COLS = [
   {
@@ -54,10 +55,12 @@ export default function Footer() {
               className="flex items-center gap-2.75 font-display font-bold text-[18px] tracking-[-0.01em] no-underline text-site-text"
               href="/"
             >
-              <img
+            <Image
                 className="h-8.75 w-8.75 block object-contain"
-                src="/MSC%20logo.png"
+                src="/MSC logo.png"
                 alt="Mikaelson School Club"
+                width={35}
+                height={35}
               />
               <span className="font-display font-bold text-[14px] tracking-[-0.01em] whitespace-nowrap text-accent-ink mobile:hidden md:flex">
                 Mikaelson School Club

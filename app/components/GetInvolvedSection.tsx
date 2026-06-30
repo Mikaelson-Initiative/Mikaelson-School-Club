@@ -4,7 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Reveal from './Reveal';
 import Counter from './Counter';
+import BaseModal from './BaseModal';
 import { IconArrow, IconCheck } from './Icons';
+import { BTN_PRIMARY } from '../lib/tw';
 
 /* ── Form definitions per audience ── */
 const FORMS: Record<string, {
@@ -92,95 +94,87 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
   }
 
   return (
-    <div
-      className="fixed inset-0 z-[200] grid place-items-center p-6 bg-[rgba(8,14,12,.6)] backdrop-blur-[6px]"
-      style={{ animation: 'modalFadeIn .22s ease' }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div
-        className="bg-surface text-site-text border border-line rounded-[22px] max-w-[460px] w-full p-10 relative max-h-[90vh] overflow-y-auto max-sm:p-[28px] max-sm:px-5 xs:p-6 xs:px-4"
-        style={{ animation: 'modalFadeIn .28s ease' }}
-      >
-        <button
-          className="text-muted absolute top-4 right-[18px] bg-transparent border-none cursor-pointer text-[20px] leading-none transition-colors duration-150 hover:text-site-text"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          ×
-        </button>
-
-        {submitted ? (
-          <div className="text-center py-5">
-            <div className="bg-accent-soft text-accent-ink w-[58px] h-[58px] rounded-full grid place-items-center mx-auto mb-[18px] text-[26px]">
-              ✓
-            </div>
-            <h3 className="font-display font-bold text-[22px] m-0 mb-[10px]">You&apos;re on the list.</h3>
-            <p className="text-muted m-0 text-[15px]">We&apos;ve received your details and will be in touch within 3 working days.</p>
+    <BaseModal onClose={onClose}>
+      {submitted ? (
+        <div className="text-center py-5">
+          <div className="bg-accent-soft text-accent-ink w-[58px] h-[58px] rounded-full grid place-items-center mx-auto mb-[18px] text-[26px]">
+            ✓
           </div>
-        ) : (
-          <>
-            <p className="font-mono text-accent-ink text-[11px] tracking-[0.18em] uppercase mb-3">
-              {form.label}
-            </p>
-            <h2
-              className="font-display font-extrabold tracking-[-0.02em] m-0 mb-[10px]"
-              style={{ fontSize: 'clamp(22px,3vw,28px)' }}
-            >
-              {form.heading}
-            </h2>
-            <p className="text-muted text-[14.5px] m-0 mb-7">{form.sub}</p>
-            <form onSubmit={handleSubmit}>
-              {form.fields.map((f) => (
-                <div className="flex flex-col gap-[6px] mb-4" key={f.name}>
-                  <label
-                    htmlFor={f.name}
-                    className="font-mono text-muted text-[11px] tracking-[0.1em] uppercase"
+          <h3 className="font-display font-bold text-[22px] m-0 mb-[10px]">You&apos;re on the list.</h3>
+          <p className="text-muted m-0 text-[15px]">We&apos;ve received your details and will be in touch within 3 working days.</p>
+        </div>
+      ) : (
+        <>
+          <p className="font-mono text-accent-ink text-[11px] tracking-[0.18em] uppercase mb-3">
+            {form.label}
+          </p>
+          <h2
+            className="font-display font-extrabold tracking-[-0.02em] m-0 mb-[10px]"
+            style={{ fontSize: 'clamp(22px,3vw,28px)' }}
+          >
+            {form.heading}
+          </h2>
+          <p className="text-muted text-[14.5px] m-0 mb-7">{form.sub}</p>
+          <form onSubmit={handleSubmit}>
+            {form.fields.map((f) => (
+              <div className="flex flex-col gap-[6px] mb-4" key={f.name}>
+                <label
+                  htmlFor={f.name}
+                  className="font-mono text-muted text-[11px] tracking-[0.1em] uppercase"
+                >
+                  {f.label}
+                </label>
+                {f.type === 'select' ? (
+                  <select
+                    id={f.name}
+                    required
+                    className={FIELD_INPUT + ' appearance-none cursor-pointer'}
+                    value={values[f.name] || ''}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setValues(prev => ({ ...prev, [f.name]: value }));
+                    }}
                   >
-                    {f.label}
-                  </label>
-                  {f.type === 'select' ? (
-                    <select
-                      id={f.name}
-                      required
-                      className={FIELD_INPUT + ' appearance-none cursor-pointer'}
-                      value={values[f.name] || ''}
-                      onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
-                    >
-                      <option value="" disabled>Select one…</option>
-                      {f.options!.map((o) => <option key={o} value={o}>{o}</option>)}
-                    </select>
-                  ) : f.type === 'textarea' ? (
-                    <textarea
-                      id={f.name}
-                      placeholder={f.placeholder}
-                      className={FIELD_INPUT + ' resize-y min-h-[90px]'}
-                      value={values[f.name] || ''}
-                      onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
-                    />
-                  ) : (
-                    <input
-                      id={f.name}
-                      type={f.type}
-                      placeholder={f.placeholder}
-                      required={!f.label.includes('optional')}
-                      className={FIELD_INPUT}
-                      value={values[f.name] || ''}
-                      onChange={(e) => setValues({ ...values, [f.name]: e.target.value })}
-                    />
-                  )}
-                </div>
-              ))}
-              <button
-                type="submit"
-                className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
-              >
-                Submit application <IconArrow size={16} className="arr" />
-              </button>
-            </form>
-          </>
-        )}
-      </div>
-    </div>
+                    <option value="" disabled>Select one…</option>
+                    {f.options!.map((o) => <option key={o} value={o}>{o}</option>)}
+                  </select>
+                ) : f.type === 'textarea' ? (
+                  <textarea
+                    id={f.name}
+                    placeholder={f.placeholder}
+                    className={FIELD_INPUT + ' resize-y min-h-[90px]'}
+                    value={values[f.name] || ''}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setValues(prev => ({ ...prev, [f.name]: value }));
+                    }}
+                  />
+                ) : (
+                  <input
+                    id={f.name}
+                    type={f.type}
+                    placeholder={f.placeholder}
+                    required={!f.label.includes('optional')}
+                    className={FIELD_INPUT}
+                    value={values[f.name] || ''}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setValues(prev => ({ ...prev, [f.name]: value }));
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+            <button
+              type="submit"
+              className={`${BTN_PRIMARY} w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]`}
+            >
+              Submit application <IconArrow size={16} className="arr" />
+            </button>
+          </form>
+        </>
+      )}
+    </BaseModal>
   );
 }
 
@@ -253,13 +247,13 @@ export default function GetInvolvedSection() {
               {a.href ? (
                 <Link
                   href={a.href}
-                  className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                  className={`${BTN_PRIMARY} [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]`}
                 >
                   {a.cta} <IconArrow size={16} className="arr" />
                 </Link>
               ) : (
                 <button
-                  className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                  className={`${BTN_PRIMARY} [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]`}
                   onClick={() => setModalOpen(true)}
                 >
                   {a.cta} <IconArrow size={16} className="arr" />

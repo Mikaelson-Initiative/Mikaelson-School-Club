@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import VolunteerModal from '../components/VolunteerModal';
+import Image from 'next/image';
 import { IconLinkedin } from '../components/Icons';
 
 import { WRAP, SEC, LABEL } from '../lib/tw';
@@ -25,7 +26,7 @@ const OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[
   { name: 'Mariam Jimoh', role: 'ESG and Impact', img: '/team/Mariam%20Jimoh.jpeg', linkedin: 'https://www.linkedin.com/in/jimohmariamajoke/' },
   { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', img: '/team/Ayegbusi%20Bright%20Temitope.jpg' },
   { name: 'Feranmi Oluwole', role: 'Operations Manager', img: '/team/Feranmi%20Oluwole.JPG', linkedin: 'https://www.linkedin.com/in/feranmi-oluwole-675712339/' },
-  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.png', linkedin: 'https://www.linkedin.com/in/theresa-gyamfi/' },
+  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.jpg', linkedin: 'https://www.linkedin.com/in/theresa-gyamfi/' },
   { name: 'Esther Adeoye', role: 'Social Media Manager', img: '/team/Adeoye%20Esther.jpg', linkedin: 'https://www.linkedin.com/in/adeoye-esther-4151a62b8/' },
   { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/AriyoAresa.avif', linkedin: 'https://www.linkedin.com/in/ariyoaresa/' },
   { name: 'Ayomide Idowu', role: 'Visuals and Designs', img: '/team/Ayomide%20Idowu.jpg', linkedin: 'https://www.linkedin.com/in/ayomide-idowu-4a852623a/' },
@@ -57,7 +58,13 @@ export default function LeadershipPage() {
                 <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[22px] text-center transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-36px_rgba(0,0,0,.45)] hover:border-[color-mix(in_srgb,var(--accent)_35%,var(--line))]">
                   <div className="bg-[var(--surface-2)] border-2 border-accent-soft w-[80px] h-[80px] rounded-full overflow-hidden mx-auto mb-[14px] grid place-items-center">
                     {o.img ? (
-                      <img src={o.img} alt={o.name} className="w-full h-full object-cover" />
+                      <Image
+                        src={o.img}
+                        alt={o.name}
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <span className="font-mono text-[20px] font-bold text-accent-ink">{o.name.charAt(0)}</span>
                     )}

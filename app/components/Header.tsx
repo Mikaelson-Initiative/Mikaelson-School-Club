@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import { BTN_PRIMARY } from '../lib/tw';
 
 type NavItem = {
   label: string;
@@ -80,10 +82,12 @@ export default function Header() {
             className="flex items-center gap-2.75 font-display font-bold text-[18px] tracking-[-0.01em] no-underline text-site-text"
             href="/"
           >
-            <img
+            <Image
               className="h-8.75 w-8.75 block object-contain"
-              src="/MSC%20logo.png"
+              src="/MSC logo.png"
               alt="Mikaelson School Club"
+              width={35}
+              height={35}
             />
             <span className="font-display font-bold text-[14px] tracking-[-0.01em] whitespace-nowrap text-accent-ink mobile:hidden md:flex">
               Mikaelson School Club
@@ -98,6 +102,7 @@ export default function Header() {
                   <button
                     type="button"
                     aria-haspopup="true"
+                    aria-expanded={false}
                     className={[
                       'font-body bg-transparent border-none cursor-pointer inline-flex items-center gap-[5px] p-0',
                       'text-[14.5px] font-medium transition-colors duration-200',
@@ -158,7 +163,7 @@ export default function Header() {
           <div className="flex items-center gap-4 max-md:hidden">
             <Link
               href="/partners"
-              className="font-body font-bold text-[14px] border-none rounded-full px-[22px] py-[11px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)]"
+              className={BTN_PRIMARY}
             >
               Sponsor a Chapter
             </Link>
@@ -256,7 +261,7 @@ export default function Header() {
             )}
             <Link
               href="/partners"
-              className="mt-5 flex w-full justify-center box-border font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)]"
+              className={`mt-5 flex w-full justify-center ${BTN_PRIMARY}`}
               onClick={() => setMenuOpen(false)}
             >
               Sponsor a Chapter

@@ -10,8 +10,6 @@ import {
   type EventType,
 } from '../lib/events';
 
-const PIN = '2026';
-
 /* ── Types ── */
 interface SchoolApplication {
   id: string;
@@ -36,26 +34,6 @@ interface School {
   approvalDate: string;
   studentCount: number;
 }
-
-/* ── Initial Data ── */
-const INITIAL_APPLICATIONS: SchoolApplication[] = [
-  { id: 'app-1', schoolName: 'Greenwood Academy', contactName: 'John Doe', email: 'john@greenwood.edu', phone: '+234 801 234 5678', location: 'Lagos, Nigeria', role: 'Principal', studentsCount: 45, message: 'We want to bring STEM excellence to our students.', submissionDate: '2026-06-01', status: 'pending' },
-  { id: 'app-2', schoolName: 'Riverside High', contactName: 'Jane Smith', email: 'jane@riverside.edu', phone: '+234 802 345 6789', location: 'Ikeja, Lagos', role: 'Teacher', studentsCount: 30, message: 'Looking for more extracurricular activities for our students.', submissionDate: '2026-06-02', status: 'pending' },
-];
-
-const INITIAL_SCHOOLS: School[] = [
-  { id: '1', name: 'Igbobi College', city: 'Lagos', region: 'Yaba', status: 'Active', approvalDate: '2026-05-01', studentCount: 120 },
-  { id: '2', name: 'St Finbars College', city: 'Lagos', region: 'Akoka', status: 'Active', approvalDate: '2026-05-01', studentCount: 85 },
-  { id: '3', name: "St Gregory's College", city: 'Lagos', region: 'Obalende', status: 'Active', approvalDate: '2026-05-01', studentCount: 150 },
-  { id: '4', name: 'Methodist Girls & Boys', city: 'Lagos', region: 'Yaba', status: 'Registered', approvalDate: '2026-05-01', studentCount: 0 },
-  { id: '5', name: 'Dowen College', city: 'Lagos', region: 'Lekki', status: 'Registered', approvalDate: '2026-05-01', studentCount: 0 },
-  { id: '6', name: 'Yabatech Secondary School', city: 'Lagos', region: 'Yaba', status: 'Registered', approvalDate: '2026-05-01', studentCount: 0 },
-  { id: '7', name: "King's College", city: 'Lagos', region: 'Lagos Island', status: 'Active', approvalDate: '2026-05-01', studentCount: 200 },
-  { id: '8', name: "Kay's International College", city: 'Lagos', region: 'Victoria Island', status: 'Registered', approvalDate: '2026-05-01', studentCount: 0 },
-  { id: '9', name: 'Our Lady of Apostles Secondary School', city: 'Lagos', region: 'Yaba', status: 'Registered', approvalDate: '2026-05-01', studentCount: 0 },
-  { id: '10', name: 'Cathedral Missionary School (CMS)', city: 'Lagos', region: 'Lagos Island', status: 'Registered', approvalDate: '2026-05-01', studentCount: 0 },
-];
-
 const TEAM = [
   { name: 'Michael Olukayode', role: 'Team Lead' },
   { name: 'Boluwatife Adeleke', role: 'Project Manager' },
@@ -81,38 +59,35 @@ const NAV: { key: TabKey; label: string; icon: string }[] = [
   { key: 'team', label: 'Team', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1a4 4 0 100-8 4 4 0 000 8z' },
 ];
 
-/* ── localStorage-backed state hook ── */
-function usePersistentState<T>(key: string, initial: T): [T, Dispatch<SetStateAction<T>>, boolean] {
-  const [state, setState] = useState<T>(initial);
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(key);
-      if (raw) setState(JSON.parse(raw) as T);
-    } catch { /* ignore */ }
-    setLoaded(true);
-  }, [key]);
-  useEffect(() => {
-    if (loaded) {
-      try { localStorage.setItem(key, JSON.stringify(state)); } catch { /* ignore */ }
-    }
-  }, [key, state, loaded]);
-  return [state, setState, loaded];
-}
-
 /* ── Login ── */
 function LoginScreen({ onLogin }: { onLogin: () => void }) {
-  const [pin, setPin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (pin === PIN) {
-      sessionStorage.setItem('msc_admin', '1');
-      onLogin();
-    } else {
+    setLoading(true);
+    setError(false);
+
+    try {
+      const res = await fetch('/api/auth/callback/credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        sessionStorage.setItem('msc_admin', '1');
+        onLogin();
+      } else {
+        setError(true);
+      }
+    } catch (err) {
       setError(true);
-      setPin('');
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -127,23 +102,33 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
           </div>
         </div>
         <h1 className="text-2xl font-bold text-[#003e45] mb-1" style={{ fontFamily: 'var(--font-display)' }}>Sign in</h1>
-        <p className="text-sm text-[#6e675c] mb-6">Enter your admin PIN to continue.</p>
+        <p className="text-sm text-[#6e675c] mb-6">Enter your email and password to continue.</p>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
-            type="password"
-            placeholder="Enter PIN"
-            value={pin}
-            onChange={e => { setPin(e.target.value); setError(false); }}
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={e => { setEmail(e.target.value); setError(false); }}
             className="w-full border border-[#e7e0d4] rounded-xl px-4 py-3 text-sm bg-[#f3eee5] text-[#201d16] outline-none focus:border-[#5ce1e6] transition-colors"
             autoFocus
+            required
           />
-          {error && <p className="text-red-500 text-xs">Incorrect PIN. Try again.</p>}
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => { setPassword(e.target.value); setError(false); }}
+            className="w-full border border-[#e7e0d4] rounded-xl px-4 py-3 text-sm bg-[#f3eee5] text-[#201d16] outline-none focus:border-[#5ce1e6] transition-colors"
+            required
+          />
+          {error && <p className="text-red-500 text-xs">Invalid credentials. Try again.</p>}
           <button
             type="submit"
-            className="w-full bg-[#5ce1e6] text-[#003e45] font-bold rounded-full py-3 text-sm hover:translate-y-0.5 transition-transform"
+            disabled={loading}
+            className="w-full bg-[#5ce1e6] text-[#003e45] font-bold rounded-full py-3 text-sm hover:translate-y-0.5 transition-transform disabled:opacity-50 disabled:hover:translate-y-0"
             style={{ boxShadow: '0 8px 0 -2px #003e45' }}
           >
-            Access Dashboard
+            {loading ? 'Signing in...' : 'Access Dashboard'}
           </button>
         </form>
       </div>
@@ -159,9 +144,30 @@ const emptyEvent = (): Omit<EventItem, 'id'> => ({
 /* ── Dashboard ── */
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
-  const [applications, setApplications] = usePersistentState<SchoolApplication[]>('msc_applications', INITIAL_APPLICATIONS);
-  const [schools, setSchools] = usePersistentState<School[]>('msc_schools', INITIAL_SCHOOLS);
+  const [applications, setApplications] = useState<SchoolApplication[]>([]);
+  const [schools, setSchools] = useState<School[]>([]);
   const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const appsRes = await fetch('/api/admin/applications');
+        if (appsRes.ok) {
+          const data = await appsRes.json();
+          setApplications(Array.isArray(data) ? data : data.applications || []);
+        }
+
+        const schoolsRes = await fetch('/api/admin/schools');
+        if (schoolsRes.ok) {
+          const data = await schoolsRes.json();
+          setSchools(Array.isArray(data) ? data : data.schools || []);
+        }
+      } catch (err) {
+        console.error('Error fetching admin data:', err);
+      }
+    }
+    fetchData();
+  }, []);
 
   // Events (shared store so the public /events page sees changes)
   const [events, setEvents] = useState<EventItem[]>(SEED_EVENTS);

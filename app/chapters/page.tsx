@@ -12,12 +12,14 @@ import Link from 'next/link';
 import { WRAP, LABEL } from '../lib/tw';
 const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]';
 
-const CHAPTERS = [
-  { school: 'Igbobi College', city: 'Lagos, Nigeria', code: 'IC', members: 0, live: false },
-  { school: 'St Finbars College', city: 'Lagos, Nigeria', code: 'SF', members: 0, live: false },
-  { school: 'Yabatech Secondary School', city: 'Lagos, Nigeria', code: 'YS', members: 0, live: false },
-  { school: 'Our Lady of Apostles Secondary School', city: 'Yaba, Lagos, Nigeria', code: 'OL', members: 0, live: false },
-  { school: 'CMS Grammar School', city: 'Lagos, Nigeria', code: 'CMS', members: 0, live: false },
+type Chapter = { school: string; city: string; code: string; members: number; live: boolean; logo?: string };
+
+const CHAPTERS: Chapter[] = [
+  { school: 'Igbobi College', city: 'Lagos, Nigeria', code: 'IC', members: 0, live: false, logo: '/chapters/igbobi.png' },
+  { school: 'St Finbars College', city: 'Lagos, Nigeria', code: 'SF', members: 0, live: false, logo: '/chapters/st-finbars.png' },
+  { school: 'Yabatech Secondary School', city: 'Lagos, Nigeria', code: 'YS', members: 0, live: false, logo: '/chapters/yabatech.png' },
+  { school: 'Our Lady of Apostles Secondary School', city: 'Yaba, Lagos, Nigeria', code: 'OL', members: 0, live: false, logo: '/chapters/our-lady-of-apostles.png' },
+  { school: 'CMS Grammar School', city: 'Lagos, Nigeria', code: 'CMS', members: 0, live: false, logo: '/chapters/cms-grammar.png' },
   { school: 'Achimota School', city: 'Accra, Ghana', code: 'AC', members: 52, live: true },
   { school: 'Riara Springs', city: 'Nairobi, Kenya', code: 'NB', members: 38, live: true },
   { school: 'Morris Isaacson', city: 'Soweto, South Africa', code: 'SW', members: 47, live: true },
@@ -34,6 +36,22 @@ const STEPS = [
   { t: 'Launch', d: 'Run your first huddle with starter sessions and the habit system.' },
   { t: 'Grow', d: 'Track engagement, ship a community project, and recruit your next cohort.' },
 ];
+
+/* School logo with graceful fallback to the letter code badge (e.g. before a logo
+   file has been added to /public/chapters, or for chapters without a logo). */
+function ChapterMark({ logo, code }: { logo?: string; code: string }) {
+  const [failed, setFailed] = useState(false);
+  if (logo && !failed) {
+    return (
+      <div className="w-[46px] h-[46px] rounded-[8px] bg-white border border-line grid place-items-center overflow-hidden shrink-0">
+        <img src={logo} alt="" className="w-full h-full object-contain p-[5px]" onError={() => setFailed(true)} />
+      </div>
+    );
+  }
+  return (
+    <div className="font-mono text-[13px] font-bold text-accent-ink bg-accent-soft w-[46px] h-[46px] rounded-[8px] grid place-items-center shrink-0">{code}</div>
+  );
+}
 
 export default function ChaptersPage() {
   const [filter, setFilter] = useState('All');
@@ -97,8 +115,8 @@ export default function ChaptersPage() {
             {list.map((c, i) => (
               <Reveal delay={i * 50} key={c.school}>
                 <div className="bg-surface border border-line rounded-[14px] py-[18px] px-5 flex items-center gap-4 transition-[transform,border-color] duration-200 hover:border-accent hover:-translate-y-[1px] max-sm:flex-col max-sm:items-start max-sm:gap-3">
-                  {/* Code badge */}
-                  <div className="font-mono text-[13px] font-bold text-accent-ink bg-accent-soft py-[6px] px-[10px] rounded-[8px] shrink-0">{c.code}</div>
+                  {/* School logo (falls back to the letter code) */}
+                  <ChapterMark logo={c.logo} code={c.code} />
                   <div className="flex-1 min-w-0">
                     <div className="font-display font-semibold text-[16px]">{c.school}</div>
                     <div className="font-mono text-muted text-[12px] uppercase tracking-[.06em]">{c.city}</div>

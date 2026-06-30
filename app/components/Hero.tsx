@@ -1,18 +1,31 @@
 import Reveal from './Reveal';
 import { IconArrow } from './Icons';
 import Link from 'next/link';
+import Image from 'next/image';
+import { BTN_PRIMARY, BTN_GHOST } from '../lib/tw';
 
 export default function Hero() {
   return (
-    <header
+    // `<section>` not `<header>` — the nav already provides the page header landmark
+    <section
       className="relative pt-34 pb-24 overflow-hidden max-md:pt-30 max-md:pb-18 max-sm:pt-24 max-sm:pb-14"
       id="top"
     >
       {/* Background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <div
-          className="absolute inset-0 bg-cover bg-no-repeat bg-position-[center_right] max-md:opacity-50"
-          style={{ backgroundImage: "url('/hero-v3.png')" }}
+        {/*
+          Using next/image with `fill` + `priority` so Next.js:
+          - Generates a <link rel="preload"> for the LCP image
+          - Serves WebP/AVIF instead of PNG
+          - Adds a srcset for different viewports
+        */}
+        <Image
+          src="/hero-v3.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-right max-md:opacity-50"
         />
         {/* Fade overlay */}
         <div
@@ -50,13 +63,13 @@ export default function Hero() {
             <div className="flex gap-4 flex-wrap max-sm:flex-col max-sm:items-stretch max-sm:gap-[10px]">
               <Link
                 href="/apply"
-                className="font-body mb-3 font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] max-sm:justify-center [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]"
+                className={`${BTN_PRIMARY} mb-3 max-sm:justify-center [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]`}
               >
                 Apply for a Chapter <IconArrow size={16} className="arr" />
               </Link>
               <Link
                 href="/#pillars"
-                className="font-body font-semibold text-[15px] rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-transparent text-site-text border-[1.5px] border-line transition-[transform,border-color,color] duration-200 hover:border-accent hover:text-accent-ink hover:-translate-y-[2px] max-sm:justify-center"
+                className={`${BTN_GHOST} max-sm:justify-center`}
               >
                 Explore Programs
               </Link>
@@ -64,6 +77,6 @@ export default function Hero() {
           </Reveal>
         </div>
       </div>
-    </header>
+    </section>
   );
 }

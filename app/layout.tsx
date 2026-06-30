@@ -139,6 +139,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${hankenGrotesk.variable} ${inter.variable} ${jetBrainsMono.variable}`}
+      // suppressHydrationWarning: browser extensions (e.g. dark-mode managers) may
+      // modify the <html> element's class/attributes after SSR, causing a harmless
+      // hydration mismatch. This suppresses that warning without affecting behaviour.
       suppressHydrationWarning
     >
       <head>
