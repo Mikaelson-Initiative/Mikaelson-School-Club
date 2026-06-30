@@ -72,19 +72,39 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
     setError(false);
 
     try {
-      const res = await fetch('/api/auth/callback/credentials', {
+      // 1. Fetch CSRF Token
+      const csrfRes = await fetch('/api/auth/csrf', { 
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include' // CRITICAL: Tells the browser to save the CSRF cookie!
+      });
+      const { csrfToken } = await csrfRes.json();
+
+      // 2. Submit Login 
+      const loginRes = await fetch('/api/auth/callback/credentials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        credentials: 'include', // CRITICAL: Tells the browser to SEND the CSRF cookie back!
+        body: JSON.stringify({
+          email,
+          password,
+          csrfToken,
+          redirect: false,
+        }),
       });
 
-      if (res.ok) {
+      const data = await loginRes.json();
+      
+      // NextAuth returns { error: "CredentialsSignin" } on failure
+      if (data?.error) {
+        console.error("Login failed:", data.error);
+        setError(true);
+      } else {
+        // Success! 
         sessionStorage.setItem('msc_admin', '1');
         onLogin();
-      } else {
-        setError(true);
       }
     } catch (err) {
+      console.error("Network error:", err);
       setError(true);
     } finally {
       setLoading(false);
