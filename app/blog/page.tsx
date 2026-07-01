@@ -13,7 +13,10 @@ export const dynamic = 'force-dynamic';
 export default async function BlogPage() {
   let posts: any[] = [];
   try {
-    const res = await fetch('https://dev.to/api/articles/latest?username=mikaelsonschoolclub', { cache: 'no-store' });
+    const res = await fetch('https://dev.to/api/articles/latest?username=mikaelsonschoolclub', { 
+      cache: 'no-store',
+      headers: { 'Origin': `https://nocache${Date.now()}.mikaelsoninitiative.org` }
+    });
     if (res.ok) {
       const data = await res.json();
       posts = data.map((post: any) => ({

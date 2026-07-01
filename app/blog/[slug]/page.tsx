@@ -15,13 +15,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   let post: any = null;
   try {
-    const listRes = await fetch('https://dev.to/api/articles/latest?username=mikaelsonschoolclub', { cache: 'no-store' });
+    const listRes = await fetch('https://dev.to/api/articles/latest?username=mikaelsonschoolclub', { 
+      cache: 'no-store',
+      headers: { 'Origin': `https://nocache${Date.now()}.mikaelsoninitiative.org` }
+    });
     if (listRes.ok) {
       const list = await listRes.json();
       const match = list.find((p: any) => p.slug === slug);
       
       if (match && match.id) {
-        const res = await fetch(`https://dev.to/api/articles/${match.id}`, { cache: 'no-store' });
+        const res = await fetch(`https://dev.to/api/articles/${match.id}`, { 
+          cache: 'no-store',
+          headers: { 'Origin': `https://nocache${Date.now()}.mikaelsoninitiative.org` }
+        });
         if (res.ok) {
           post = await res.json();
         }
