@@ -260,18 +260,23 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     const token = sessionStorage.getItem('msc_admin_token') || '';
     for (let i = 0; i < HARDCODED_OFFICERS.length; i++) {
       const o = HARDCODED_OFFICERS[i];
-      await fetch('/api/admin/team', {
+      const res = await fetch('/api/admin/team', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: o.name,
           role: o.role,
           email: o.name.split(' ')[0].toLowerCase() + '@mikaelsoninitiative.org',
-          avatarUrl: o.avatarUrl || undefined,
+          avatarUrl: o.avatarUrl ? `https://mikaelsoninitiative.org${o.avatarUrl}` : undefined,
           linkedinUrl: o.linkedinUrl || undefined,
           sortOrder: i
         })
       });
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to add ${o.name}: ${errorData.error || 'Unknown error'}`);
+      }
     }
     alert("Team Seeded! Please refresh the page.");
   };
