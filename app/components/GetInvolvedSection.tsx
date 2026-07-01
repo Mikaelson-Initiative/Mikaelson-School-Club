@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Reveal from './Reveal';
 import Counter from './Counter';
@@ -71,12 +71,12 @@ const FORMS: Record<string, {
 
 const AUDIENCES: {
   key: string; tab: string; h: string; p: string; bullets: string[];
-  cta: string; href?: string; stat: number; ss: string; sl: string;
+  cta: string; href?: string; statKey: 'students' | 'schools' | 'mentors' | 'sponsors'; ss: string; sl: string;
 }[] = [
-  { key: 'students', tab: 'Students', h: 'Join a chapter at your school.', p: 'Become part of a community that takes your growth seriously. Build habits, lead projects, and graduate with skills school doesn\'t teach.', bullets: ['Weekly sessions with your peers', 'A habit system that actually sticks', 'Real leadership experience for your CV'], cta: 'Apply as a Student', stat: 480, ss: '+', sl: 'students already in' },
-  { key: 'schools', tab: 'Schools', h: 'Start a chapter on your campus.', p: 'Bring a structured leadership and habit programme into your school with full facilitation support. We handle the system, you watch your culture shift.', bullets: ['Turnkey curriculum & Champion training', 'Measurable engagement reporting', 'Zero setup cost to pilot a chapter'], cta: 'Bring us to your school', href: '/apply', stat: 9, ss: '', sl: 'partner schools' },
-  { key: 'mentors', tab: 'Mentors', h: 'Become a Champion.', p: 'Teachers and student leaders: train with us to facilitate a chapter. We give you the playbook, the tools, and a community of fellow Champions.', bullets: ['Facilitator training & certification', 'Ready-to-run session plans', 'A network of mentors across cities'], cta: 'Train as a Champion', stat: 30, ss: '+', sl: 'trained Champions' },
-  { key: 'sponsors', tab: 'Sponsors', h: 'Partner with the movement.', p: 'Fund chapters, sponsor a school, or back the digital-literacy programme. Every contribution is tied to transparent, measurable student outcomes.', bullets: ['Sponsor a chapter for a full year', 'Quarterly impact reporting', 'Co-branded community projects'], cta: 'Partner with us', stat: 5, ss: '', sl: 'cities reached' },
+  { key: 'students', tab: 'Students', h: 'Join a chapter at your school.', p: 'Become part of a community that takes your growth seriously. Build habits, lead projects, and graduate with skills school doesn\'t teach.', bullets: ['Weekly sessions with your peers', 'A habit system that actually sticks', 'Real leadership experience for your CV'], cta: 'Apply as a Student', statKey: 'students', ss: '+', sl: 'students already in' },
+  { key: 'schools', tab: 'Schools', h: 'Start a chapter on your campus.', p: 'Bring a structured leadership and habit programme into your school with full facilitation support. We handle the system, you watch your culture shift.', bullets: ['Turnkey curriculum & Champion training', 'Measurable engagement reporting', 'Zero setup cost to pilot a chapter'], cta: 'Bring us to your school', href: '/apply', statKey: 'schools', ss: '', sl: 'partner schools' },
+  { key: 'mentors', tab: 'Mentors', h: 'Become a Champion.', p: 'Teachers and student leaders: train with us to facilitate a chapter. We give you the playbook, the tools, and a community of fellow Champions.', bullets: ['Facilitator training & certification', 'Ready-to-run session plans', 'A network of mentors across cities'], cta: 'Train as a Champion', statKey: 'mentors', ss: '+', sl: 'trained Champions' },
+  { key: 'sponsors', tab: 'Sponsors', h: 'Partner with the movement.', p: 'Fund chapters, sponsor a school, or back the digital-literacy programme. Every contribution is tied to transparent, measurable student outcomes.', bullets: ['Sponsor a chapter for a full year', 'Quarterly impact reporting', 'Co-branded community projects'], cta: 'Partner with us', statKey: 'sponsors', ss: '', sl: 'cities reached' },
 ];
 
 /* ── Shared class strings ── */
@@ -181,7 +181,47 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
 export default function GetInvolvedSection() {
   const [tab, setTab] = useState('students');
   const [modalOpen, setModalOpen] = useState(false);
+  
+  // Dynamic stats
+  const [statsData, setStatsData] = useState({
+    totalSchools: 9,
+    activeChapters: 12,
+    totalStudents: 480,
+    retentionRate: 94,
+  });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const res = await fetch('/api/stats');
+        if (res.ok) {
+          const data = await res.json();
+          setStatsData({
+            totalSchools: data.totalSchools,
+            activeChapters: data.activeChapters,
+            totalStudents: data.totalStudents,
+            retentionRate: data.retentionRate,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch stats", err);
+      }
+    }
+    fetchStats();
+  }, []);
+
   const a = AUDIENCES.find((x) => x.key === tab)!;
+
+  // Map stat keys to actual values
+  const getStatValue = (key: string) => {
+    switch (key) {
+      case 'students': return statsData.totalStudents;
+      case 'schools': return statsData.totalSchools;
+      case 'mentors': return 30; // Hardcoded default for now
+      case 'sponsors': return 5; // Hardcoded default for now
+      default: return 0;
+    }
+  };
 
   return (
     <>
@@ -266,7 +306,7 @@ export default function GetInvolvedSection() {
               <div
                 className="font-display font-[800] text-[46px] tracking-[-0.02em] leading-none"
               >
-                <Counter to={a.stat} suffix={a.ss} />
+                <Counter to={getStatValue(a.statKey)} suffix={a.ss} />
               </div>
               <div className="text-muted font-mono text-[13px] uppercase tracking-[0.06em] mt-[10px]">
                 {a.sl}

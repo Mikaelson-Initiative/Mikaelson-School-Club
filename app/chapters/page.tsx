@@ -55,14 +55,33 @@ function ChapterMark({ logo, code }: { logo?: string; code: string }) {
 export default function ChaptersPage() {
   const [filter, setFilter] = useState('All');
   const [chapters, setChapters] = useState<Chapter[]>(HARDCODED_CHAPTERS);
-  const [countries, setCountries] = useState<string[]>(['All', 'Nigeria', 'Ghana', 'Kenya', 'South Africa', 'Uganda', 'Rwanda', 'Tanzania']);
+  const [countries, setCountries] = useState<string[]>(['All']);
+  const [statsData, setStatsData] = useState({
+    totalSchools: 9,
+    activeChapters: 12,
+    totalStudents: 480,
+  });
   
   useEffect(() => {
     async function fetchChapters() {
       try {
-        const res = await fetch('/api/schools');
-        if (res.ok) {
-          const data = await res.json();
+        // We can fetch schools and stats in parallel
+        const [schoolsRes, statsRes] = await Promise.all([
+          fetch('/api/schools'),
+          fetch('/api/stats')
+        ]);
+        
+        if (statsRes.ok) {
+          const stats = await statsRes.json();
+          setStatsData({
+            totalSchools: stats.totalSchools,
+            activeChapters: stats.activeChapters,
+            totalStudents: stats.totalStudents,
+          });
+        }
+
+        if (schoolsRes.ok) {
+          const data = await schoolsRes.json();
           const dynamicChapters = data.map((c: any) => ({
             school: c.name,
             city: c.country === 'Unknown' ? c.city : `${c.city}, ${c.country}`,
@@ -119,10 +138,10 @@ export default function ChaptersPage() {
           <Reveal>
             <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-2 border border-line rounded-[22px] mb-12">
               {[
-                { n: 12, s: '', l: 'Active chapters' },
-                { n: 9, s: '', l: 'Partner schools' },
+                { n: statsData.activeChapters, s: '', l: 'Active chapters' },
+                { n: statsData.totalSchools, s: '', l: 'Partner schools' },
                 { n: 5, s: '', l: 'Cities' },
-                { n: 480, s: '+', l: 'Students' },
+                { n: statsData.totalStudents, s: '+', l: 'Students' },
               ].map((s) => (
                 <div key={s.l} className="py-[26px] px-[24px] text-center">
                   <div className="font-display font-[800] text-[38px] tracking-[-0.03em] leading-none"><Counter to={s.n} suffix={s.s} /></div>
