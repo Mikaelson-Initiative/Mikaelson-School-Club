@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
@@ -14,7 +14,7 @@ const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px
 
 type Chapter = { school: string; city: string; code: string; members: number; live: boolean; logo?: string };
 
-const CHAPTERS: Chapter[] = [
+const HARDCODED_CHAPTERS: Chapter[] = [
   { school: 'Igbobi College', city: 'Lagos, Nigeria', code: 'IC', members: 0, live: false, logo: '/chapters/igbobi.png' },
   { school: 'St Finbars College', city: 'Lagos, Nigeria', code: 'SF', members: 0, live: false, logo: '/chapters/st-finbars.png' },
   { school: 'Yabatech Secondary School', city: 'Lagos, Nigeria', code: 'YS', members: 0, live: false, logo: '/chapters/yabatech.png' },
@@ -28,7 +28,6 @@ const CHAPTERS: Chapter[] = [
   { school: 'Feza Boys', city: 'Dar es Salaam, Tanzania', code: 'DS', members: 22, live: false },
 ];
 
-const COUNTRIES = ['All', 'Nigeria', 'Ghana', 'Kenya', 'South Africa', 'Uganda', 'Rwanda', 'Tanzania'];
 
 const STEPS = [
   { t: 'Apply', d: 'A teacher or student leader submits a short application for the school.' },
@@ -55,7 +54,44 @@ function ChapterMark({ logo, code }: { logo?: string; code: string }) {
 
 export default function ChaptersPage() {
   const [filter, setFilter] = useState('All');
-  const list = CHAPTERS.filter((c) => filter === 'All' || c.city.includes(filter));
+  const [chapters, setChapters] = useState<Chapter[]>(HARDCODED_CHAPTERS);
+  const [countries, setCountries] = useState<string[]>(['All', 'Nigeria', 'Ghana', 'Kenya', 'South Africa', 'Uganda', 'Rwanda', 'Tanzania']);
+  
+  useEffect(() => {
+    async function fetchChapters() {
+      try {
+        const res = await fetch('/api/schools');
+        if (res.ok) {
+          const data = await res.json();
+          const dynamicChapters = data.map((c: any) => ({
+            school: c.name,
+            city: c.country === 'Unknown' ? c.city : `${c.city}, ${c.country}`,
+            code: c.name.substring(0, 2).toUpperCase(),
+            members: c.studentsCount,
+            live: c.status === 'ACTIVE' || c.status === 'Active' || c.status === 'REGISTERED' || c.status === 'Registered', // For simplicity, showing all as live if they are in the DB, or customize based on status
+          }));
+          
+          // Combine or overwrite? The hardcoded ones have nice logos.
+          // Let's overwrite entirely with dynamic + keep logos if matched by name.
+          const merged = dynamicChapters.map((dc: Chapter) => {
+            const hardcodedMatch = HARDCODED_CHAPTERS.find(hc => hc.school.toLowerCase() === dc.school.toLowerCase());
+            return hardcodedMatch ? { ...dc, logo: hardcodedMatch.logo, live: dc.live || hardcodedMatch.live } : dc;
+          });
+          
+          if (merged.length > 0) {
+            setChapters(merged);
+            const uniqueCountries = Array.from(new Set(merged.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown')));
+            setCountries(['All', ...uniqueCountries]);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch chapters", err);
+      }
+    }
+    fetchChapters();
+  }, []);
+
+  const list = chapters.filter((c) => filter === 'All' || c.city.includes(filter));
 
   return (
     <>
@@ -92,7 +128,7 @@ export default function ChaptersPage() {
                 {list.length} chapters {filter !== 'All' ? `in ${filter}` : 'listed'}
               </span>
               <div className="flex gap-2 flex-wrap">
-                {COUNTRIES.map((c) => (
+                {countries.map((c) => (
                   <button
                     key={c}
                     className={[
