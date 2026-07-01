@@ -1,10 +1,7 @@
-import type { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Leadership',
-  description: 'Meet the elected student officers and faculty advisors leading the Mikaelson School Club network across Africa.',
-  openGraph: { title: 'Leadership | Mikaelson School Club', description: 'The students and advisors leading the Mikaelson School Club network.' },
-};
+import { useState, useEffect } from 'react';
+
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -19,7 +16,7 @@ import { WRAP, SEC, LABEL } from '../lib/tw';
 // Fallback used until each member's individual profile URL is added via `linkedin`.
 const TEAM_LINKEDIN = 'https://www.linkedin.com/company/mikaelson-initiative';
 
-const OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[] = [
+const HARDCODED_OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[] = [
   { name: 'Michael Olukayode', role: 'Team Lead', img: '/team/Michael%20Olukayode.jpg', linkedin: 'https://www.linkedin.com/in/michael-olukayode-73890b214/' },
   { name: 'Boluwatife Adeleke', role: 'Project Manager', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg', linkedin: 'https://www.linkedin.com/in/boluwatifemercyadeleke/' },
   { name: 'Irene Ezechi', role: 'Program Manager', img: '/team/Irene%20Ezechi.jpg', linkedin: 'https://www.linkedin.com/in/ireneezechi/' },
@@ -39,6 +36,38 @@ const ADVISORS = [
 ];
 
 export default function LeadershipPage() {
+  const [officers, setOfficers] = useState(HARDCODED_OFFICERS);
+
+  useEffect(() => {
+    async function fetchTeam() {
+      try {
+        const res = await fetch('/api/team');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            const dynamicOfficers = data.map((member: any) => ({
+              name: member.name,
+              role: member.role,
+              img: member.avatarUrl,
+              linkedin: member.linkedinUrl,
+            }));
+            
+            // Merge dynamically fetched officers, retaining hardcoded images if missing
+            const merged = dynamicOfficers.map((doff: any) => {
+              const match = HARDCODED_OFFICERS.find(h => h.name === doff.name);
+              return match ? { ...doff, img: doff.img || match.img } : doff;
+            });
+            
+            setOfficers(merged);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch team", err);
+      }
+    }
+    fetchTeam();
+  }, []);
+
   return (
     <>
       <Header />
@@ -53,7 +82,7 @@ export default function LeadershipPage() {
           </Reveal>
           {/* Officers grid: 5 cols → 3 → 2 → 1 */}
           <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-5">
-            {OFFICERS.map((o, i) => (
+            {officers.map((o, i) => (
               <Reveal delay={i * 60} key={o.name}>
                 <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[22px] text-center transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-36px_rgba(0,0,0,.45)] hover:border-[color-mix(in_srgb,var(--accent)_35%,var(--line))]">
                   <div className="bg-[var(--surface-2)] border-2 border-accent-soft w-[80px] h-[80px] rounded-full overflow-hidden mx-auto mb-[14px] grid place-items-center">

@@ -1,10 +1,6 @@
-import type { Metadata } from 'next';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Blog & Stories',
-  description: 'Student spotlights, session recaps, and programme updates from Mikaelson School Club chapters across Africa.',
-  openGraph: { title: 'Blog & Stories | Mikaelson School Club', description: 'Voices from the club, student stories and chapter updates.' },
-};
+import { useState, useEffect } from 'react';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -16,13 +12,45 @@ import Link from 'next/link';
 import { WRAP, LABEL } from '../lib/tw';
 const LINK_ARROW = 'font-mono text-accent-ink text-[12.5px] tracking-[0.06em] uppercase no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[4px]';
 
-const POSTS = [
+const HARDCODED_POSTS = [
   { category: 'Student Story', title: 'How tracking my habits for 30 days changed my relationship with school', author: 'Amara O., JSS 2, Lagos', excerpt: 'A student shares how the habit tracking system helped her go from inconsistent to her most productive term yet.' },
   { category: 'Session Recap', title: 'What our chapter learned about digital communication this term', author: 'Kwame A., Chapter President, Accra', excerpt: "Our digital literacy sessions this term covered AI tools, online communication, and responsible internet use. Here's what stuck." },
   { category: 'Facilitator Reflection', title: 'Running a student leadership club is harder, and more rewarding, than I expected', author: 'Mr. Ndlovu, Champion, Soweto', excerpt: "Six months in, our Chapter Champion reflects on what surprised him, what worked, and what he'd do differently." },
 ];
 
 export default function BlogPage() {
+  const [posts, setPosts] = useState(HARDCODED_POSTS);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const res = await fetch('/api/blog');
+        if (res.ok) {
+          const data = await res.json();
+          // Assuming data is an array or object containing posts. In route.ts it returns `result` which is paginated.
+          // Wait, let's check `src/app/api/blog/route.ts` - it calls `getPublicPosts`.
+          // `getPublicPosts` typically returns { posts, total, page, limit }.
+          if (data && data.posts && data.posts.length > 0) {
+            const dynamicPosts = data.posts.map((post: any) => ({
+              category: post.category?.name || 'Update',
+              title: post.title,
+              author: post.author?.name || 'Mikaelson School Club',
+              excerpt: post.excerpt || post.content?.substring(0, 100) + '...',
+              slug: post.slug
+            }));
+            
+            // Merge dynamically fetched posts, combining with hardcoded ones or just replacing.
+            // Since blog posts change often, it's usually better to just replace if we have data.
+            setPosts(dynamicPosts);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch posts", err);
+      }
+    }
+    fetchPosts();
+  }, []);
+
   return (
     <>
       <Header />
@@ -37,7 +65,7 @@ export default function BlogPage() {
             </h2>
           </Reveal>
           <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[22px]">
-            {POSTS.map((post, i) => (
+            {posts.map((post: any, i: number) => (
               <Reveal delay={i * 90} key={post.title}>
                 <div className="bg-surface border border-line rounded-[22px] overflow-hidden transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-34px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--line))]">
                   {/* Card image placeholder */}

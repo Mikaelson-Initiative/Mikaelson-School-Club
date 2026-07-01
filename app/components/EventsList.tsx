@@ -8,16 +8,29 @@ import { loadEvents, SEED_EVENTS, type EventItem } from '../lib/events';
 
 export default function EventsList() {
   const [events, setEvents] = useState<EventItem[]>(SEED_EVENTS);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const refresh = () => setEvents(loadEvents());
-    refresh();
-    window.addEventListener('msc_events_changed', refresh);
-    window.addEventListener('storage', refresh);
-    return () => {
-      window.removeEventListener('msc_events_changed', refresh);
-      window.removeEventListener('storage', refresh);
-    };
+    async function fetchEvents() {
+      try {
+        const res = await fetch('/api/events');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.length > 0) {
+            // Map backend data to frontend EventItem format if necessary,
+            // or assume the backend sends compatible data.
+            // Let's assume the backend data matches closely. 
+            // The backend returns: { id, title, date, time, location, description, category, type, attendees }
+            setEvents(data);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch events", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchEvents();
   }, []);
 
   const upcoming = events.filter((e) => e.type === 'upcoming');
