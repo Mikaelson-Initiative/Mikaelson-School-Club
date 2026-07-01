@@ -183,6 +183,18 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           const data = await schoolsRes.json();
           setSchools(Array.isArray(data) ? data : data.schools || []);
         }
+
+        const eventsRes = await fetch('/api/admin/events', { credentials: 'include' });
+        if (eventsRes.ok) {
+          const data = await eventsRes.json();
+          const mappedEvents = (Array.isArray(data) ? data : data.events || []).map((e: any) => ({
+            ...e,
+            type: e.isPast ? 'past' : 'upcoming',
+            date: new Date(e.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            category: e.category || 'Other',
+          }));
+          setEvents(mappedEvents);
+        }
       } catch (err) {
         console.error('Error fetching admin data:', err);
       }
@@ -190,10 +202,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     fetchData();
   }, []);
 
-  // Events (shared store so the public /events page sees changes)
-  const [events, setEvents] = useState<EventItem[]>(SEED_EVENTS);
-  useEffect(() => { setEvents(loadEvents()); }, []);
-  const persistEvents = (next: EventItem[]) => { setEvents(next); saveEvents(next); };
+  // Events (now fetched from backend)
+  const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -284,19 +294,61 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     setShowEventForm(true);
   };
   const cancelEventForm = () => { setShowEventForm(false); setEditingId(null); setEventForm(emptyEvent()); };
-  const submitEventForm = (e: React.FormEvent) => {
+  const submitEventForm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!eventForm.title.trim() || !eventForm.date.trim()) return;
+
+    const payload = {
+      title: eventForm.title,
+      date: eventForm.date,
+      time: eventForm.time,
+      location: eventForm.location,
+      description: eventForm.description,
+      category: eventForm.category,
+      isPast: eventForm.type === 'past',
+      attendees: eventForm.attendees || undefined,
+    };
+
     if (editingId) {
-      persistEvents(events.map(ev => ev.id === editingId ? { ...eventForm, id: editingId } : ev));
+      const res = await fetch(`/api/admin/events/${editingId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        setEvents(events.map(ev => ev.id === editingId ? { ...eventForm, id: editingId } : ev));
+        cancelEventForm();
+      } else {
+        alert("Failed to update event.");
+      }
     } else {
-      persistEvents([...events, { ...eventForm, id: newEventId() }]);
+      const res = await fetch('/api/admin/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setEvents([...events, { ...eventForm, id: data.id }]);
+        cancelEventForm();
+      } else {
+        alert("Failed to create event.");
+      }
     }
-    cancelEventForm();
   };
-  const deleteEvent = (id: string) => {
+  const deleteEvent = async (id: string) => {
     if (typeof window !== 'undefined' && !window.confirm('Delete this event?')) return;
-    persistEvents(events.filter(ev => ev.id !== id));
+    const res = await fetch(`/api/admin/events/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (res.ok) {
+      setEvents(events.filter(ev => ev.id !== id));
+    } else {
+      alert("Failed to delete event.");
+    }
   };
 
   const inputCls = "w-full bg-[#f9f7f3] border border-[#e7e0d4] rounded-xl px-4 py-2.5 text-sm text-[#201d16] outline-none focus:border-[#5ce1e6] transition-colors";
@@ -585,7 +637,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
               {!showEventForm && (
                 <p className="text-xs text-[#6e675c] bg-[#f3eee5] border border-[#e7e0d4] rounded-xl px-4 py-3">
-                  Events are saved to this browser and shown on the public <span className="font-mono">/events</span> page. A backend is needed to publish to all visitors.
+                  Events are published instantly to the public <span className="font-mono">/events</span> page.
                 </p>
               )}
 

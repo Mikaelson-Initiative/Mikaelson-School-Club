@@ -17,11 +17,13 @@ export default function EventsList() {
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {
-            // Map backend data to frontend EventItem format if necessary,
-            // or assume the backend sends compatible data.
-            // Let's assume the backend data matches closely. 
-            // The backend returns: { id, title, date, time, location, description, category, type, attendees }
-            setEvents(data);
+            const mappedEvents = data.map((e: any) => ({
+              ...e,
+              type: e.isPast ? 'past' : 'upcoming',
+              date: new Date(e.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+              category: e.category || 'Other',
+            }));
+            setEvents(mappedEvents);
           }
         }
       } catch (err) {
