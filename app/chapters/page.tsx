@@ -14,21 +14,6 @@ const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px
 
 type Chapter = { school: string; city: string; code: string; members: number; live: boolean; logo?: string };
 
-const HARDCODED_CHAPTERS: Chapter[] = [
-  { school: 'Igbobi College', city: 'Lagos, Nigeria', code: 'IC', members: 0, live: false, logo: '/chapters/igbobi.png' },
-  { school: 'St Finbars College', city: 'Lagos, Nigeria', code: 'SF', members: 0, live: false, logo: '/chapters/st-finbars.png' },
-  { school: 'Yabatech Secondary School', city: 'Lagos, Nigeria', code: 'YS', members: 0, live: false, logo: '/chapters/yabatech.png' },
-  { school: 'Our Lady of Apostles Secondary School', city: 'Yaba, Lagos, Nigeria', code: 'OL', members: 0, live: false, logo: '/chapters/our-lady-of-apostles.png' },
-  { school: 'CMS Grammar School', city: 'Lagos, Nigeria', code: 'CMS', members: 0, live: false, logo: '/chapters/cms-grammar.png' },
-  { school: 'Achimota School', city: 'Accra, Ghana', code: 'AC', members: 52, live: true },
-  { school: 'Riara Springs', city: 'Nairobi, Kenya', code: 'NB', members: 38, live: true },
-  { school: 'Morris Isaacson', city: 'Soweto, South Africa', code: 'SW', members: 47, live: true },
-  { school: 'Kibuli Secondary', city: 'Kampala, Uganda', code: 'KM', members: 33, live: true },
-  { school: 'Green Hills Academy', city: 'Kigali, Rwanda', code: 'KG', members: 29, live: false },
-  { school: 'Feza Boys', city: 'Dar es Salaam, Tanzania', code: 'DS', members: 22, live: false },
-];
-
-
 const STEPS = [
   { t: 'Apply', d: 'A teacher or student leader submits a short application for the school.' },
   { t: 'Train', d: 'We certify your Champion and hand over the full chapter playbook.' },
@@ -54,12 +39,12 @@ function ChapterMark({ logo, code }: { logo?: string; code: string }) {
 
 export default function ChaptersPage() {
   const [filter, setFilter] = useState('All');
-  const [chapters, setChapters] = useState<Chapter[]>(HARDCODED_CHAPTERS);
+  const [chapters, setChapters] = useState<Chapter[]>([]);
   const [countries, setCountries] = useState<string[]>(['All']);
   const [statsData, setStatsData] = useState({
-    totalSchools: 9,
-    activeChapters: 12,
-    totalStudents: 480,
+    totalSchools: 0,
+    activeChapters: 0,
+    totalStudents: 0,
   });
   
   useEffect(() => {
@@ -81,36 +66,19 @@ export default function ChaptersPage() {
         }
 
         if (schoolsRes.ok) {
-          const data = await schoolsRes.json();
+          const data = await fetch('/api/schools').then(r => r.json());
           const dynamicChapters = data.map((c: any) => ({
             school: c.name,
             city: c.country === 'Unknown' ? c.city : `${c.city}, ${c.country}`,
             code: c.name.substring(0, 2).toUpperCase(),
             members: c.studentsCount,
-            live: c.status === 'ACTIVE' || c.status === 'Active' || c.status === 'REGISTERED' || c.status === 'Registered', // For simplicity, showing all as live if they are in the DB, or customize based on status
+            logo: '/logos/default.png', // Generic fallback logo for all schools
+            live: c.status === 'ACTIVE' || c.status === 'Active' || c.status === 'REGISTERED' || c.status === 'Registered',
           }));
           
-          // Combine hardcoded and dynamic chapters.
-          // If a dynamic chapter has the same name as a hardcoded one, the dynamic one overrides it (but we keep the logo).
-          const dynamicNames = new Set(dynamicChapters.map((dc: any) => dc.school.toLowerCase()));
-          
-          const filteredHardcoded = HARDCODED_CHAPTERS.map(hc => {
-             // If this hardcoded chapter is now in the DB, skip it here so we don't duplicate.
-             if (dynamicNames.has(hc.school.toLowerCase())) return null;
-             return hc;
-          }).filter(Boolean) as Chapter[];
-
-          // For the dynamic chapters, see if there's a hardcoded logo to attach.
-          const finalDynamic = dynamicChapters.map((dc: any) => {
-             const match = HARDCODED_CHAPTERS.find(hc => hc.school.toLowerCase() === dc.school.toLowerCase());
-             return match ? { ...dc, logo: match.logo } : dc;
-          });
-
-          const combined = [...filteredHardcoded, ...finalDynamic];
-          
-          if (combined.length > 0) {
-            setChapters(combined);
-            const uniqueCountries = Array.from(new Set(combined.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown'))) as string[];
+          if (dynamicChapters.length > 0) {
+            setChapters(dynamicChapters);
+            const uniqueCountries = Array.from(new Set(dynamicChapters.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown'))) as string[];
             setCountries(['All', ...uniqueCountries]);
           }
         }

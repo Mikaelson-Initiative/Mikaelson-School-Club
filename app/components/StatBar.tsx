@@ -6,10 +6,10 @@ import Counter from './Counter';
 
 export default function StatBar() {
   const [statsData, setStatsData] = useState({
-    totalSchools: 9,
-    activeChapters: 12,
-    totalStudents: 480,
-    retentionRate: 94,
+    totalSchools: 0,
+    activeChapters: 0,
+    totalStudents: 0,
+    retentionRate: 0,
   });
 
   useEffect(() => {
