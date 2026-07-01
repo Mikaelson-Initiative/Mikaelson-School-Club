@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { WRAP, LABEL } from '../lib/tw';
 const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]';
 
-type Chapter = { school: string; city: string; code: string; members: number; live: boolean; logo?: string };
+type Chapter = { school: string; city: string; country: string; locationStr: string; code: string; members: number; live: boolean; logo?: string };
 
 const STEPS = [
   { t: 'Apply', d: 'A teacher or student leader submits a short application for the school.' },
@@ -67,18 +67,38 @@ export default function ChaptersPage() {
 
         if (schoolsRes.ok) {
           const data = await fetch('/api/schools').then(r => r.json());
-          const dynamicChapters = data.map((c: any) => ({
-            school: c.name,
-            city: c.country === 'Unknown' ? c.city : `${c.city}, ${c.country}`,
-            code: c.name.substring(0, 2).toUpperCase(),
-            members: c.studentsCount,
-            logo: '/logos/default.png', // Generic fallback logo for all schools
-            live: c.status === 'ACTIVE' || c.status === 'Active' || c.status === 'REGISTERED' || c.status === 'Registered',
-          }));
+          const dynamicChapters = data.map((c: any) => {
+            let finalCountry = c.country;
+            let finalCity = c.city;
+            
+            // Clean up dirty data from DB fallback
+            if (finalCountry === 'Unknown' || !finalCountry) {
+              const parts = finalCity.split(',').map((s: string) => s.trim().replace(/\.$/, ''));
+              finalCountry = parts.length > 1 ? parts.pop()! : 'Nigeria';
+              finalCity = parts.join(', ') || finalCity;
+
+              if (finalCity.toLowerCase().includes('accra')) { finalCountry = 'Ghana'; finalCity = 'Accra'; }
+              else if (finalCity.toLowerCase().includes('lagos')) { finalCountry = 'Nigeria'; finalCity = 'Lagos'; }
+              else if (finalCity.toLowerCase().includes('akure')) { finalCountry = 'Nigeria'; finalCity = 'Akure'; }
+              else if (finalCity.toLowerCase().includes('kogi')) { finalCountry = 'Nigeria'; finalCity = 'Kogi'; }
+              else if (finalCity.toLowerCase().includes('ogbomoso') || finalCity.toLowerCase().includes('oyo')) { finalCountry = 'Nigeria'; finalCity = 'Ogbomoso'; }
+            }
+
+            return {
+              school: c.name,
+              city: finalCity,
+              country: finalCountry,
+              locationStr: `${finalCity}, ${finalCountry}`,
+              code: c.name.substring(0, 2).toUpperCase(),
+              members: c.studentsCount,
+              logo: '/logos/default.png',
+              live: c.status === 'ACTIVE' || c.status === 'Active' || c.status === 'REGISTERED' || c.status === 'Registered',
+            };
+          });
           
           if (dynamicChapters.length > 0) {
             setChapters(dynamicChapters);
-            const uniqueCountries = Array.from(new Set(dynamicChapters.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown'))) as string[];
+            const uniqueCountries = Array.from(new Set(dynamicChapters.map((c: Chapter) => c.country))) as string[];
             setCountries(['All', ...uniqueCountries]);
           }
         }
@@ -89,7 +109,7 @@ export default function ChaptersPage() {
     fetchChapters();
   }, []);
 
-  const list = chapters.filter((c) => filter === 'All' || c.city.includes(filter));
+  const list = chapters.filter((c) => filter === 'All' || c.country === filter);
 
   const uniqueCitiesCount = new Set(chapters.map(c => c.city)).size;
 
@@ -155,7 +175,7 @@ export default function ChaptersPage() {
                   <ChapterMark logo={c.logo} code={c.code} />
                   <div className="flex-1 min-w-0">
                     <div className="font-display font-semibold text-[16px]">{c.school}</div>
-                    <div className="font-mono text-muted text-[12px] uppercase tracking-[.06em]">{c.city}</div>
+                    <div className="font-mono text-muted text-[12px] uppercase tracking-[.06em]">{c.locationStr}</div>
                   </div>
                   {/* Status badge */}
                   <span className={[

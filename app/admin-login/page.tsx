@@ -33,19 +33,7 @@ interface School {
   approvalDate: string;
   studentCount: number;
 }
-const TEAM = [
-  { name: 'Michael Olukayode', role: 'Team Lead' },
-  { name: 'Boluwatife Adeleke', role: 'Project Manager' },
-  { name: 'Irene Ezechi', role: 'Program Manager' },
-  { name: 'Mariam Jimoh', role: 'ESG and Impact' },
-  { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs' },
-  { name: 'Feranmi Oluwole', role: 'Operations Manager' },
-  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer' },
-  { name: 'Esther Adeoye', role: 'Social Media Manager' },
-  { name: 'Ariyo Aresa', role: 'Front-end Engineer' },
-  { name: 'Ayomide Idowu', role: 'Visuals and Designs' },
-  { name: 'Happiness Obochi', role: 'Team Member' },
-];
+// Team data is now fetched from the API
 
 type TabKey = 'overview' | 'applications' | 'schools' | 'events' | 'analytics' | 'team';
 
@@ -71,35 +59,25 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
     setError(false);
 
     try {
-      // 1. Fetch CSRF Token
       const csrfRes = await fetch('/api/auth/csrf', { 
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include' // CRITICAL: Tells the browser to save the CSRF cookie!
+        credentials: 'include' 
       });
       const { csrfToken } = await csrfRes.json();
 
-      // 2. Submit Login 
       const loginRes = await fetch('/api/auth/callback/credentials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include', // CRITICAL: Tells the browser to SEND the CSRF cookie back!
-        body: JSON.stringify({
-          email,
-          password,
-          csrfToken,
-          redirect: false,
-        }),
+        credentials: 'include',
+        body: JSON.stringify({ email, password, csrfToken, redirect: false }),
       });
 
-      // NextAuth returns ok: true or redirects on success!
       if (loginRes.ok || loginRes.redirected) {
-        // Success! 
         sessionStorage.setItem('msc_admin', '1');
         onLogin();
-        return; // Exit early!
+        return;
       }
 
-      // If we reach here, it failed. NOW we can safely parse the error JSON.
       const data = await loginRes.json();
       console.error("Login failed:", data.error);
       setError(true);
@@ -156,34 +134,37 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
   );
 }
 
-/* ── Empty event form ── */
 const emptyEvent = (): Omit<EventItem, 'id'> => ({
   title: '', date: '', time: '', location: '', description: '', category: 'Workshop', type: 'upcoming', attendees: '', registrationUrl: '',
 });
 
-/* ── Dashboard ── */
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [applications, setApplications] = useState<SchoolApplication[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
+  const [team, setTeam] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const appsRes = await fetch('/api/admin/applications', { credentials: 'include' });
+        const [appsRes, schoolsRes, eventsRes, teamRes] = await Promise.all([
+          fetch('/api/admin/applications', { credentials: 'include' }),
+          fetch('/api/admin/schools', { credentials: 'include' }),
+          fetch('/api/admin/events', { credentials: 'include', cache: 'no-store' }),
+          fetch('/api/team')
+        ]);
+
         if (appsRes.ok) {
           const data = await appsRes.json();
           setApplications(Array.isArray(data) ? data : data.applications || []);
         }
 
-        const schoolsRes = await fetch('/api/admin/schools', { credentials: 'include' });
         if (schoolsRes.ok) {
           const data = await schoolsRes.json();
           setSchools(Array.isArray(data) ? data : data.schools || []);
         }
 
-        const eventsRes = await fetch('/api/admin/events', { credentials: 'include', cache: 'no-store' });
         if (eventsRes.ok) {
           const data = await eventsRes.json();
           const mappedEvents = (Array.isArray(data) ? data : data.events || []).map((e: any) => ({
@@ -195,6 +176,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           }));
           setEvents(mappedEvents);
         }
+
+        if (teamRes.ok) setTeam(await teamRes.json());
       } catch (err) {
         console.error('Error fetching admin data:', err);
       }
@@ -202,22 +185,18 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     fetchData();
   }, []);
 
-  // Events (now fetched from backend)
   const [events, setEvents] = useState<EventItem[]>([]);
 
   useEffect(() => { setMounted(true); }, []);
 
-  // Filters
   const [appFilter, setAppFilter] = useState<'ALL' | 'PENDING' | 'REVIEWED' | 'SCHEDULED' | 'TRAINING' | 'LAUNCHED' | 'REJECTED'>('ALL');
   const [schoolSortField, setSchoolSortField] = useState<keyof School>('name');
   const [schoolSortOrder, setSchoolSortOrder] = useState<'asc' | 'desc'>('asc');
   const [schoolSearch, setSchoolSearch] = useState('');
 
-  // Event editor state
   const [eventForm, setEventForm] = useState<Omit<EventItem, 'id'>>(emptyEvent());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const [viewingRegistrationsFor, setViewingRegistrationsFor] = useState<EventItem | null>(null);
   const [registrations, setRegistrations] = useState<any[]>([]);
@@ -290,7 +269,6 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     document.body.appendChild(link); link.click(); document.body.removeChild(link);
   };
 
-  /* ── Events CRUD ── */
   const openNewEvent = () => { setEventForm(emptyEvent()); setEditingId(null); setShowEventForm(true); };
   const openEditEvent = (ev: EventItem) => {
     const { id, ...rest } = ev; void id;
@@ -380,7 +358,6 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
   return (
     <div className="min-h-screen bg-[#f9f7f3] flex flex-col lg:flex-row">
-      {/* Sidebar */}
       <aside className="lg:w-[230px] lg:shrink-0 bg-white border-b lg:border-b-0 lg:border-r border-[#e7e0d4] lg:min-h-screen lg:sticky lg:top-0 flex lg:flex-col">
         <div className="hidden lg:flex items-center gap-3 px-6 py-5 border-b border-[#e7e0d4]">
           <img src="/MSC%20logo.png" alt="MSC" className="w-9 h-9 object-contain" />
@@ -390,12 +367,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           </div>
         </div>
 
-        {/* Mobile brand */}
         <div className="flex lg:hidden items-center gap-2 px-4 py-3">
           <img src="/MSC%20logo.png" alt="MSC" className="w-7 h-7 object-contain" />
         </div>
 
-        {/* Nav */}
         <nav className="flex lg:flex-col gap-1 p-3 lg:p-3 overflow-x-auto flex-1 min-w-0">
           {NAV.map(item => {
             const active = activeTab === item.key;
@@ -421,9 +396,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </div>
       </aside>
 
-      {/* Main */}
       <main className="flex-1 min-w-0">
-        {/* Top bar */}
         <header className="bg-white border-b border-[#e7e0d4] sticky top-0 z-40">
           <div className="px-5 md:px-8 py-3.5 flex items-center justify-between gap-4">
             <div>
@@ -452,7 +425,6 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </header>
 
         <div className="p-5 md:p-8">
-          {/* Overview */}
           {activeTab === 'overview' && (
             <div className="space-y-10">
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -462,7 +434,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                   { label: 'Students', value: stats.totalStudents, sub: 'Enrolled', color: 'bg-white', text: 'text-[#003e45]' },
                   { label: 'Pending Apps', value: stats.pendingApps, sub: 'To review', color: 'bg-[#5ce1e6]', text: 'text-[#003e45]' },
                   { label: 'Events', value: upcomingCount, sub: 'Upcoming', color: 'bg-white', text: 'text-[#003e45]' },
-                  { label: 'Team', value: TEAM.length, sub: 'Core team', color: 'bg-[#003e45]', text: 'text-white' },
+                  { label: 'Team', value: team.length, sub: 'Core team', color: 'bg-[#003e45]', text: 'text-white' },
                 ].map(m => (
                   <div key={m.label} className={`${m.color} rounded-2xl p-5 shadow-sm border border-[#e7e0d4]`}>
                     <div className={`text-3xl font-extrabold tracking-tight leading-none ${m.text}`} style={{ fontFamily: 'var(--font-display)' }}>{m.value}</div>
@@ -748,10 +720,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           {/* Team */}
           {activeTab === 'team' && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {TEAM.map(t => (
-                <div key={t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 flex items-center gap-4 shadow-sm">
-                  <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center text-[#003e45] font-bold text-lg">{t.name.charAt(0)}</div>
-                  <div><div className="font-bold text-[#003e45] text-sm">{t.name}</div><div className="text-xs text-[#6e675c] font-mono uppercase tracking-widest">{t.role}</div></div>
+              {team.map(t => (
+                <div key={t.id || t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-5 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center shrink-0">
+                    {t.img ? <img src={t.img} className="w-full h-full rounded-full object-cover" /> : <div className="text-[#003e45] font-bold">{t.name.charAt(0)}</div>}
+                  </div>
+                  <div><div className="font-bold text-[#003e45] text-sm">{t.name}</div><div className="text-xs text-[#6e675c]">{t.role}</div></div>
                 </div>
               ))}
             </div>
