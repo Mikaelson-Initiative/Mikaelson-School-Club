@@ -88,9 +88,63 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
   const [values, setValues] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      let endpoint = '';
+      let payload: any = { ...values };
+
+      if (audienceKey === 'students') {
+        endpoint = '/api/apply/student';
+      } else if (audienceKey === 'schools') {
+        endpoint = '/api/apply';
+        // Need to rename size to studentsEstimate for schools endpoint, and map name to contactName
+        payload.contactName = payload.name;
+        payload.schoolName = payload.school;
+        payload.studentsEstimate = parseInt(
+          payload.size?.replace(/[^0-9]/g, '') || '0', 
+          10
+        );
+        payload.location = payload.city;
+        delete payload.name;
+        delete payload.school;
+        delete payload.size;
+        delete payload.city;
+      } else if (audienceKey === 'mentors') {
+        endpoint = '/api/apply/mentor';
+      } else if (audienceKey === 'sponsors') {
+        endpoint = '/api/contact';
+        // Sponsor maps to Contact payload
+        payload.type = 'PARTNERSHIP';
+        // The message is "org - message" or just support type
+        payload.message = `Organisation: ${payload.org}\nSupport Type: ${payload.support}\n\n${payload.message || ''}`;
+        delete payload.org;
+        delete payload.support;
+      }
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -165,11 +219,17 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
                 )}
               </div>
             ))}
+            {error && (
+              <div className="bg-red-50 text-red-600 text-[14px] p-3 rounded-lg mb-4">
+                {error}
+              </div>
+            )}
             <button
               type="submit"
-              className={`${BTN_PRIMARY} w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]`}
+              disabled={isSubmitting}
+              className={`${BTN_PRIMARY} w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px] disabled:opacity-70 disabled:cursor-not-allowed`}
             >
-              Submit application <IconArrow size={16} className="arr" />
+              {isSubmitting ? 'Submitting...' : 'Submit application'} {!isSubmitting && <IconArrow size={16} className="arr" />}
             </button>
           </form>
         </>

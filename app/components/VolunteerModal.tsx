@@ -12,9 +12,45 @@ function Modal({ onClose }: { onClose: () => void }) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const payload = {
+        name: values.name,
+        email: values.email,
+        phone: values.phone,
+        role: values.role,
+        motivation: values.why,
+        // Since we combined 'why' and 'experience' on the frontend into motivation
+        // wait, we can just concat them or send experience if there's a field for it, but the volunteer schema uses `motivation`. Let's concat them.
+      };
+      if (values.experience) {
+        payload.motivation += `\n\nExperience: ${values.experience}`;
+      }
+
+      const res = await fetch('/api/volunteer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -90,11 +126,17 @@ function Modal({ onClose }: { onClose: () => void }) {
                 />
               </div>
             ))}
+            {error && (
+              <div className="bg-red-50 text-red-600 text-[14px] p-3 rounded-lg mb-4">
+                {error}
+              </div>
+            )}
             <button
               type="submit"
-              className={`${BTN_PRIMARY} w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]`}
+              disabled={isSubmitting}
+              className={`${BTN_PRIMARY} w-full justify-center mt-2 [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px] disabled:opacity-70 disabled:cursor-not-allowed`}
             >
-              Submit application <IconArrow size={16} className="arr" />
+              {isSubmitting ? 'Submitting...' : 'Submit application'} {!isSubmitting && <IconArrow size={16} className="arr" />}
             </button>
           </form>
         </>

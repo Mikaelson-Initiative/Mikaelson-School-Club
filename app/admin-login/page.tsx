@@ -24,6 +24,40 @@ interface SchoolApplication {
   status: 'PENDING' | 'REVIEWED' | 'SCHEDULED' | 'TRAINING' | 'LAUNCHED' | 'REJECTED';
 }
 
+interface StudentApplication {
+  id: string;
+  name: string;
+  school: string;
+  year: string;
+  city: string;
+  goal?: string;
+  createdAt: string;
+  status: string;
+}
+
+interface MentorApplication {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  school: string;
+  city: string;
+  experience?: string;
+  createdAt: string;
+  status: string;
+}
+
+interface VolunteerApplication {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  role: string;
+  motivation: string;
+  createdAt: string;
+  status: string;
+}
+
 interface School {
   id: string;
   name: string;
@@ -35,12 +69,15 @@ interface School {
 }
 // Team data is now fetched from the API
 
-type TabKey = 'overview' | 'applications' | 'schools' | 'events' | 'analytics' | 'team';
+type TabKey = 'overview' | 'applications' | 'students' | 'mentors' | 'volunteers' | 'schools' | 'events' | 'analytics' | 'team';
 
 const NAV: { key: TabKey; label: string; icon: string }[] = [
   { key: 'overview', label: 'Overview', icon: 'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z' },
-  { key: 'applications', label: 'Applications', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
-  { key: 'schools', label: 'Schools', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.42a12 12 0 01.84 4.42 12 12 0 01-7 1 12 12 0 01-7-1 12 12 0 01.84-4.42L12 14z' },
+  { key: 'applications', label: 'Schools', icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' },
+  { key: 'students', label: 'Students', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z' },
+  { key: 'mentors', label: 'Mentors', icon: 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
+  { key: 'volunteers', label: 'Volunteers', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
+  { key: 'schools', label: 'Chapters', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.42a12 12 0 01.84 4.42 12 12 0 01-7 1 12 12 0 01-7-1 12 12 0 01.84-4.42L12 14z' },
   { key: 'events', label: 'Events', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
   { key: 'analytics', label: 'Analytics', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
   { key: 'team', label: 'Team', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1a4 4 0 100-8 4 4 0 000 8z' },
@@ -141,6 +178,9 @@ const emptyEvent = (): Omit<EventItem, 'id'> => ({
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [applications, setApplications] = useState<SchoolApplication[]>([]);
+  const [students, setStudents] = useState<StudentApplication[]>([]);
+  const [mentors, setMentors] = useState<MentorApplication[]>([]);
+  const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
   const [team, setTeam] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -148,8 +188,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [appsRes, schoolsRes, eventsRes, teamRes] = await Promise.all([
+        const [appsRes, studRes, mentRes, volRes, schoolsRes, eventsRes, teamRes] = await Promise.all([
           fetch('/api/admin/applications', { credentials: 'include' }),
+          fetch('/api/admin/students', { credentials: 'include' }),
+          fetch('/api/admin/mentors', { credentials: 'include' }),
+          fetch('/api/admin/volunteers', { credentials: 'include' }),
           fetch('/api/admin/schools', { credentials: 'include' }),
           fetch('/api/admin/events', { credentials: 'include', cache: 'no-store' }),
           fetch('/api/team')
@@ -158,6 +201,21 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         if (appsRes.ok) {
           const data = await appsRes.json();
           setApplications(Array.isArray(data) ? data : data.applications || []);
+        }
+
+        if (studRes.ok) {
+          const data = await studRes.json();
+          setStudents(data.applications || []);
+        }
+
+        if (mentRes.ok) {
+          const data = await mentRes.json();
+          setMentors(data.applications || []);
+        }
+
+        if (volRes.ok) {
+          const data = await volRes.json();
+          setVolunteers(data.volunteers || []);
         }
 
         if (schoolsRes.ok) {
@@ -336,6 +394,48 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     } catch (e) {
       alert(`Network error updating status: ${e instanceof Error ? e.message : String(e)}`);
     }
+  };
+
+  const handleStudentStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/students/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setStudents(arr => arr.map(a => a.id === id ? { ...a, status: newStatus } : a));
+      }
+    } catch (e) { alert('Error updating status'); }
+  };
+
+  const handleMentorStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/mentors/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setMentors(arr => arr.map(a => a.id === id ? { ...a, status: newStatus } : a));
+      }
+    } catch (e) { alert('Error updating status'); }
+  };
+
+  const handleVolunteerStatus = async (id: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/volunteers/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setVolunteers(arr => arr.map(a => a.id === id ? { ...a, status: newStatus } : a));
+      }
+    } catch (e) { alert('Error updating status'); }
   };
 
   const exportEnrollmentData = () => {
@@ -606,6 +706,119 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     ))}
                     {filteredApplications.length === 0 && (
                       <tr><td colSpan={6} className="px-6 py-10 text-center text-sm text-[#6e675c] italic">No applications in this view.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Students */}
+          {activeTab === 'students' && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl border border-[#e7e0d4] overflow-hidden shadow-sm overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[640px]">
+                  <thead>
+                    <tr className="bg-[#f9f7f3] border-b border-[#e7e0d4]">
+                      {['Name', 'School', 'Year & Goal', 'Location', 'Date', 'Status', 'Actions'].map(h => (
+                        <th key={h} className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-[#6e675c]">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#f3eee5]">
+                    {students.map(app => (
+                      <tr key={app.id} className="hover:bg-[#faf9f6] transition-colors">
+                        <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{app.name}</div></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{app.school}</td>
+                        <td className="px-6 py-4 text-sm text-[#201d16] max-w-[200px]"><span className="font-bold">{app.year}</span><div className="text-xs text-[#6e675c] truncate">{app.goal || '-'}</div></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{app.city}</td>
+                        <td className="px-6 py-4 text-xs text-[#6e675c]">{new Date(app.createdAt).toLocaleDateString()}</td>
+                        <td className="px-6 py-4">
+                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${app.status === 'REVIEWED' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {app.status === 'PENDING' && <button onClick={() => handleStudentStatus(app.id, 'REVIEWED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Mark Reviewed</button>}
+                        </td>
+                      </tr>
+                    ))}
+                    {students.length === 0 && (
+                      <tr><td colSpan={7} className="px-6 py-10 text-center text-sm text-[#6e675c] italic">No student applications yet.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Mentors */}
+          {activeTab === 'mentors' && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl border border-[#e7e0d4] overflow-hidden shadow-sm overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[640px]">
+                  <thead>
+                    <tr className="bg-[#f9f7f3] border-b border-[#e7e0d4]">
+                      {['Name & Email', 'Role & School', 'Experience', 'Location', 'Date', 'Status', 'Actions'].map(h => (
+                        <th key={h} className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-[#6e675c]">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#f3eee5]">
+                    {mentors.map(app => (
+                      <tr key={app.id} className="hover:bg-[#faf9f6] transition-colors">
+                        <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{app.name}</div><div className="text-xs text-[#6e675c]">{app.email}</div></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]"><div>{app.role}</div><div className="text-xs text-[#6e675c]">{app.school}</div></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16] max-w-[200px] truncate">{app.experience || '-'}</td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{app.city}</td>
+                        <td className="px-6 py-4 text-xs text-[#6e675c]">{new Date(app.createdAt).toLocaleDateString()}</td>
+                        <td className="px-6 py-4">
+                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${app.status === 'REVIEWED' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {app.status === 'PENDING' && <button onClick={() => handleMentorStatus(app.id, 'REVIEWED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Mark Reviewed</button>}
+                        </td>
+                      </tr>
+                    ))}
+                    {mentors.length === 0 && (
+                      <tr><td colSpan={7} className="px-6 py-10 text-center text-sm text-[#6e675c] italic">No champion applications yet.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Volunteers */}
+          {activeTab === 'volunteers' && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl border border-[#e7e0d4] overflow-hidden shadow-sm overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[640px]">
+                  <thead>
+                    <tr className="bg-[#f9f7f3] border-b border-[#e7e0d4]">
+                      {['Name & Contact', 'Role', 'Motivation', 'Date', 'Status', 'Actions'].map(h => (
+                        <th key={h} className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-[#6e675c]">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#f3eee5]">
+                    {volunteers.map(app => (
+                      <tr key={app.id} className="hover:bg-[#faf9f6] transition-colors">
+                        <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{app.name}</div><div className="text-xs text-[#6e675c]">{app.email}<br/>{app.phone}</div></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{app.role}</td>
+                        <td className="px-6 py-4 text-sm text-[#201d16] max-w-[200px] truncate">{app.motivation}</td>
+                        <td className="px-6 py-4 text-xs text-[#6e675c]">{new Date(app.createdAt).toLocaleDateString()}</td>
+                        <td className="px-6 py-4">
+                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${app.status === 'LAUNCHED' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {app.status === 'PENDING' && <button onClick={() => handleVolunteerStatus(app.id, 'REVIEWED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Review</button>}
+                          {app.status === 'REVIEWED' && <button onClick={() => handleVolunteerStatus(app.id, 'SCHEDULED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Schedule</button>}
+                          {app.status === 'SCHEDULED' && <button onClick={() => handleVolunteerStatus(app.id, 'TRAINING')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Train</button>}
+                          {app.status === 'TRAINING' && <button onClick={() => handleVolunteerStatus(app.id, 'LAUNCHED')} className="bg-[#5ce1e6] text-[#003e45] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Launch</button>}
+                        </td>
+                      </tr>
+                    ))}
+                    {volunteers.length === 0 && (
+                      <tr><td colSpan={6} className="px-6 py-10 text-center text-sm text-[#6e675c] italic">No volunteer applications yet.</td></tr>
                     )}
                   </tbody>
                 </table>
