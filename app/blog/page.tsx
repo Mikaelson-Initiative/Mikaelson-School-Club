@@ -1,7 +1,3 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
@@ -12,40 +8,27 @@ import Link from 'next/link';
 import { WRAP, LABEL } from '../lib/tw';
 const LINK_ARROW = 'font-mono text-accent-ink text-[12.5px] tracking-[0.06em] uppercase no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[4px]';
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<any[]>([]);
+export const revalidate = 3600; // revalidate every hour
 
-  useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const res = await fetch('/api/blog');
-        if (res.ok) {
-          const data = await res.json();
-          // Assuming data is an array or object containing posts. In route.ts it returns `result` which is paginated.
-          // Wait, let's check `src/app/api/blog/route.ts` - it calls `getPublicPosts`.
-          // `getPublicPosts` typically returns { posts, total, page, limit }.
-          if (data && data.posts && data.posts.length > 0) {
-            const dynamicPosts = data.posts.map((post: any) => ({
-              category: post.category?.name || 'Update',
-              title: post.title,
-              author: post.author?.name || 'Mikaelson School Club',
-              excerpt: post.excerpt || post.content?.substring(0, 100) + '...',
-              slug: post.slug
-            }));
-            
-            // Merge dynamically fetched posts, combining with hardcoded ones or just replacing.
-            // Since blog posts change often, it's usually better to just replace if we have data.
-            setPosts(dynamicPosts);
-          } else {
-            setPosts([]);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to fetch posts", err);
-      }
+export default async function BlogPage() {
+  let posts: any[] = [];
+  try {
+    const res = await fetch('https://dev.to/api/articles?username=mikaelsonschoolclub');
+    if (res.ok) {
+      const data = await res.json();
+      posts = data.map((post: any) => ({
+        category: post.tags[0] || 'Update',
+        title: post.title,
+        author: post.user?.name || 'Mikaelson School Club',
+        excerpt: post.description,
+        slug: post.slug,
+        coverImage: post.cover_image,
+        publishedAt: post.readable_publish_date
+      }));
     }
-    fetchPosts();
-  }, []);
+  } catch (err) {
+    console.error("Failed to fetch posts from dev.to", err);
+  }
 
   return (
     <>
@@ -67,26 +50,40 @@ export default function BlogPage() {
           ) : (
             <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[22px]">
               {posts.map((post: any, i: number) => (
-                <Reveal delay={i * 90} key={post.title}>
-                  <div className="bg-surface border border-line rounded-[22px] overflow-hidden transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-34px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--line))]">
-                    {/* Card image placeholder */}
-                    <div className="bg-[var(--surface-2)] h-[180px] flex flex-col items-center justify-center gap-3 rounded-t-[22px]">
-                      <span className="font-mono text-[11px] tracking-[.08em] uppercase text-muted">Coming soon</span>
+                <Reveal delay={i * 90} key={post.slug}>
+                  <Link href={`/blog/${post.slug}`} className="block h-full no-underline text-current">
+                    <div className="bg-surface border border-line rounded-[22px] h-full overflow-hidden transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-34px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--line))] flex flex-col">
+                      {post.coverImage ? (
+                        <div className="h-[180px] bg-[var(--surface-2)] overflow-hidden shrink-0">
+                          <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                        </div>
+                      ) : (
+                        <div className="bg-[var(--surface-2)] h-[180px] flex flex-col items-center justify-center gap-3 shrink-0">
+                          <span className="font-mono text-[11px] tracking-[.08em] uppercase text-muted">No Image</span>
+                        </div>
+                      )}
+                      
+                      <div className="p-[26px] flex flex-col flex-1">
+                        <div className="flex items-center justify-between mb-[14px]">
+                          <span className="font-mono text-muted border border-line inline-flex items-center gap-[7px] text-[11px] tracking-[0.07em] uppercase py-[5px] px-[11px] rounded-full font-bold">
+                            <span className="w-[6px] h-[6px] rounded-full bg-current" />
+                            {post.category}
+                          </span>
+                          <span className="text-[11px] font-mono text-muted uppercase tracking-[0.05em]">{post.publishedAt}</span>
+                        </div>
+                        
+                        <h4 className="font-display font-semibold text-[18px] m-0 mb-[10px] tracking-[-0.01em] leading-[1.3] text-[#201d16]">{post.title}</h4>
+                        <p className="text-[#6e675c] text-[14.5px] m-0 mb-[16px] flex-1">{post.excerpt}</p>
+                        
+                        <div className="mt-auto pt-4 border-t border-[#e7e0d4] flex items-center justify-between">
+                          <div className="font-mono text-[11px] text-[#6e675c] uppercase tracking-[.06em]">{post.author}</div>
+                          <span className={`${LINK_ARROW}`}>
+                            Read more <IconArrow size={14} className="arr" />
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="p-[26px]">
-                      {/* Badge */}
-                      <span className="font-mono text-muted border border-line inline-flex items-center gap-[7px] text-[11px] tracking-[0.07em] uppercase py-[5px] px-[11px] rounded-full font-bold mb-[14px]">
-                        <span className="w-[6px] h-[6px] rounded-full bg-current" />
-                        {post.category}
-                      </span>
-                      <h4 className="font-display font-semibold text-[18px] m-0 mb-[10px] tracking-[-0.01em] leading-[1.3]">{post.title}</h4>
-                      <p className="text-muted text-[14.5px] m-0 mb-[6px]">{post.excerpt}</p>
-                      <div className="font-mono text-[11px] text-muted uppercase tracking-[.06em] mb-[18px]">{post.author}</div>
-                      <span className={`${LINK_ARROW} opacity-45`}>
-                        Read more <IconArrow size={14} className="arr" />
-                      </span>
-                    </div>
-                  </div>
+                  </Link>
                 </Reveal>
               ))}
             </div>
