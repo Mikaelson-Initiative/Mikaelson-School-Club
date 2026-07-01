@@ -20,6 +20,7 @@ export interface EventItem {
   category: string;    // e.g. "Workshop", "Networking", "Career"
   type: EventType;
   attendees?: string;  // for past events, e.g. "125 students"
+  registrationUrl?: string;
 }
 
 export const EVENTS_STORAGE_KEY = 'msc_events';

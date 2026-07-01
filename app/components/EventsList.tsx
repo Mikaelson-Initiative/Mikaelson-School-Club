@@ -13,7 +13,7 @@ export default function EventsList() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const res = await fetch('/api/events');
+        const res = await fetch('/api/events', { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {
@@ -22,6 +22,7 @@ export default function EventsList() {
               type: e.isPast ? 'past' : 'upcoming',
               date: new Date(e.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
               category: e.category || 'Other',
+              registrationUrl: e.registrationUrl || '',
             }));
             setEvents(mappedEvents);
           }
@@ -74,9 +75,15 @@ export default function EventsList() {
                         <div className="font-mono text-muted text-[12px] tracking-[.04em]">📍 {event.location}</div>
                       </div>
                       <p className="text-muted text-[14.5px] m-0 mb-5 leading-[1.6]">{event.description}</p>
-                      <span className="font-mono text-muted text-[12.5px] tracking-[0.06em] uppercase inline-flex items-center gap-[7px] font-bold opacity-40 cursor-not-allowed">
-                        Registration soon <IconArrow size={13} />
-                      </span>
+                      {event.registrationUrl ? (
+                        <a href={event.registrationUrl} target="_blank" rel="noopener noreferrer" className="font-mono text-[12.5px] tracking-[0.06em] uppercase inline-flex items-center gap-[7px] font-bold text-accent-2 hover:opacity-80 transition-opacity">
+                          Register Here <IconArrow size={13} />
+                        </a>
+                      ) : (
+                        <span className="font-mono text-muted text-[12.5px] tracking-[0.06em] uppercase inline-flex items-center gap-[7px] font-bold opacity-40 cursor-not-allowed">
+                          Registration soon <IconArrow size={13} />
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Reveal>

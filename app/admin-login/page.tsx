@@ -159,7 +159,7 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
 
 /* ── Empty event form ── */
 const emptyEvent = (): Omit<EventItem, 'id'> => ({
-  title: '', date: '', time: '', location: '', description: '', category: 'Workshop', type: 'upcoming', attendees: '',
+  title: '', date: '', time: '', location: '', description: '', category: 'Workshop', type: 'upcoming', attendees: '', registrationUrl: '',
 });
 
 /* ── Dashboard ── */
@@ -184,7 +184,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           setSchools(Array.isArray(data) ? data : data.schools || []);
         }
 
-        const eventsRes = await fetch('/api/admin/events', { credentials: 'include' });
+        const eventsRes = await fetch('/api/admin/events', { credentials: 'include', cache: 'no-store' });
         if (eventsRes.ok) {
           const data = await eventsRes.json();
           const mappedEvents = (Array.isArray(data) ? data : data.events || []).map((e: any) => ({
@@ -192,6 +192,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             type: e.isPast ? 'past' : 'upcoming',
             date: e.date.split('T')[0],
             category: e.category || 'Other',
+            registrationUrl: e.registrationUrl || '',
           }));
           setEvents(mappedEvents);
         }
@@ -307,6 +308,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       category: eventForm.category,
       isPast: eventForm.type === 'past',
       attendees: eventForm.attendees || undefined,
+      registrationUrl: eventForm.registrationUrl || undefined,
     };
 
     if (editingId) {
@@ -619,10 +621,15 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                       <label className={labelCls}>Location</label>
                       <input className={inputCls} value={eventForm.location} onChange={e => setEventForm(f => ({ ...f, location: e.target.value }))} placeholder="e.g. Room 301" />
                     </div>
-                    {eventForm.type === 'past' && (
+                    {eventForm.type === 'upcoming' ? (
                       <div>
-                        <label className={labelCls}>Attendees</label>
-                        <input className={inputCls} value={eventForm.attendees || ''} onChange={e => setEventForm(f => ({ ...f, attendees: e.target.value }))} placeholder="e.g. 125 students" />
+                        <label className={labelCls}>Registration URL (Optional)</label>
+                        <input className={inputCls} type="url" value={eventForm.registrationUrl || ''} onChange={e => setEventForm(f => ({ ...f, registrationUrl: e.target.value }))} placeholder="e.g. https://forms.gle/..." />
+                      </div>
+                    ) : (
+                      <div>
+                        <label className={labelCls}>Attendees count (Optional)</label>
+                        <input className={inputCls} value={eventForm.attendees || ''} onChange={e => setEventForm(f => ({ ...f, attendees: e.target.value }))} placeholder="e.g. 150 students" />
                       </div>
                     )}
                     <div className="md:col-span-2">
@@ -658,7 +665,14 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                               <span className="font-bold text-[#003e45] text-sm">{ev.title}</span>
                               <span className="text-[9px] font-mono uppercase tracking-widest bg-[#e0f6f7] text-[#003e45] px-2 py-0.5 rounded-full">{ev.category}</span>
                             </div>
-                            <div className="text-xs text-[#6e675c] mt-0.5">{ev.date}{ev.time ? ` • ${ev.time}` : ''}{ev.location ? ` • ${ev.location}` : ''}{ev.attendees ? ` • ${ev.attendees}` : ''}</div>
+                            <div className="text-xs text-[#6e675c] mt-0.5">
+                              {ev.date}{ev.time ? ` • ${ev.time}` : ''}{ev.location ? ` • ${ev.location}` : ''}{ev.attendees ? ` • ${ev.attendees}` : ''}
+                              {ev.registrationUrl && (
+                                <span className="ml-2 inline-flex items-center gap-1 text-[#003e45] font-medium">
+                                  <span>🔗</span> <a href={ev.registrationUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">Link</a>
+                                </span>
+                              )}
+                            </div>
                           </div>
                           <button onClick={() => openEditEvent(ev)} className="text-[10px] font-mono uppercase font-bold text-[#003e45] border border-[#e7e0d4] px-3 py-1 rounded-full hover:border-[#003e45] hover:bg-[#f3eee5]">Edit</button>
                           <button onClick={() => deleteEvent(ev.id)} className="text-[10px] font-mono uppercase font-bold text-red-600 border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-red-50 hover:border-red-200">Delete</button>
