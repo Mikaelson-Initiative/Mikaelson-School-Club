@@ -218,6 +218,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [eventForm, setEventForm] = useState<Omit<EventItem, 'id'>>(emptyEvent());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [viewingRegistrationsFor, setViewingRegistrationsFor] = useState<EventItem | null>(null);
+  const [registrations, setRegistrations] = useState<any[]>([]);
+  const [regsLoading, setRegsLoading] = useState(false);
 
   const stats = useMemo(() => {
     const approvedChapters = schools.filter(s => s.status === 'Active' || s.status === 'Registered').length;
@@ -349,11 +354,27 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       credentials: 'include',
     });
     if (res.ok) {
-      setEvents(events.filter(ev => ev.id !== id));
+      setEvents(events.filter(s => s.id !== id));
     } else {
       alert("Failed to delete event.");
     }
   };
+
+  async function openRegistrations(ev: EventItem) {
+    setViewingRegistrationsFor(ev);
+    setRegistrations([]);
+    setRegsLoading(true);
+    try {
+      const res = await fetch(`/api/admin/events/${ev.id}/registrations`, { credentials: 'include' });
+      if (res.ok) {
+        setRegistrations(await res.json());
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setRegsLoading(false);
+    }
+  }
 
   const inputCls = "w-full bg-[#f9f7f3] border border-[#e7e0d4] rounded-xl px-4 py-2.5 text-sm text-[#201d16] outline-none focus:border-[#5ce1e6] transition-colors";
   const labelCls = "text-[10px] font-mono uppercase tracking-widest text-[#6e675c] mb-1.5 block";
@@ -674,8 +695,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                               )}
                             </div>
                           </div>
+                          <button onClick={() => openRegistrations(ev)} className="text-[10px] font-mono uppercase font-bold text-accent-2 border border-[#e7e0d4] px-3 py-1 rounded-full hover:border-accent-2 hover:bg-accent-soft mr-2">Guests</button>
                           <button onClick={() => openEditEvent(ev)} className="text-[10px] font-mono uppercase font-bold text-[#003e45] border border-[#e7e0d4] px-3 py-1 rounded-full hover:border-[#003e45] hover:bg-[#f3eee5]">Edit</button>
-                          <button onClick={() => deleteEvent(ev.id)} className="text-[10px] font-mono uppercase font-bold text-red-600 border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-red-50 hover:border-red-200">Delete</button>
+                          <button onClick={() => deleteEvent(ev.id)} className="text-[10px] font-mono uppercase font-bold text-red-600 border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-red-50 hover:border-red-200 ml-2">Delete</button>
                         </div>
                       ))}
                       {list.length === 0 && <div className="px-6 py-8 text-center text-sm text-[#6e675c] italic">No {group} events.</div>}
@@ -737,6 +759,54 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           )}
         </div>
       </main>
+
+      {/* Registrations Viewer Modal */}
+      {viewingRegistrationsFor && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
+          <div className="bg-[#f9f8f6] w-full max-w-2xl rounded-2xl shadow-xl flex flex-col max-h-[85vh]">
+            <div className="flex items-center justify-between p-6 border-b border-[#e7e0d4]">
+              <h2 className="font-display font-bold text-xl text-[#201d16]">
+                Registrations: {viewingRegistrationsFor.title}
+              </h2>
+              <button onClick={() => setViewingRegistrationsFor(null)} className="text-[#6e675c] hover:text-[#201d16]">
+                ✕
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              {regsLoading ? (
+                <div className="text-center py-10 text-sm text-[#6e675c]">Loading registrations...</div>
+              ) : registrations.length === 0 ? (
+                <div className="text-center py-10 text-sm text-[#6e675c]">No one has registered for this event yet.</div>
+              ) : (
+                <div className="border border-[#e7e0d4] rounded-xl overflow-hidden bg-white">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-[#f3eee5] text-[#6e675c] text-xs uppercase font-mono font-bold tracking-wider">
+                      <tr>
+                        <th className="px-4 py-3 border-b border-[#e7e0d4]">Name</th>
+                        <th className="px-4 py-3 border-b border-[#e7e0d4]">Email</th>
+                        <th className="px-4 py-3 border-b border-[#e7e0d4]">School</th>
+                        <th className="px-4 py-3 border-b border-[#e7e0d4]">Registered At</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#e7e0d4]">
+                      {registrations.map(reg => (
+                        <tr key={reg.id} className="hover:bg-[#faf9f7]">
+                          <td className="px-4 py-3 font-medium text-[#201d16]">{reg.name}</td>
+                          <td className="px-4 py-3 text-[#6e675c]">{reg.email}</td>
+                          <td className="px-4 py-3 text-[#6e675c]">{reg.schoolName || '—'}</td>
+                          <td className="px-4 py-3 text-[#6e675c] text-xs">{new Date(reg.createdAt).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
