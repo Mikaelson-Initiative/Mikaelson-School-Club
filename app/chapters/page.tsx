@@ -91,6 +91,8 @@ export default function ChaptersPage() {
 
   const list = chapters.filter((c) => filter === 'All' || c.city.includes(filter));
 
+  const uniqueCitiesCount = new Set(chapters.map(c => c.city)).size;
+
   return (
     <>
       <Header />
@@ -108,7 +110,7 @@ export default function ChaptersPage() {
               {[
                 { n: statsData.activeChapters, s: '', l: 'Active chapters' },
                 { n: statsData.totalSchools, s: '', l: 'Partner schools' },
-                { n: 5, s: '', l: 'Cities' },
+                { n: uniqueCitiesCount, s: '', l: 'Cities' },
                 { n: statsData.totalStudents, s: '+', l: 'Students' },
               ].map((s) => (
                 <div key={s.l} className="py-[26px] px-[24px] text-center">
