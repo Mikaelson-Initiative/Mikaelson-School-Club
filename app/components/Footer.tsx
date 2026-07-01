@@ -80,7 +80,7 @@ export default function Footer() {
                 <IconInstagram size={20} />
               </a>
               <a
-                href="mailto:hello@mikaelsoninitiative.org"
+                href="mailto:msc@mikaelsoninitiative.org"
                 aria-label="Email"
                 className="text-muted transition-colors duration-200 hover:text-accent-ink"
               >

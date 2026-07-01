@@ -16,13 +16,13 @@ interface SchoolApplication {
   schoolName: string;
   contactName: string;
   email: string;
-  phone: string;
+  phone?: string;
   location: string;
   role: string;
-  studentsCount: number;
-  message: string;
-  submissionDate: string;
-  status: 'pending' | 'approved' | 'rejected';
+  studentsEstimate: number;
+  message?: string;
+  createdAt: string;
+  status: 'PENDING' | 'REVIEWED' | 'SCHEDULED' | 'TRAINING' | 'LAUNCHED' | 'REJECTED';
 }
 
 interface School {
@@ -172,13 +172,13 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const appsRes = await fetch('/api/admin/applications');
+        const appsRes = await fetch('/api/admin/applications', { credentials: 'include' });
         if (appsRes.ok) {
           const data = await appsRes.json();
           setApplications(Array.isArray(data) ? data : data.applications || []);
         }
 
-        const schoolsRes = await fetch('/api/admin/schools');
+        const schoolsRes = await fetch('/api/admin/schools', { credentials: 'include' });
         if (schoolsRes.ok) {
           const data = await schoolsRes.json();
           setSchools(Array.isArray(data) ? data : data.schools || []);
@@ -198,7 +198,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   useEffect(() => { setMounted(true); }, []);
 
   // Filters
-  const [appFilter, setAppFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
+  const [appFilter, setAppFilter] = useState<'ALL' | 'PENDING' | 'REVIEWED' | 'SCHEDULED' | 'TRAINING' | 'LAUNCHED' | 'REJECTED'>('ALL');
   const [schoolSortField, setSchoolSortField] = useState<keyof School>('name');
   const [schoolSortOrder, setSchoolSortOrder] = useState<'asc' | 'desc'>('asc');
   const [schoolSearch, setSchoolSearch] = useState('');
@@ -212,11 +212,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     const approvedChapters = schools.filter(s => s.status === 'Active' || s.status === 'Registered').length;
     const activeChapters = schools.filter(s => s.status === 'Active').length;
     const totalStudents = schools.reduce((acc, s) => acc + s.studentCount, 0);
-    const pendingApps = applications.filter(a => a.status === 'pending').length;
+    const pendingApps = applications.filter(a => a.status === 'PENDING').length;
     return { approvedChapters, activeChapters, totalStudents, pendingApps, totalApps: applications.length };
   }, [schools, applications]);
 
-  const filteredApplications = applications.filter(app => appFilter === 'all' ? true : app.status === appFilter);
+  const filteredApplications = applications.filter(app => appFilter === 'ALL' ? true : app.status === appFilter);
 
   const sortedSchools = useMemo(() => {
     return [...schools]
@@ -231,23 +231,38 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
   const upcomingCount = events.filter(e => e.type === 'upcoming').length;
 
-  const handleApprove = (appId: string) => {
-    const app = applications.find(a => a.id === appId);
-    if (!app) return;
-    setApplications(apps => apps.map(a => a.id === appId ? { ...a, status: 'approved' } : a));
-    const newSchool: School = {
-      id: `school-${Date.now()}`,
-      name: app.schoolName,
-      city: app.location.split(',')[0].trim(),
-      region: app.location.split(',')[1]?.trim() || 'Lagos',
-      status: 'Registered',
-      approvalDate: new Date().toISOString().split('T')[0],
-      studentCount: app.studentsCount,
-    };
-    setSchools(prev => [...prev, newSchool]);
+  const handleStatusChange = async (appId: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/applications/${appId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setApplications(apps => apps.map(a => a.id === appId ? { ...a, status: newStatus as any } : a));
+        if (newStatus === 'LAUNCHED') {
+          const app = applications.find(a => a.id === appId);
+          if (app) {
+            const newSchool: School = {
+              id: `school-${Date.now()}`,
+              name: app.schoolName,
+              city: app.location.split(',')[0].trim(),
+              region: app.location.split(',')[1]?.trim() || 'Lagos',
+              status: 'Registered',
+              approvalDate: new Date().toISOString().split('T')[0],
+              studentCount: app.studentsEstimate,
+            };
+            setSchools(prev => [...prev, newSchool]);
+          }
+        }
+      } else {
+        alert('Failed to update status.');
+      }
+    } catch (e) {
+      alert('Network error updating status.');
+    }
   };
-
-  const handleReject = (appId: string) => setApplications(apps => apps.map(a => a.id === appId ? { ...a, status: 'rejected' } : a));
 
   const exportEnrollmentData = () => {
     const csvContent = "data:text/csv;charset=utf-8,"
@@ -388,9 +403,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                       <div key={app.id} className="flex items-center justify-between p-4 bg-[#f9f7f3] rounded-xl border border-[#e7e0d4]">
                         <div>
                           <div className="font-bold text-[#003e45] text-sm">{app.schoolName}</div>
-                          <div className="text-xs text-[#6e675c]">{app.location} • {app.studentsCount} students</div>
+                          <div className="text-xs text-[#6e675c]">{app.location} • {app.studentsEstimate} students</div>
                         </div>
-                        <button onClick={() => setActiveTab('applications')} className="text-[10px] font-mono uppercase font-bold text-[#003e45] bg-[#5ce1e6] px-3 py-1 rounded-full">Review</button>
+                        <button onClick={() => { setActiveTab('applications'); setAppFilter('PENDING'); }} className="text-[10px] font-mono uppercase font-bold text-[#003e45] bg-[#5ce1e6] px-3 py-1 rounded-full">Review</button>
                       </div>
                     ))}
                     {applications.length === 0 && <p className="text-sm text-[#6e675c] italic">No new applications.</p>}
@@ -420,7 +435,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           {activeTab === 'applications' && (
             <div className="space-y-6">
               <div className="flex gap-2 flex-wrap">
-                {(['all', 'pending', 'approved', 'rejected'] as const).map(f => (
+                {(['ALL', 'PENDING', 'REVIEWED', 'SCHEDULED', 'TRAINING', 'LAUNCHED', 'REJECTED'] as const).map(f => (
                   <button key={f} onClick={() => setAppFilter(f)} className={`px-4 py-1.5 rounded-full text-[10px] font-mono uppercase tracking-widest font-bold border transition-all ${appFilter === f ? 'bg-[#003e45] text-white border-[#003e45]' : 'bg-white text-[#6e675c] border-[#e7e0d4]'}`}>{f}</button>
                 ))}
               </div>
@@ -438,14 +453,19 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                       <tr key={app.id} className="hover:bg-[#faf9f6] transition-colors">
                         <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{app.schoolName}</div><div className="text-xs text-[#6e675c]">{app.contactName} • {app.email}</div></td>
                         <td className="px-6 py-4 text-sm text-[#201d16]">{app.location}</td>
-                        <td className="px-6 py-4 text-sm text-[#201d16] font-mono">{app.studentsCount}</td>
-                        <td className="px-6 py-4 text-xs text-[#6e675c]">{app.submissionDate}</td>
-                        <td className="px-6 py-4"><span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${app.status === 'approved' ? 'bg-[#e0f6f7] text-[#003e45]' : app.status === 'rejected' ? 'bg-red-50 text-red-600' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16] font-mono">{app.studentsEstimate}</td>
+                        <td className="px-6 py-4 text-xs text-[#6e675c]">{new Date(app.createdAt).toLocaleDateString()}</td>
                         <td className="px-6 py-4">
-                          {app.status === 'pending' && (
-                            <div className="flex gap-2">
-                              <button onClick={() => handleApprove(app.id)} className="bg-[#5ce1e6] text-[#003e45] text-[10px] font-mono font-bold px-3 py-1 rounded-full hover:brightness-95">Approve</button>
-                              <button onClick={() => handleReject(app.id)} className="bg-white border border-[#e7e0d4] text-[#6e675c] text-[10px] font-mono font-bold px-3 py-1 rounded-full hover:bg-red-50 hover:text-red-600 hover:border-red-200">Reject</button>
+                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${['LAUNCHED', 'TRAINING'].includes(app.status) ? 'bg-[#e0f6f7] text-[#003e45]' : app.status === 'REJECTED' ? 'bg-red-50 text-red-600' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {app.status !== 'REJECTED' && app.status !== 'LAUNCHED' && (
+                            <div className="flex gap-1.5 flex-wrap">
+                              {app.status === 'PENDING' && <button onClick={() => handleStatusChange(app.id, 'REVIEWED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Review</button>}
+                              {app.status === 'REVIEWED' && <button onClick={() => handleStatusChange(app.id, 'SCHEDULED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Schedule</button>}
+                              {app.status === 'SCHEDULED' && <button onClick={() => handleStatusChange(app.id, 'TRAINING')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Train</button>}
+                              {(app.status === 'TRAINING' || app.status === 'SCHEDULED' || app.status === 'REVIEWED') && <button onClick={() => handleStatusChange(app.id, 'LAUNCHED')} className="bg-[#5ce1e6] text-[#003e45] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Launch</button>}
+                              <button onClick={() => handleStatusChange(app.id, 'REJECTED')} className="bg-white border border-[#e7e0d4] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-red-50 hover:text-red-600 hover:border-red-200">Reject</button>
                             </div>
                           )}
                         </td>

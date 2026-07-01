@@ -19,7 +19,7 @@ const SECTIONS = [
   { heading: 'Programme Participation', content: (<p>Schools and students who join the Mikaelson School Club programme do so under a separate participation agreement, which governs the rights and obligations of programme participants. These Terms of Use apply to the website only and do not constitute an offer to participate in the programme.</p>) },
   { heading: 'Limitation of Liability', content: (<p>The Mikaelson Initiative provides this website on an &quot;as is&quot; basis. We make no warranties, express or implied, regarding the accuracy or completeness of the content. To the fullest extent permitted by law, the Mikaelson Initiative is not liable for any indirect, incidental, or consequential losses arising from your use of this website.</p>) },
   { heading: 'Changes to Terms', content: (<p>We may update these Terms of Use from time to time. Changes will be posted on this page with an updated date. Where changes are significant, we will notify users by email where contact details are held. Your continued use of the site after changes are posted constitutes your acceptance of the updated terms.</p>) },
-  { heading: 'Contact', content: (<p>For any questions about these Terms of Use, please contact us at{' '}<a href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink">hello@mikaelsoninitiative.org</a>.</p>) },
+  { heading: 'Contact', content: (<p>For any questions about these Terms of Use, please contact us at{' '}<a href="mailto:msc@mikaelsoninitiative.org" className="text-accent-ink">msc@mikaelsoninitiative.org</a>.</p>) },
 ];
 
 export default function TermsPage() {

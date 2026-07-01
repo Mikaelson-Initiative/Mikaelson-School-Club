@@ -121,7 +121,7 @@ const jsonLd = {
       },
       description:
         'Building the next generation of African leaders through habit systems, peer leadership, and digital literacy.',
-      email: 'hello@mikaelsoninitiative.org',
+      email: 'msc@mikaelsoninitiative.org',
       areaServed: 'Africa',
       audience: {
         '@type': 'EducationalAudience',

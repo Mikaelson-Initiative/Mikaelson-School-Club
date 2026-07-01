@@ -18,9 +18,12 @@ const STEPS = [
 
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     // Capture the form data
     const formData = new FormData(e.currentTarget);
@@ -54,6 +57,8 @@ export default function ApplyPage() {
     } catch (err) {
       console.error("Network error:", err);
       alert("Network error, please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -75,7 +80,7 @@ export default function ApplyPage() {
                   <h2 className="font-display font-bold tracking-[-0.02em] mt-4 mb-3" style={{ fontSize: 'clamp(22px,2.6vw,30px)' }}>We&apos;ll be in touch within 3 working days.</h2>
                   <p className="text-muted text-[16px] m-0">
                     Keep an eye on your inbox. If you have any urgent questions, email{' '}
-                    <a href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink font-semibold">hello@mikaelsoninitiative.org</a>.
+                    <a href="mailto:msc@mikaelsoninitiative.org" className="text-accent-ink font-semibold">msc@mikaelsoninitiative.org</a>.
                   </p>
                 </div>
               ) : (
@@ -114,9 +119,10 @@ export default function ApplyPage() {
                   </div>
                   <button
                     type="submit"
-                    className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center justify-center gap-[9px] whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] mt-1 w-full"
+                    disabled={isSubmitting}
+                    className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center justify-center gap-[9px] whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] mt-1 w-full disabled:opacity-70 disabled:hover:translate-y-0 disabled:hover:shadow-[0_12px_0_-2px_var(--accent-ink)]"
                   >
-                    Submit Application →
+                    {isSubmitting ? "Submitting..." : "Submit Application →"}
                   </button>
                 </form>
               )}
@@ -137,7 +143,7 @@ export default function ApplyPage() {
               <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent-ink font-bold block mb-[10px]">Questions?</span>
               <p className="m-0 text-[14.5px] text-muted leading-[1.65]">
                 Email us at{' '}
-                <a href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink font-semibold no-underline">hello@mikaelsoninitiative.org</a>
+                <a href="mailto:msc@mikaelsoninitiative.org" className="text-accent-ink font-semibold no-underline">msc@mikaelsoninitiative.org</a>
                 {' '}or use the{' '}
                 <Link href="/contact" className="text-accent-ink font-semibold no-underline">contact form</Link>.
               </p>

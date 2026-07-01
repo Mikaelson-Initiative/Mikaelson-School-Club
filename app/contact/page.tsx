@@ -19,9 +19,9 @@ const FIELD_LABEL = 'font-mono text-[11px] uppercase tracking-[0.1em] text-accen
 const BOOKING_URL = 'https://calendar.google.com/appointments/schedules/AcZssZ1JVLcmrQSO15PwdFlP3GVv8YDwb74-Ey_unMB6kNXziUKoGUkWhzc9UsTlPlqp-3JUZvWbfkuo';
 
 const CONTACTS = [
-  { Icon: IconMail, title: 'General Enquiries', email: 'hello@mikaelsoninitiative.org', body: 'For questions about the programme, chapters, and membership.' },
+  { Icon: IconMail, title: 'General Enquiries', email: 'msc@mikaelsoninitiative.org', body: 'For questions about the programme, chapters, and membership.' },
   { Icon: IconGlobe, title: 'Partnerships & Sponsors', email: 'partnership@mikaelsoninitiative.org', body: 'For organisations interested in supporting the initiative.' },
-  { Icon: IconCompass, title: 'Media', email: 'hello@mikaelsoninitiative.org', body: 'For press, interviews, and coverage requests.' },
+  { Icon: IconCompass, title: 'Media', email: 'msc@mikaelsoninitiative.org', body: 'For press, interviews, and coverage requests.' },
 ];
 
 const SOCIALS = [
@@ -111,7 +111,7 @@ export default function ContactPage() {
                 <h3 className="font-display font-semibold text-[22px] m-0 mb-2 tracking-[-0.01em]">Send a message</h3>
                 <p className="text-muted text-[14.5px] m-0 mb-6 leading-[1.55]">Use the email addresses above or fill in the form below:</p>
 
-                <form action="mailto:hello@mikaelsoninitiative.org" method="GET" className="flex flex-col gap-4">
+                <form action="mailto:msc@mikaelsoninitiative.org" method="GET" className="flex flex-col gap-4">
                   <div>
                     <label className={FIELD_LABEL}>Name</label>
                     <input type="text" name="name" placeholder="Your name" className={FIELD_INPUT} />
@@ -143,7 +143,7 @@ export default function ContactPage() {
 
                 <p className="font-mono text-[13px] text-muted tracking-[0.02em] mt-4 m-0">
                   Or email{' '}
-                  <Link href="mailto:hello@mikaelsoninitiative.org" className="text-accent-ink font-bold no-underline">hello@mikaelsoninitiative.org</Link>
+                  <Link href="mailto:msc@mikaelsoninitiative.org" className="text-accent-ink font-bold no-underline">msc@mikaelsoninitiative.org</Link>
                   {' '}directly.
                 </p>
               </div>

@@ -71,7 +71,7 @@ export default function BlogPage() {
               <span className={`${LABEL} justify-center flex mb-4`}>Stay updated</span>
               <p className="text-[18px] text-muted m-0 mb-7">Stories are published as chapters run. Subscribe to receive updates.</p>
               <Link
-                href="mailto:hello@mikaelsoninitiative.org?subject=Subscribe"
+                href="mailto:msc@mikaelsoninitiative.org?subject=Subscribe"
                 className="font-body font-bold text-[16px] border-none rounded-full px-8 py-4 cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)]"
               >
                 <IconMail size={16} />

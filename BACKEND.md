@@ -461,12 +461,12 @@ Integrate transactional emails using **Resend** or SMTP Nodemailer.
 
 1. **Trigger on Application (`POST /api/apply`):**
    * Send a welcome email to the applicant's email address confirming receipt of application.
-   * Send an alert message containing applicant details to `hello@mikaelsoninitiative.org`.
+   * Send an alert message containing applicant details to `msc@mikaelsoninitiative.org`.
 2. **Trigger on Contact Enquiry (`POST /api/contact`):**
    * route emails to appropriate target channels:
      * Partnerships -> `partners@mikaelsoninitiative.org`
      * Media -> `media@mikaelsoninitiative.org`
-     * General/School -> `hello@mikaelsoninitiative.org`
+     * General/School -> `msc@mikaelsoninitiative.org`
 
 ---
 
