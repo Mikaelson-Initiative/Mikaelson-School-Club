@@ -14,29 +14,47 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const { slug } = params;
 
   let post: any = null;
+  let debugLog: string[] = [];
   try {
-    // 1. Fetch latest articles to bypass Dev.to cache and get the fresh article ID
+    debugLog.push("Fetching latest articles list...");
     const listRes = await fetch('https://dev.to/api/articles/latest?username=mikaelsonschoolclub', { cache: 'no-store' });
+    debugLog.push(`listRes.ok: ${listRes.ok}, status: ${listRes.status}`);
+    
     if (listRes.ok) {
       const list = await listRes.json();
+      debugLog.push(`Found ${list.length} articles`);
       const match = list.find((p: any) => p.slug === slug);
+      debugLog.push(`Match found for ${slug}: ${!!match}`);
       
       if (match && match.id) {
-        // 2. Fetch the full article using the unique ID. 
-        // This completely bypasses any cached 404s on the /username/slug endpoint 
-        // because the ID URL is completely new to Fastly's edge nodes.
+        debugLog.push(`Fetching article ID ${match.id}...`);
         const res = await fetch(`https://dev.to/api/articles/${match.id}`, { cache: 'no-store' });
+        debugLog.push(`res.ok: ${res.ok}, status: ${res.status}`);
         if (res.ok) {
           post = await res.json();
+          debugLog.push(`Successfully fetched post!`);
+        } else {
+          debugLog.push(`Failed to fetch ID ${match.id}: ` + await res.text());
         }
       }
+    } else {
+      debugLog.push("Failed to fetch list: " + await listRes.text());
     }
-  } catch (err) {
-    console.error("Failed to fetch post", err);
+  } catch (err: any) {
+    debugLog.push(`Exception: ${err.message}`);
   }
 
   if (!post) {
-    return notFound();
+    return (
+      <div className="pt-32 pb-24 px-5">
+        <div className="max-w-3xl mx-auto">
+          <h1 className="text-3xl font-bold mb-6 text-red-500">Debug Info</h1>
+          <pre className="bg-gray-100 p-4 rounded text-sm text-black whitespace-pre-wrap">
+            {debugLog.join('\n')}
+          </pre>
+        </div>
+      </div>
+    );
   }
 
   const category = post.tags?.[0] || 'Update';
