@@ -80,7 +80,7 @@ export default function ChaptersPage() {
           
           if (merged.length > 0) {
             setChapters(merged);
-            const uniqueCountries = Array.from(new Set(merged.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown')));
+            const uniqueCountries = Array.from(new Set(merged.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown'))) as string[];
             setCountries(['All', ...uniqueCountries]);
           }
         }
