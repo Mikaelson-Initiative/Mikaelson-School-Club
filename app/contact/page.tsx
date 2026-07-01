@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
+import ContactForm from '../components/ContactForm';
 import { IconMail, IconGlobe, IconCompass, IconInstagram, IconX, IconLinkedin, IconYoutube, IconCalendar, IconArrow } from '../components/Icons';
 import Link from 'next/link';
 
@@ -107,46 +108,7 @@ export default function ContactPage() {
 
             {/* Right: Contact form */}
             <Reveal delay={100}>
-              <div className="bg-[var(--surface-2)] border border-line rounded-[22px] p-9">
-                <h3 className="font-display font-semibold text-[22px] m-0 mb-2 tracking-[-0.01em]">Send a message</h3>
-                <p className="text-muted text-[14.5px] m-0 mb-6 leading-[1.55]">Use the email addresses above or fill in the form below:</p>
-
-                <form action="mailto:msc@mikaelsoninitiative.org" method="GET" className="flex flex-col gap-4">
-                  <div>
-                    <label className={FIELD_LABEL}>Name</label>
-                    <input type="text" name="name" placeholder="Your name" className={FIELD_INPUT} />
-                  </div>
-                  <div>
-                    <label className={FIELD_LABEL}>Email</label>
-                    <input type="email" name="email" placeholder="you@email.com" className={FIELD_INPUT} />
-                  </div>
-                  <div>
-                    <label className={FIELD_LABEL}>Type</label>
-                    <select name="subject" className={FIELD_INPUT + ' appearance-none cursor-pointer'}>
-                      <option value="School enquiry">School enquiry</option>
-                      <option value="Partnership">Partnership</option>
-                      <option value="Media">Media</option>
-                      <option value="General">General</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className={FIELD_LABEL}>Message</label>
-                    <textarea name="body" rows={4} placeholder="Tell us what's on your mind..." className={FIELD_INPUT + ' resize-y leading-[1.6]'} />
-                  </div>
-                  <button
-                    type="submit"
-                    className="font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center justify-center gap-[9px] whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] mt-1 w-full"
-                  >
-                    Send message
-                  </button>
-                </form>
-
-                <p className="font-mono text-[13px] text-muted tracking-[0.02em] mt-4 m-0">
-                  Or email{' '}
-                  <Link href="mailto:msc@mikaelsoninitiative.org" className="text-accent-ink font-bold no-underline">msc@mikaelsoninitiative.org</Link>
-                  {' '}directly.
-                </p>
-              </div>
+              <ContactForm />
             </Reveal>
           </div>
         </div>
