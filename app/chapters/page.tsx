@@ -71,16 +71,27 @@ export default function ChaptersPage() {
             live: c.status === 'ACTIVE' || c.status === 'Active' || c.status === 'REGISTERED' || c.status === 'Registered', // For simplicity, showing all as live if they are in the DB, or customize based on status
           }));
           
-          // Combine or overwrite? The hardcoded ones have nice logos.
-          // Let's overwrite entirely with dynamic + keep logos if matched by name.
-          const merged = dynamicChapters.map((dc: Chapter) => {
-            const hardcodedMatch = HARDCODED_CHAPTERS.find(hc => hc.school.toLowerCase() === dc.school.toLowerCase());
-            return hardcodedMatch ? { ...dc, logo: hardcodedMatch.logo, live: dc.live || hardcodedMatch.live } : dc;
-          });
+          // Combine hardcoded and dynamic chapters.
+          // If a dynamic chapter has the same name as a hardcoded one, the dynamic one overrides it (but we keep the logo).
+          const dynamicNames = new Set(dynamicChapters.map((dc: any) => dc.school.toLowerCase()));
           
-          if (merged.length > 0) {
-            setChapters(merged);
-            const uniqueCountries = Array.from(new Set(merged.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown'))) as string[];
+          const filteredHardcoded = HARDCODED_CHAPTERS.map(hc => {
+             // If this hardcoded chapter is now in the DB, skip it here so we don't duplicate.
+             if (dynamicNames.has(hc.school.toLowerCase())) return null;
+             return hc;
+          }).filter(Boolean) as Chapter[];
+
+          // For the dynamic chapters, see if there's a hardcoded logo to attach.
+          const finalDynamic = dynamicChapters.map((dc: any) => {
+             const match = HARDCODED_CHAPTERS.find(hc => hc.school.toLowerCase() === dc.school.toLowerCase());
+             return match ? { ...dc, logo: match.logo } : dc;
+          });
+
+          const combined = [...filteredHardcoded, ...finalDynamic];
+          
+          if (combined.length > 0) {
+            setChapters(combined);
+            const uniqueCountries = Array.from(new Set(combined.map((c: Chapter) => c.city.split(',').pop()?.trim() || 'Unknown'))) as string[];
             setCountries(['All', ...uniqueCountries]);
           }
         }
