@@ -201,6 +201,46 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [viewingRegistrationsFor, setViewingRegistrationsFor] = useState<EventItem | null>(null);
   const [registrations, setRegistrations] = useState<any[]>([]);
   const [regsLoading, setRegsLoading] = useState(false);
+  
+  // Team member form state
+  const emptyTeamMember = () => ({ name: '', role: '', email: '', avatarUrl: '', linkedinUrl: '' });
+  const [teamForm, setTeamForm] = useState(emptyTeamMember());
+  const [showTeamForm, setShowTeamForm] = useState(false);
+  const [teamSubmitting, setTeamSubmitting] = useState(false);
+
+  const submitTeamForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!teamForm.name.trim() || !teamForm.role.trim() || !teamForm.email.trim()) return;
+    setTeamSubmitting(true);
+    try {
+      const token = sessionStorage.getItem('msc_admin_token') || '';
+      const res = await fetch('/api/admin/team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          name: teamForm.name,
+          role: teamForm.role,
+          email: teamForm.email,
+          avatarUrl: teamForm.avatarUrl || undefined,
+          linkedinUrl: teamForm.linkedinUrl || undefined,
+          sortOrder: team.length
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setTeam([...team, { ...teamForm, id: data.id }]);
+        setShowTeamForm(false);
+        setTeamForm(emptyTeamMember());
+      } else {
+        alert("Failed to add team member.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error adding team member.");
+    } finally {
+      setTeamSubmitting(false);
+    }
+  };
 
   const stats = useMemo(() => {
     const approvedChapters = schools.filter(s => s.status === 'Active' || s.status === 'Registered').length;
@@ -719,15 +759,45 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
           {/* Team */}
           {activeTab === 'team' && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {team.map(t => (
-                <div key={t.id || t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-5 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center shrink-0">
-                    {t.img ? <img src={t.img} className="w-full h-full rounded-full object-cover" /> : <div className="text-[#003e45] font-bold">{t.name.charAt(0)}</div>}
+            <div className="space-y-6">
+              <div className="flex justify-end">
+                <button 
+                  onClick={() => setShowTeamForm(!showTeamForm)}
+                  className="bg-[#003e45] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-transform hover:scale-105"
+                >
+                  {showTeamForm ? "Cancel" : "+ Add Member"}
+                </button>
+              </div>
+
+              {showTeamForm && (
+                <form onSubmit={submitTeamForm} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 shadow-sm mb-6">
+                  <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">Add Team Member</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <input className={inputCls} value={teamForm.name} onChange={e => setTeamForm(f => ({ ...f, name: e.target.value }))} placeholder="Name" required />
+                    <input className={inputCls} value={teamForm.email} onChange={e => setTeamForm(f => ({ ...f, email: e.target.value }))} type="email" placeholder="Email" required />
+                    <input className={inputCls} value={teamForm.role} onChange={e => setTeamForm(f => ({ ...f, role: e.target.value }))} placeholder="Role (e.g. Program Manager)" required />
+                    <input className={inputCls} value={teamForm.linkedinUrl} onChange={e => setTeamForm(f => ({ ...f, linkedinUrl: e.target.value }))} type="url" placeholder="LinkedIn URL (optional)" />
+                    <input className={inputCls} value={teamForm.avatarUrl} onChange={e => setTeamForm(f => ({ ...f, avatarUrl: e.target.value }))} type="url" placeholder="Avatar Image URL (optional)" />
                   </div>
-                  <div><div className="font-bold text-[#003e45] text-sm">{t.name}</div><div className="text-xs text-[#6e675c]">{t.role}</div></div>
-                </div>
-              ))}
+                  <div className="flex justify-end gap-3">
+                    <button type="button" onClick={() => setShowTeamForm(false)} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
+                    <button type="submit" disabled={teamSubmitting} className="px-5 py-2 rounded-full bg-[#5ce1e6] text-[#003e45] font-bold text-sm disabled:opacity-50">
+                      {teamSubmitting ? "Saving..." : "Save Member"}
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {team.map(t => (
+                  <div key={t.id || t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-5 flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center shrink-0">
+                      {t.img || t.avatarUrl ? <img src={t.img || t.avatarUrl} className="w-full h-full rounded-full object-cover" /> : <div className="text-[#003e45] font-bold">{t.name.charAt(0)}</div>}
+                    </div>
+                    <div><div className="font-bold text-[#003e45] text-sm">{t.name}</div><div className="text-xs text-[#6e675c]">{t.role}</div></div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
