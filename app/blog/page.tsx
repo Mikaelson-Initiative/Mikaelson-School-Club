@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { WRAP, LABEL } from '../lib/tw';
 const LINK_ARROW = 'font-mono text-accent-ink text-[12.5px] tracking-[0.06em] uppercase no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[4px]';
 
-export const revalidate = 3600; // revalidate every hour
+export const revalidate = 0; // force dynamic so updates show instantly
 
 export default async function BlogPage() {
   let posts: any[] = [];

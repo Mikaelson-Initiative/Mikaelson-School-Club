@@ -8,7 +8,7 @@ import Footer from '../../components/Footer';
 import { IconArrow } from '../../components/Icons';
 import { WRAP } from '../../lib/tw';
 
-export const revalidate = 3600;
+export const revalidate = 0;
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
