@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import Reveal from './Reveal';
 import { IconArrow } from './Icons';
 import { WRAP, SEC, LABEL } from '../lib/tw';
@@ -9,42 +10,6 @@ import { loadEvents, SEED_EVENTS, type EventItem } from '../lib/events';
 export default function EventsList() {
   const [events, setEvents] = useState<EventItem[]>(SEED_EVENTS);
   const [loading, setLoading] = useState(true);
-  
-  const [registeringFor, setRegisteringFor] = useState<EventItem | null>(null);
-  const [regForm, setRegForm] = useState({ name: '', email: '', schoolName: '' });
-  const [regStatus, setRegStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [regError, setRegError] = useState('');
-
-  async function handleRegister(e: FormEvent) {
-    e.preventDefault();
-    if (!registeringFor) return;
-    
-    setRegStatus('submitting');
-    setRegError('');
-    
-    try {
-      const res = await fetch(`/api/events/${registeringFor.id}/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(regForm),
-      });
-      
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to register');
-      }
-      
-      setRegStatus('success');
-      setTimeout(() => {
-        setRegisteringFor(null);
-        setRegStatus('idle');
-        setRegForm({ name: '', email: '', schoolName: '' });
-      }, 3000);
-    } catch (err: any) {
-      setRegStatus('error');
-      setRegError(err.message);
-    }
-  }
 
   useEffect(() => {
     async function fetchEvents() {
@@ -116,13 +81,9 @@ export default function EventsList() {
                           External Register <IconArrow size={13} />
                         </a>
                       ) : (
-                        <button onClick={() => {
-                          setRegisteringFor(event);
-                          setRegStatus('idle');
-                          setRegError('');
-                        }} className="font-mono text-[12.5px] tracking-[0.06em] uppercase inline-flex items-center gap-[7px] font-bold text-accent-2 hover:opacity-80 transition-opacity cursor-pointer">
+                        <Link href={`/events/${event.id}/register`} className="font-mono text-[12.5px] tracking-[0.06em] uppercase inline-flex items-center gap-[7px] font-bold text-accent-2 hover:opacity-80 transition-opacity cursor-pointer">
                           Register Here <IconArrow size={13} />
-                        </button>
+                        </Link>
                       )}
                     </div>
                   </div>
@@ -173,49 +134,6 @@ export default function EventsList() {
           )}
         </div>
       </section>
-
-      {/* Registration Modal Overlay */}
-      {registeringFor && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-          <div className="bg-surface w-full max-w-md rounded-[24px] p-8 shadow-2xl relative">
-            <button 
-              onClick={() => setRegisteringFor(null)}
-              className="absolute top-6 right-6 text-muted hover:text-accent-ink transition-colors"
-            >
-              ✕
-            </button>
-            <h3 className="font-display font-bold text-[24px] mb-2 leading-tight">Register for<br/>{registeringFor.title}</h3>
-            <p className="text-muted text-[14px] mb-6">Fill out your details below to secure your spot.</p>
-
-            {regStatus === 'success' ? (
-              <div className="bg-[#e0f6f7] text-[#003e45] p-5 rounded-xl border border-[#b2e5e7] flex flex-col items-center text-center">
-                <span className="text-[32px] mb-2">🎉</span>
-                <p className="font-bold mb-1">Registration Complete!</p>
-                <p className="text-[13px] opacity-80">We&apos;ve sent a confirmation email to {regForm.email}. See you there!</p>
-              </div>
-            ) : (
-              <form onSubmit={handleRegister} className="flex flex-col gap-4">
-                <div>
-                  <label className="block font-mono text-[11px] uppercase tracking-wider font-bold mb-1.5 ml-1 text-accent-ink">Name <span className="text-red-500">*</span></label>
-                  <input required value={regForm.name} onChange={e => setRegForm(f => ({ ...f, name: e.target.value }))} className="w-full bg-[var(--surface-2)] border border-line rounded-xl px-4 py-3 text-[14px] outline-none focus:border-accent-2 transition-colors" placeholder="Jane Doe" />
-                </div>
-                <div>
-                  <label className="block font-mono text-[11px] uppercase tracking-wider font-bold mb-1.5 ml-1 text-accent-ink">Email Address <span className="text-red-500">*</span></label>
-                  <input required type="email" value={regForm.email} onChange={e => setRegForm(f => ({ ...f, email: e.target.value }))} className="w-full bg-[var(--surface-2)] border border-line rounded-xl px-4 py-3 text-[14px] outline-none focus:border-accent-2 transition-colors" placeholder="jane@example.com" />
-                </div>
-                <div>
-                  <label className="block font-mono text-[11px] uppercase tracking-wider font-bold mb-1.5 ml-1 text-accent-ink">School Name</label>
-                  <input value={regForm.schoolName} onChange={e => setRegForm(f => ({ ...f, schoolName: e.target.value }))} className="w-full bg-[var(--surface-2)] border border-line rounded-xl px-4 py-3 text-[14px] outline-none focus:border-accent-2 transition-colors" placeholder="Optional" />
-                </div>
-                {regError && <div className="text-red-600 text-[13px] mt-1 bg-red-50 p-3 rounded-lg border border-red-100">{regError}</div>}
-                <button disabled={regStatus === 'submitting'} type="submit" className="mt-2 w-full bg-accent-2 text-white font-mono uppercase tracking-widest text-[13px] font-bold py-4 rounded-xl hover:bg-accent transition-colors disabled:opacity-50">
-                  {regStatus === 'submitting' ? 'Submitting...' : 'Confirm Registration'}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
     </>
   );
 }
