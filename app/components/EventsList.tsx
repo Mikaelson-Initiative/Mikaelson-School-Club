@@ -5,10 +5,10 @@ import Link from 'next/link';
 import Reveal from './Reveal';
 import { IconArrow } from './Icons';
 import { WRAP, SEC, LABEL } from '../lib/tw';
-import { loadEvents, SEED_EVENTS, type EventItem } from '../lib/events';
+import { loadEvents, type EventItem } from '../lib/events';
 
 export default function EventsList() {
-  const [events, setEvents] = useState<EventItem[]>(SEED_EVENTS);
+  const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

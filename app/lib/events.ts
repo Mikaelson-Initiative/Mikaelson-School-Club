@@ -25,86 +25,19 @@ export interface EventItem {
 
 export const EVENTS_STORAGE_KEY = 'msc_events';
 
-/** Default events shown until/unless the admin changes them. */
-export const SEED_EVENTS: EventItem[] = [
-  {
-    id: 'seed-1',
-    title: 'Monthly Networking Dinner',
-    date: 'June 15, 2026',
-    time: '6:00 PM – 8:00 PM',
-    location: 'School Auditorium',
-    description: 'Connect with fellow club members and industry professionals over dinner.',
-    category: 'Networking',
-    type: 'upcoming',
-  },
-  {
-    id: 'seed-2',
-    title: 'Leadership Workshop',
-    date: 'June 22, 2026',
-    time: '3:30 PM – 5:00 PM',
-    location: 'Room 301',
-    description: 'Learn essential leadership skills from experienced mentors.',
-    category: 'Workshop',
-    type: 'upcoming',
-  },
-  {
-    id: 'seed-3',
-    title: 'Career Fair',
-    date: 'July 10, 2026',
-    time: '2:00 PM – 5:00 PM',
-    location: 'School Gymnasium',
-    description: 'Meet representatives from top companies and explore career opportunities.',
-    category: 'Career',
-    type: 'upcoming',
-  },
-  {
-    id: 'seed-4',
-    title: 'Orientation Event',
-    date: 'May 1, 2026',
-    time: '',
-    location: 'School Auditorium',
-    description: 'Welcome session introducing new members to the club and its programme.',
-    category: 'Community',
-    type: 'past',
-    attendees: '125 students',
-  },
-  {
-    id: 'seed-5',
-    title: 'Spring Volunteer Drive',
-    date: 'April 20, 2026',
-    time: '',
-    location: 'Community Centre',
-    description: 'A day of community service organised by chapter members.',
-    category: 'Community',
-    type: 'past',
-    attendees: '80 volunteers',
-  },
-  {
-    id: 'seed-6',
-    title: 'Winter Seminar Series',
-    date: 'March 15, 2026',
-    time: '',
-    location: 'Main Hall',
-    description: 'A series of seminars on leadership, habits, and digital skills.',
-    category: 'Workshop',
-    type: 'past',
-    attendees: '200+ attendees',
-  },
-];
-
 /** Read events from localStorage; seed on first use. Safe on the server (returns seed). */
 export function loadEvents(): EventItem[] {
-  if (typeof window === 'undefined') return SEED_EVENTS;
+  if (typeof window === 'undefined') return [];
   try {
     const raw = window.localStorage.getItem(EVENTS_STORAGE_KEY);
     if (!raw) {
-      window.localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify(SEED_EVENTS));
-      return SEED_EVENTS;
+      window.localStorage.setItem(EVENTS_STORAGE_KEY, JSON.stringify([]));
+      return [];
     }
     const parsed = JSON.parse(raw) as EventItem[];
-    return Array.isArray(parsed) ? parsed : SEED_EVENTS;
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
-    return SEED_EVENTS;
+    return [];
   }
 }
 
