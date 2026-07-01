@@ -198,6 +198,14 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           fetch('/api/team')
         ]);
 
+        if (appsRes.status === 403 || studRes.status === 403 || mentRes.status === 403 || volRes.status === 403) {
+          setIsAdmin(false);
+          setIsLoadingData(false);
+          return;
+        } else {
+          setIsAdmin(true);
+        }
+
         if (appsRes.ok) {
           const data = await appsRes.json();
           setApplications(Array.isArray(data) ? data : data.applications || []);
@@ -205,16 +213,19 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
         if (studRes.ok) {
           const data = await studRes.json();
+          console.log('Students data:', data);
           setStudents(data.applications || []);
         }
 
         if (mentRes.ok) {
           const data = await mentRes.json();
+          console.log('Mentors data:', data);
           setMentors(data.applications || []);
         }
 
         if (volRes.ok) {
           const data = await volRes.json();
+          console.log('Volunteers data:', data);
           setVolunteers(data.volunteers || []);
         }
 
