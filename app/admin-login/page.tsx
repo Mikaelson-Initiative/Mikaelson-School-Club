@@ -190,7 +190,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           const mappedEvents = (Array.isArray(data) ? data : data.events || []).map((e: any) => ({
             ...e,
             type: e.isPast ? 'past' : 'upcoming',
-            date: new Date(e.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+            date: e.date.split('T')[0],
             category: e.category || 'Other',
           }));
           setEvents(mappedEvents);
@@ -609,7 +609,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     </div>
                     <div>
                       <label className={labelCls}>Date *</label>
-                      <input className={inputCls} value={eventForm.date} onChange={e => setEventForm(f => ({ ...f, date: e.target.value }))} placeholder="e.g. June 15, 2026" required />
+                      <input type="date" className={inputCls} value={eventForm.date} onChange={e => setEventForm(f => ({ ...f, date: e.target.value }))} required />
                     </div>
                     <div>
                       <label className={labelCls}>Time</label>
