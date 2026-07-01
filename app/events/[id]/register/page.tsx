@@ -22,7 +22,13 @@ export default function RegisterPage({ params }: { params: Promise<{ id: string 
         const res = await fetch('/api/events', { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          const found = data.find((e: any) => e.id === id);
+          let allEvents = [];
+          if (data && (data.upcoming || data.past)) {
+            allEvents = [...(data.upcoming || []), ...(data.past || [])];
+          } else if (Array.isArray(data)) {
+            allEvents = data;
+          }
+          const found = allEvents.find((e: any) => e.id === id);
           if (found) {
             setEvent({
               ...found,

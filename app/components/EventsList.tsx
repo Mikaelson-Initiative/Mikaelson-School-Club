@@ -17,7 +17,18 @@ export default function EventsList() {
         const res = await fetch('/api/events', { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
-          if (data && data.length > 0) {
+          if (data && (data.upcoming || data.past)) {
+            const allEvents = [...(data.upcoming || []), ...(data.past || [])];
+            const mappedEvents = allEvents.map((e: any) => ({
+              ...e,
+              type: e.isPast ? 'past' : 'upcoming',
+              date: new Date(e.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+              category: e.category || 'Other',
+              registrationUrl: e.registrationUrl || '',
+            }));
+            setEvents(mappedEvents);
+          } else if (Array.isArray(data)) {
+            // Fallback just in case the API ever returns a flat array
             const mappedEvents = data.map((e: any) => ({
               ...e,
               type: e.isPast ? 'past' : 'upcoming',
