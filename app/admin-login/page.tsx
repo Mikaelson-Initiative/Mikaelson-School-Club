@@ -242,6 +242,40 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     }
   };
 
+  const seedTeam = async () => {
+    const HARDCODED_OFFICERS = [
+      { name: 'Michael Olukayode', role: 'Team Lead', avatarUrl: '/team/Michael%20Olukayode.jpg', linkedinUrl: 'https://www.linkedin.com/in/michael-olukayode-73890b214/' },
+      { name: 'Boluwatife Adeleke', role: 'Project Manager', avatarUrl: '/team/Boluwatife%20Mercy%20Adeleke.jpeg', linkedinUrl: 'https://www.linkedin.com/in/boluwatifemercyadeleke/' },
+      { name: 'Irene Ezechi', role: 'Program Manager', avatarUrl: '/team/Irene%20Ezechi.jpg', linkedinUrl: 'https://www.linkedin.com/in/ireneezechi/' },
+      { name: 'Mariam Jimoh', role: 'ESG and Impact', avatarUrl: '/team/Mariam%20Jimoh.jpeg', linkedinUrl: 'https://www.linkedin.com/in/jimohmariamajoke/' },
+      { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', avatarUrl: '/team/Ayegbusi%20Bright%20Temitope.jpg', linkedinUrl: '' },
+      { name: 'Feranmi Oluwole', role: 'Operations Manager', avatarUrl: '/team/Feranmi%20Oluwole.JPG', linkedinUrl: 'https://www.linkedin.com/in/feranmi-oluwole-675712339/' },
+      { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', avatarUrl: '/team/Asiedu%20Gyamfi.jpg', linkedinUrl: 'https://www.linkedin.com/in/theresa-gyamfi/' },
+      { name: 'Esther Adeoye', role: 'Social Media Manager', avatarUrl: '/team/Adeoye%20Esther.jpg', linkedinUrl: 'https://www.linkedin.com/in/adeoye-esther-4151a62b8/' },
+      { name: 'Ariyo Aresa', role: 'Front-end Engineer', avatarUrl: '/team/AriyoAresa.avif', linkedinUrl: 'https://www.linkedin.com/in/ariyoaresa/' },
+      { name: 'Ayomide Idowu', role: 'Visuals and Designs', avatarUrl: '/team/Ayomide%20Idowu.jpg', linkedinUrl: 'https://www.linkedin.com/in/ayomide-idowu-4a852623a/' },
+      { name: 'Happiness Obochi', role: 'Team Member', avatarUrl: '/team/Happiness%20Obochi.jpg', linkedinUrl: 'https://www.linkedin.com/in/happinessobochi/' },
+    ];
+    
+    const token = sessionStorage.getItem('msc_admin_token') || '';
+    for (let i = 0; i < HARDCODED_OFFICERS.length; i++) {
+      const o = HARDCODED_OFFICERS[i];
+      await fetch('/api/admin/team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          name: o.name,
+          role: o.role,
+          email: o.name.split(' ')[0].toLowerCase() + '@mikaelsoninitiative.org',
+          avatarUrl: o.avatarUrl || undefined,
+          linkedinUrl: o.linkedinUrl || undefined,
+          sortOrder: i
+        })
+      });
+    }
+    alert("Team Seeded! Please refresh the page.");
+  };
+
   const stats = useMemo(() => {
     const approvedChapters = schools.filter(s => s.status === 'Active' || s.status === 'Registered').length;
     const activeChapters = schools.filter(s => s.status === 'Active').length;
@@ -455,6 +489,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
               {activeTab === 'events' && (
                 <button onClick={openNewEvent} className="bg-[#5ce1e6] text-[#003e45] px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:brightness-95 transition">
                   + New Event
+                </button>
+              )}
+              {activeTab === 'team' && (
+                <button onClick={seedTeam} className="bg-orange-500 text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-orange-600 transition-colors">
+                  Seed Team (Temp)
                 </button>
               )}
               <button onClick={onLogout} className="lg:hidden text-[11px] font-mono uppercase tracking-widest text-[#6e675c] border border-[#e7e0d4] rounded-full px-3 py-1.5">
@@ -790,11 +829,14 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {team.map(t => (
-                  <div key={t.id || t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-5 flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center shrink-0">
-                      {t.img || t.avatarUrl ? <img src={t.img || t.avatarUrl} className="w-full h-full rounded-full object-cover" /> : <div className="text-[#003e45] font-bold">{t.name.charAt(0)}</div>}
+                  <div key={t.id || t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 flex items-center gap-4 shadow-sm">
+                    <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center text-[#003e45] font-bold text-lg overflow-hidden shrink-0">
+                      {t.img || t.avatarUrl ? <img src={t.img || t.avatarUrl} className="w-full h-full object-cover" /> : t.name.charAt(0)}
                     </div>
-                    <div><div className="font-bold text-[#003e45] text-sm">{t.name}</div><div className="text-xs text-[#6e675c]">{t.role}</div></div>
+                    <div>
+                      <div className="font-bold text-[#003e45] text-sm">{t.name}</div>
+                      <div className="text-xs text-[#6e675c] font-mono uppercase tracking-widest">{t.role}</div>
+                    </div>
                   </div>
                 ))}
               </div>
