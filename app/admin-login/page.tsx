@@ -257,10 +257,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           }
         }
       } else {
-        alert('Failed to update status.');
+        const errText = await res.text();
+        alert(`Failed to update status. Error: ${res.status} ${errText}`);
       }
     } catch (e) {
-      alert('Network error updating status.');
+      alert(`Network error updating status: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 
