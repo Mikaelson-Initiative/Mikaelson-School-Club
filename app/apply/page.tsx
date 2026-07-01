@@ -34,7 +34,7 @@ export default function ApplyPage() {
       contactName: formData.get('name') as string,
       email: formData.get('email') as string,
       phone: formData.get('phone') as string || undefined,
-      location: formData.get('location') as string,
+      location: `${formData.get('city')}, ${formData.get('country')}`,
       role: formData.get('role') as string,
       studentsEstimate: Number(formData.get('students')) || 0,
       message: formData.get('message') as string || undefined,
@@ -90,7 +90,8 @@ export default function ApplyPage() {
                     { label: 'Your Name', name: 'name', type: 'text', placeholder: 'First and last name' },
                     { label: 'Email Address', name: 'email', type: 'email', placeholder: 'you@yourschool.edu' },
                     { label: 'Phone Number', name: 'phone', type: 'tel', placeholder: '+233 000 000 000' },
-                    { label: 'City & Country', name: 'location', type: 'text', placeholder: 'e.g. Accra, Ghana' },
+                    { label: 'City', name: 'city', type: 'text', placeholder: 'e.g. Accra' },
+                    { label: 'Country', name: 'country', type: 'text', placeholder: 'e.g. Ghana' },
                   ].map((f) => (
                     <div key={f.name}>
                       <label className={LABEL_CLS}>{f.label}</label>
