@@ -320,7 +320,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         setEvents(events.map(ev => ev.id === editingId ? { ...eventForm, id: editingId } : ev));
         cancelEventForm();
       } else {
-        alert("Failed to update event.");
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to update event: ${errorData.error || 'Unknown error'}`);
       }
     } else {
       const res = await fetch('/api/admin/events', {
@@ -334,7 +335,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         setEvents([...events, { ...eventForm, id: data.id }]);
         cancelEventForm();
       } else {
-        alert("Failed to create event.");
+        const errorData = await res.json().catch(() => ({}));
+        alert(`Failed to create event: ${errorData.error || 'Unknown error'}`);
       }
     }
   };
