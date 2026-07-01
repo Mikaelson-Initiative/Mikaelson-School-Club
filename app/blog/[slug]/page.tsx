@@ -8,14 +8,14 @@ import Footer from '../../components/Footer';
 import { IconArrow } from '../../components/Icons';
 import { WRAP } from '../../lib/tw';
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const { slug } = params;
 
   let post: any = null;
   try {
-    const res = await fetch(`https://dev.to/api/articles/mikaelsonschoolclub/${slug}`);
+    const res = await fetch(`https://dev.to/api/articles/mikaelsonschoolclub/${slug}`, { cache: 'no-store' });
     if (res.ok) {
       post = await res.json();
     } else if (res.status === 404) {
