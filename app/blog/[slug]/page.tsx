@@ -15,15 +15,24 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
 
   let post: any = null;
   try {
-    const res = await fetch(`https://dev.to/api/articles/mikaelsonschoolclub/${slug}`, { cache: 'no-store' });
-    if (res.ok) {
-      post = await res.json();
-    } else if (res.status === 404) {
-      return notFound();
+    // 1. Fetch latest articles to bypass Dev.to cache and get the fresh article ID
+    const listRes = await fetch('https://dev.to/api/articles/latest?username=mikaelsonschoolclub', { cache: 'no-store' });
+    if (listRes.ok) {
+      const list = await listRes.json();
+      const match = list.find((p: any) => p.slug === slug);
+      
+      if (match && match.id) {
+        // 2. Fetch the full article using the unique ID. 
+        // This completely bypasses any cached 404s on the /username/slug endpoint 
+        // because the ID URL is completely new to Fastly's edge nodes.
+        const res = await fetch(`https://dev.to/api/articles/${match.id}`, { cache: 'no-store' });
+        if (res.ok) {
+          post = await res.json();
+        }
+      }
     }
   } catch (err) {
     console.error("Failed to fetch post", err);
-    return notFound();
   }
 
   if (!post) {
