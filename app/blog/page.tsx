@@ -12,14 +12,8 @@ import Link from 'next/link';
 import { WRAP, LABEL } from '../lib/tw';
 const LINK_ARROW = 'font-mono text-accent-ink text-[12.5px] tracking-[0.06em] uppercase no-underline inline-flex items-center gap-[7px] font-bold [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[4px]';
 
-const HARDCODED_POSTS = [
-  { category: 'Student Story', title: 'How tracking my habits for 30 days changed my relationship with school', author: 'Amara O., JSS 2, Lagos', excerpt: 'A student shares how the habit tracking system helped her go from inconsistent to her most productive term yet.' },
-  { category: 'Session Recap', title: 'What our chapter learned about digital communication this term', author: 'Kwame A., Chapter President, Accra', excerpt: "Our digital literacy sessions this term covered AI tools, online communication, and responsible internet use. Here's what stuck." },
-  { category: 'Facilitator Reflection', title: 'Running a student leadership club is harder, and more rewarding, than I expected', author: 'Mr. Ndlovu, Champion, Soweto', excerpt: "Six months in, our Chapter Champion reflects on what surprised him, what worked, and what he'd do differently." },
-];
-
 export default function BlogPage() {
-  const [posts, setPosts] = useState(HARDCODED_POSTS);
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -42,6 +36,8 @@ export default function BlogPage() {
             // Merge dynamically fetched posts, combining with hardcoded ones or just replacing.
             // Since blog posts change often, it's usually better to just replace if we have data.
             setPosts(dynamicPosts);
+          } else {
+            setPosts([]);
           }
         }
       } catch (err) {
@@ -64,31 +60,37 @@ export default function BlogPage() {
               From our chapters.
             </h2>
           </Reveal>
-          <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[22px]">
-            {posts.map((post: any, i: number) => (
-              <Reveal delay={i * 90} key={post.title}>
-                <div className="bg-surface border border-line rounded-[22px] overflow-hidden transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-34px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--line))]">
-                  {/* Card image placeholder */}
-                  <div className="bg-[var(--surface-2)] h-[180px] flex flex-col items-center justify-center gap-3 rounded-t-[22px]">
-                    <span className="font-mono text-[11px] tracking-[.08em] uppercase text-muted">Coming soon</span>
+          {posts.length === 0 ? (
+            <div className="text-muted text-[15px] col-span-full">
+              No stories published yet. Check back soon for updates from our chapters.
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-[22px]">
+              {posts.map((post: any, i: number) => (
+                <Reveal delay={i * 90} key={post.title}>
+                  <div className="bg-surface border border-line rounded-[22px] overflow-hidden transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-34px_rgba(0,0,0,.4)] hover:border-[color-mix(in_srgb,var(--accent)_40%,var(--line))]">
+                    {/* Card image placeholder */}
+                    <div className="bg-[var(--surface-2)] h-[180px] flex flex-col items-center justify-center gap-3 rounded-t-[22px]">
+                      <span className="font-mono text-[11px] tracking-[.08em] uppercase text-muted">Coming soon</span>
+                    </div>
+                    <div className="p-[26px]">
+                      {/* Badge */}
+                      <span className="font-mono text-muted border border-line inline-flex items-center gap-[7px] text-[11px] tracking-[0.07em] uppercase py-[5px] px-[11px] rounded-full font-bold mb-[14px]">
+                        <span className="w-[6px] h-[6px] rounded-full bg-current" />
+                        {post.category}
+                      </span>
+                      <h4 className="font-display font-semibold text-[18px] m-0 mb-[10px] tracking-[-0.01em] leading-[1.3]">{post.title}</h4>
+                      <p className="text-muted text-[14.5px] m-0 mb-[6px]">{post.excerpt}</p>
+                      <div className="font-mono text-[11px] text-muted uppercase tracking-[.06em] mb-[18px]">{post.author}</div>
+                      <span className={`${LINK_ARROW} opacity-45`}>
+                        Read more <IconArrow size={14} className="arr" />
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-[26px]">
-                    {/* Badge */}
-                    <span className="font-mono text-muted border border-line inline-flex items-center gap-[7px] text-[11px] tracking-[0.07em] uppercase py-[5px] px-[11px] rounded-full font-bold mb-[14px]">
-                      <span className="w-[6px] h-[6px] rounded-full bg-current" />
-                      {post.category}
-                    </span>
-                    <h4 className="font-display font-semibold text-[18px] m-0 mb-[10px] tracking-[-0.01em] leading-[1.3]">{post.title}</h4>
-                    <p className="text-muted text-[14.5px] m-0 mb-[6px]">{post.excerpt}</p>
-                    <div className="font-mono text-[11px] text-muted uppercase tracking-[.06em] mb-[18px]">{post.author}</div>
-                    <span className={`${LINK_ARROW} opacity-45`}>
-                      Read more <IconArrow size={14} className="arr" />
-                    </span>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

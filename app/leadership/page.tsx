@@ -16,19 +16,6 @@ import { WRAP, SEC, LABEL } from '../lib/tw';
 // Fallback used until each member's individual profile URL is added via `linkedin`.
 const TEAM_LINKEDIN = 'https://www.linkedin.com/company/mikaelson-initiative';
 
-const HARDCODED_OFFICERS: { name: string; role: string; img?: string; linkedin?: string }[] = [
-  { name: 'Michael Olukayode', role: 'Team Lead', img: '/team/Michael%20Olukayode.jpg', linkedin: 'https://www.linkedin.com/in/michael-olukayode-73890b214/' },
-  { name: 'Boluwatife Adeleke', role: 'Project Manager', img: '/team/Boluwatife%20Mercy%20Adeleke.jpeg', linkedin: 'https://www.linkedin.com/in/boluwatifemercyadeleke/' },
-  { name: 'Irene Ezechi', role: 'Program Manager', img: '/team/Irene%20Ezechi.jpg', linkedin: 'https://www.linkedin.com/in/ireneezechi/' },
-  { name: 'Mariam Jimoh', role: 'ESG and Impact', img: '/team/Mariam%20Jimoh.jpeg', linkedin: 'https://www.linkedin.com/in/jimohmariamajoke/' },
-  { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', img: '/team/Ayegbusi%20Bright%20Temitope.jpg' },
-  { name: 'Feranmi Oluwole', role: 'Operations Manager', img: '/team/Feranmi%20Oluwole.JPG', linkedin: 'https://www.linkedin.com/in/feranmi-oluwole-675712339/' },
-  { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', img: '/team/Asiedu%20Gyamfi.jpg', linkedin: 'https://www.linkedin.com/in/theresa-gyamfi/' },
-  { name: 'Esther Adeoye', role: 'Social Media Manager', img: '/team/Adeoye%20Esther.jpg', linkedin: 'https://www.linkedin.com/in/adeoye-esther-4151a62b8/' },
-  { name: 'Ariyo Aresa', role: 'Front-end Engineer', img: '/team/AriyoAresa.avif', linkedin: 'https://www.linkedin.com/in/ariyoaresa/' },
-  { name: 'Ayomide Idowu', role: 'Visuals and Designs', img: '/team/Ayomide%20Idowu.jpg', linkedin: 'https://www.linkedin.com/in/ayomide-idowu-4a852623a/' },
-  { name: 'Happiness Obochi', role: 'Team Member', img: '/team/Happiness%20Obochi.jpg', linkedin: 'https://www.linkedin.com/in/happinessobochi/' },
-];
 
 const ADVISORS = [
   { name: 'Advisory Board', role: 'Strategic Advisor', dept: 'Leadership & Education', bio: 'A council of educators, business leaders, and alumni who guide programme strategy and quality.' },
@@ -36,7 +23,7 @@ const ADVISORS = [
 ];
 
 export default function LeadershipPage() {
-  const [officers, setOfficers] = useState(HARDCODED_OFFICERS);
+  const [officers, setOfficers] = useState<any[]>([]);
 
   useEffect(() => {
     async function fetchTeam() {
@@ -52,13 +39,9 @@ export default function LeadershipPage() {
               linkedin: member.linkedinUrl,
             }));
             
-            // Merge dynamically fetched officers, retaining hardcoded images if missing
-            const merged = dynamicOfficers.map((doff: any) => {
-              const match = HARDCODED_OFFICERS.find(h => h.name === doff.name);
-              return match ? { ...doff, img: doff.img || match.img } : doff;
-            });
-            
-            setOfficers(merged);
+            setOfficers(dynamicOfficers);
+          } else {
+            setOfficers([]);
           }
         }
       } catch (err) {
@@ -81,38 +64,52 @@ export default function LeadershipPage() {
             <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-9" style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}>Who we are</h2>
           </Reveal>
           {/* Officers grid: 5 cols → 3 → 2 → 1 */}
-          <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 max-sm:grid-cols-1 gap-5">
-            {officers.map((o, i) => (
-              <Reveal delay={i * 60} key={o.name}>
-                <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[22px] text-center transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-[6px] hover:shadow-[0_30px_60px_-36px_rgba(0,0,0,.45)] hover:border-[color-mix(in_srgb,var(--accent)_35%,var(--line))]">
-                  <div className="bg-[var(--surface-2)] border-2 border-accent-soft w-[80px] h-[80px] rounded-full overflow-hidden mx-auto mb-[14px] grid place-items-center">
-                    {o.img ? (
-                      <Image
-                        src={o.img}
-                        alt={o.name}
-                        width={80}
-                        height={80}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="font-mono text-[20px] font-bold text-accent-ink">{o.name.charAt(0)}</span>
-                    )}
+          {officers.length === 0 ? (
+            <div className="text-muted text-[15px] col-span-full mb-[56px]">
+              Team updates coming soon.
+            </div>
+          ) : (
+            <div className="grid grid-cols-4 max-lg:grid-cols-3 max-md:grid-cols-2 gap-x-[22px] gap-y-12 mb-[92px] max-sm:mb-[56px]">
+              {officers.map((o, i) => (
+                <Reveal key={o.name} delay={i * 60}>
+                  <div className="group relative">
+                    <div className="bg-[var(--surface-2)] aspect-[4/5] rounded-[22px] mb-5 overflow-hidden relative">
+                      {o.img ? (
+                        <Image
+                          src={o.img}
+                          alt={o.name}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center font-display font-bold text-4xl text-muted opacity-30">
+                          {o.name.charAt(0)}
+                        </div>
+                      )}
+                      
+                      {/* Overlay gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                      
+                      {/* Social link on hover */}
+                      <a 
+                        href={o.linkedin || TEAM_LINKEDIN} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="absolute bottom-4 right-4 w-9 h-9 bg-white text-[#0A66C2] rounded-full flex items-center justify-center translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 shadow-lg"
+                        aria-label={`LinkedIn profile for ${o.name}`}
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                      </a>
+                    </div>
+                    <div>
+                      <h3 className="font-display font-bold text-[18px] m-0 mb-[2px]">{o.name}</h3>
+                      <p className="text-muted text-[14px] m-0">{o.role}</p>
+                    </div>
                   </div>
-                  <h3 className="font-display font-semibold text-[16px] m-0">{o.name}</h3>
-                  <div className="font-mono text-accent-ink text-[11px] uppercase tracking-[0.06em] font-bold my-[6px]">{o.role}</div>
-                  <a
-                    className="inline-flex items-center justify-center text-muted hover:text-accent-ink transition-colors duration-200 mt-1"
-                    href={o.linkedin || TEAM_LINKEDIN}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${o.name} on LinkedIn`}
-                  >
-                    <IconLinkedin size={18} />
-                  </a>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
