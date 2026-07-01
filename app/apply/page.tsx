@@ -19,9 +19,42 @@ const STEPS = [
 export default function ApplyPage() {
   const [submitted, setSubmitted] = useState(false);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSubmitted(true);
+    
+    // Capture the form data
+    const formData = new FormData(e.currentTarget);
+    
+    // Map frontend keys to match backend schema
+    const payload = {
+      schoolName: formData.get('school') as string,
+      contactName: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string || undefined,
+      location: formData.get('location') as string,
+      role: formData.get('role') as string,
+      studentsEstimate: Number(formData.get('students')) || 0,
+      message: formData.get('message') as string || undefined,
+    };
+
+    try {
+      const res = await fetch('/api/apply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      
+      if (res.ok) {
+        setSubmitted(true);
+      } else {
+        const errorData = await res.json();
+        console.error("Submission failed:", errorData);
+        alert(errorData.error || "Failed to submit application");
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      alert("Network error, please try again.");
+    }
   }
 
   return (
