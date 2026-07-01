@@ -1,14 +1,44 @@
+"use client";
+
+import { useEffect, useState } from 'react';
 import Reveal from './Reveal';
 import Counter from './Counter';
 
-const STATS = [
-  { n: 12, s: '', label: 'Active chapters' },
-  { n: 480, s: '+', label: 'Students engaged' },
-  { n: 9, s: '', label: 'Partner schools' },
-  { n: 94, s: '%', label: 'Stay through the year' },
-];
-
 export default function StatBar() {
+  const [statsData, setStatsData] = useState({
+    totalSchools: 9,
+    activeChapters: 12,
+    totalStudents: 480,
+    retentionRate: 94,
+  });
+
+  useEffect(() => {
+    async function fetchStats() {
+      try {
+        const res = await fetch('/api/stats');
+        if (res.ok) {
+          const data = await res.json();
+          setStatsData({
+            totalSchools: data.totalSchools,
+            activeChapters: data.activeChapters,
+            totalStudents: data.totalStudents,
+            retentionRate: data.retentionRate,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch stats", err);
+      }
+    }
+    fetchStats();
+  }, []);
+
+  const STATS = [
+    { n: statsData.activeChapters, s: '', label: 'Active chapters' },
+    { n: statsData.totalStudents, s: '+', label: 'Students engaged' },
+    { n: statsData.totalSchools, s: '', label: 'Partner schools' },
+    { n: statsData.retentionRate, s: '%', label: 'Stay through the year' },
+  ];
+
   return (
     <div
       className="max-w-[1180px] mx-auto px-8 max-sm:px-[18px] xs:px-4 relative z-[2]"
