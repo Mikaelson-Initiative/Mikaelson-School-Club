@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, Dispatch, SetStateAction } from 'react';
+import { useState, useMemo, useEffect, useId } from 'react';
 import {
   loadEvents,
   saveEvents,
@@ -187,6 +187,33 @@ const emptyEvent = (): Omit<EventItem, 'id'> => ({
   title: '', date: '', time: '', location: '', description: '', category: 'Workshop', type: 'upcoming', attendees: '', registrationUrl: '',
 });
 
+/* Circular avatar with drag-and-drop / click-to-browse photo upload for a team member. */
+function TeamPhotoDropzone({ avatarUrl, name, uploading, onFile }: { avatarUrl?: string; name: string; uploading: boolean; onFile: (f: File) => void }) {
+  const [drag, setDrag] = useState(false);
+  const inputId = useId();
+  return (
+    <label
+      htmlFor={inputId}
+      onDragOver={e => { e.preventDefault(); setDrag(true); }}
+      onDragLeave={() => setDrag(false)}
+      onDrop={e => { e.preventDefault(); setDrag(false); const f = e.dataTransfer.files?.[0]; if (f) onFile(f); }}
+      className={`group relative w-[108px] h-[108px] rounded-full grid place-items-center overflow-hidden cursor-pointer transition-colors ${avatarUrl ? 'border border-[#e7e0d4]' : 'border-2 border-dashed'} ${drag ? 'border-[#5ce1e6] bg-[#e0f6f7]' : (avatarUrl ? '' : 'border-[#c9c0ae] bg-[#faf9f6]')}`}
+    >
+      <input id={inputId} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) onFile(f); e.currentTarget.value = ''; }} />
+      {uploading ? (
+        <span className="text-[10px] font-mono text-[#6e675c]">Uploading…</span>
+      ) : avatarUrl ? (
+        <>
+          <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+          <span className="absolute inset-0 bg-black/45 text-white text-[10px] font-mono grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity">Change</span>
+        </>
+      ) : (
+        <span className="text-center text-[11px] leading-tight text-[#6e675c] px-3">Drop an<br/>image<br/><span className="underline">or browse files</span></span>
+      )}
+    </label>
+  );
+}
+
 function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [applications, setApplications] = useState<SchoolApplication[]>([]);
@@ -300,42 +327,96 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [viewingDetails, setViewingDetails] = useState<any | null>(null);
   
   // Team member form state
-  const emptyTeamMember = () => ({ name: '', role: '', email: '', avatarUrl: '', linkedinUrl: '' });
+  const emptyTeamMember = () => ({ name: '', role: '', email: '', bio: '', avatarUrl: '', linkedinUrl: '' });
   const [teamForm, setTeamForm] = useState(emptyTeamMember());
   const [showTeamForm, setShowTeamForm] = useState(false);
   const [teamSubmitting, setTeamSubmitting] = useState(false);
+  const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
+  const [teamUploadingId, setTeamUploadingId] = useState<string | null>(null);
 
   const submitTeamForm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!teamForm.name.trim() || !teamForm.role.trim() || !teamForm.email.trim()) return;
     setTeamSubmitting(true);
     try {
-      const token = sessionStorage.getItem('msc_admin_token') || '';
-      const res = await fetch('/api/admin/team', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({
-          name: teamForm.name,
-          role: teamForm.role,
-          email: teamForm.email,
-          avatarUrl: teamForm.avatarUrl || undefined,
-          linkedinUrl: teamForm.linkedinUrl || undefined,
-          sortOrder: team.length
-        }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setTeam([...team, { ...teamForm, id: data.id }]);
-        setShowTeamForm(false);
-        setTeamForm(emptyTeamMember());
+      const payload = {
+        name: teamForm.name,
+        role: teamForm.role,
+        email: teamForm.email,
+        bio: teamForm.bio || undefined,
+        avatarUrl: teamForm.avatarUrl || undefined,
+        linkedinUrl: teamForm.linkedinUrl || undefined,
+      };
+      if (editingTeamId) {
+        const res = await fetch(`/api/admin/team/${editingTeamId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(payload),
+        });
+        if (res.ok) {
+          setTeam(arr => arr.map(m => m.id === editingTeamId ? { ...m, ...payload } : m));
+          setShowTeamForm(false); setEditingTeamId(null); setTeamForm(emptyTeamMember());
+        } else {
+          const d = await res.json().catch(() => ({})); alert(`Failed to update team member: ${d.error || 'Unknown error'}`);
+        }
       } else {
-        alert("Failed to add team member.");
+        const res = await fetch('/api/admin/team', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ ...payload, sortOrder: team.length }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setTeam([...team, { ...payload, id: data.id }]);
+          setShowTeamForm(false); setTeamForm(emptyTeamMember());
+        } else {
+          const d = await res.json().catch(() => ({})); alert(`Failed to add team member: ${d.error || 'Unknown error'}`);
+        }
       }
     } catch (err) {
       console.error(err);
-      alert("Error adding team member.");
+      alert("Error saving team member.");
     } finally {
       setTeamSubmitting(false);
+    }
+  };
+
+  const startEditTeam = (m: any) => {
+    setTeamForm({ name: m.name || '', role: m.role || '', email: m.email || '', bio: m.bio || '', avatarUrl: m.avatarUrl || '', linkedinUrl: m.linkedinUrl || '' });
+    setEditingTeamId(m.id);
+    setShowTeamForm(true);
+  };
+
+  const deleteTeamMemberCard = async (id: string) => {
+    if (typeof window !== 'undefined' && !window.confirm('Remove this team member?')) return;
+    const res = await fetch(`/api/admin/team/${id}`, { method: 'DELETE', credentials: 'include' });
+    if (res.ok) setTeam(arr => arr.filter(m => m.id !== id));
+    else alert('Failed to delete team member.');
+  };
+
+  const uploadTeamPhoto = async (id: string, file: File) => {
+    setTeamUploadingId(id);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('category', 'team');
+      const up = await fetch('/api/admin/upload', { method: 'POST', credentials: 'include', body: fd });
+      if (!up.ok) { const d = await up.json().catch(() => ({})); alert(`Upload failed: ${d.error || up.status}`); return; }
+      const { url } = await up.json();
+      const res = await fetch(`/api/admin/team/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ avatarUrl: url }),
+      });
+      if (res.ok) setTeam(arr => arr.map(m => m.id === id ? { ...m, avatarUrl: url } : m));
+      else alert('Photo uploaded but failed to save it to the member.');
+    } catch (e) {
+      alert('Error uploading photo.');
+    } finally {
+      setTeamUploadingId(null);
     }
   };
 
@@ -1139,8 +1220,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           {activeTab === 'team' && (
             <div className="space-y-6">
               <div className="flex justify-end">
-                <button 
-                  onClick={() => setShowTeamForm(!showTeamForm)}
+                <button
+                  onClick={() => { if (showTeamForm) { setEditingTeamId(null); setTeamForm(emptyTeamMember()); } setShowTeamForm(!showTeamForm); }}
                   className="bg-[#003e45] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-sm transition-transform hover:scale-105"
                 >
                   {showTeamForm ? "Cancel" : "+ Add Member"}
@@ -1149,36 +1230,48 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
               {showTeamForm && (
                 <form onSubmit={submitTeamForm} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 shadow-sm mb-6">
-                  <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">Add Team Member</h3>
+                  <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">{editingTeamId ? 'Edit Team Member' : 'Add Team Member'}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <input className={inputCls} value={teamForm.name} onChange={e => setTeamForm(f => ({ ...f, name: e.target.value }))} placeholder="Name" required />
                     <input className={inputCls} value={teamForm.email} onChange={e => setTeamForm(f => ({ ...f, email: e.target.value }))} type="email" placeholder="Email" required />
-                    <input className={inputCls} value={teamForm.role} onChange={e => setTeamForm(f => ({ ...f, role: e.target.value }))} placeholder="Role (e.g. Program Manager)" required />
+                    <input className={inputCls} value={teamForm.role} onChange={e => setTeamForm(f => ({ ...f, role: e.target.value }))} placeholder="Role (e.g. President)" required />
                     <input className={inputCls} value={teamForm.linkedinUrl} onChange={e => setTeamForm(f => ({ ...f, linkedinUrl: e.target.value }))} type="url" placeholder="LinkedIn URL (optional)" />
-                    <input className={inputCls} value={teamForm.avatarUrl} onChange={e => setTeamForm(f => ({ ...f, avatarUrl: e.target.value }))} type="url" placeholder="Avatar Image URL (optional)" />
                   </div>
+                  <textarea className={`${inputCls} min-h-[90px] resize-y mb-4`} value={teamForm.bio} onChange={e => setTeamForm(f => ({ ...f, bio: e.target.value }))} placeholder="Short bio (e.g. Final-year student building community and academic excellence across chapters.)" />
+                  <p className="text-xs text-[#6e675c] mb-4">{editingTeamId ? 'To change the photo, drop a new image on the member’s card.' : 'After saving, drop a photo on the new member’s card to add their picture.'}</p>
                   <div className="flex justify-end gap-3">
-                    <button type="button" onClick={() => setShowTeamForm(false)} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
+                    <button type="button" onClick={() => { setShowTeamForm(false); setEditingTeamId(null); setTeamForm(emptyTeamMember()); }} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
                     <button type="submit" disabled={teamSubmitting} className="px-5 py-2 rounded-full bg-[#5ce1e6] text-[#003e45] font-bold text-sm disabled:opacity-50">
-                      {teamSubmitting ? "Saving..." : "Save Member"}
+                      {teamSubmitting ? "Saving..." : editingTeamId ? "Save Changes" : "Save Member"}
                     </button>
                   </div>
                 </form>
               )}
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {team.map(t => (
-                  <div key={t.id || t.name} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 flex items-center gap-4 shadow-sm">
-                    <div className="w-12 h-12 rounded-full bg-[#f3eee5] flex items-center justify-center text-[#003e45] font-bold text-lg overflow-hidden shrink-0">
-                      {t.img || t.avatarUrl ? <img src={t.img || t.avatarUrl} className="w-full h-full object-cover" /> : t.name.charAt(0)}
+              {team.length === 0 ? (
+                <p className="text-sm text-[#6e675c] italic">No team members yet. Add one to get started.</p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {team.map(t => (
+                    <div key={t.id || t.name} className="bg-white rounded-[22px] border border-[#e7e0d4] p-8 flex flex-col items-center text-center shadow-sm">
+                      <TeamPhotoDropzone
+                        avatarUrl={t.avatarUrl || t.img}
+                        name={t.name}
+                        uploading={teamUploadingId === t.id}
+                        onFile={(f) => uploadTeamPhoto(t.id, f)}
+                      />
+                      <h3 className="font-display font-bold text-[20px] text-[#111] mt-6 mb-2">{t.name}</h3>
+                      <div className="font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-[#40727e] mb-4">{t.role}</div>
+                      {t.bio && <p className="text-[#6e675c] text-[14px] leading-[1.6] m-0 mb-4">{t.bio}</p>}
+                      {t.email && <a href={`mailto:${t.email}`} className="font-mono text-[13px] text-[#6e675c] underline underline-offset-2 hover:text-[#003e45] break-all">{t.email}</a>}
+                      <div className="flex gap-2 mt-5">
+                        <button onClick={() => startEditTeam(t)} className="text-[10px] font-mono uppercase font-bold text-[#003e45] border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-[#f3eee5]">Edit</button>
+                        <button onClick={() => deleteTeamMemberCard(t.id)} className="text-[10px] font-mono uppercase font-bold text-red-600 border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-red-50 hover:border-red-200">Delete</button>
+                      </div>
                     </div>
-                    <div>
-                      <div className="font-bold text-[#003e45] text-sm">{t.name}</div>
-                      <div className="text-xs text-[#6e675c] font-mono uppercase tracking-widest">{t.role}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
