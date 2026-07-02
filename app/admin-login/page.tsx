@@ -187,6 +187,18 @@ const emptyEvent = (): Omit<EventItem, 'id'> => ({
   title: '', date: '', time: '', location: '', description: '', category: 'Workshop', type: 'upcoming', attendees: '', registrationUrl: '',
 });
 
+// Collapse legacy absolute "/team/<file>" avatar URLs (stored on the wrong host)
+// to a relative path served from this site's /public/team; leave others as-is.
+function teamImageSrc(url?: string | null): string | undefined {
+  if (!url) return undefined;
+  try {
+    const path = new URL(url, 'https://local').pathname;
+    return path.startsWith('/team/') ? path : url;
+  } catch {
+    return url;
+  }
+}
+
 /* Circular avatar with drag-and-drop / click-to-browse photo upload for a team member. */
 function TeamPhotoDropzone({ avatarUrl, name, uploading, onFile }: { avatarUrl?: string; name: string; uploading: boolean; onFile: (f: File) => void }) {
   const [drag, setDrag] = useState(false);
@@ -1255,7 +1267,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                   {team.map(t => (
                     <div key={t.id || t.name} className="bg-white rounded-[22px] border border-[#e7e0d4] p-8 flex flex-col items-center text-center shadow-sm">
                       <TeamPhotoDropzone
-                        avatarUrl={t.avatarUrl || t.img}
+                        avatarUrl={teamImageSrc(t.avatarUrl || t.img)}
                         name={t.name}
                         uploading={teamUploadingId === t.id}
                         onFile={(f) => uploadTeamPhoto(t.id, f)}
