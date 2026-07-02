@@ -16,6 +16,19 @@ import { WRAP, SEC, LABEL } from '../lib/tw';
 // Fallback used until each member's individual profile URL is added via `linkedin`.
 const TEAM_LINKEDIN = 'https://www.linkedin.com/company/mikaelson-initiative';
 
+// Team photos live in this site's /public/team. Legacy records store them as
+// absolute URLs on the wrong host, so collapse any ".../team/<file>" to a
+// relative path served from here; leave other hosts (e.g. Blob uploads) as-is.
+function teamImageSrc(url?: string | null): string | null {
+  if (!url) return null;
+  try {
+    const path = new URL(url, 'https://local').pathname;
+    return path.startsWith('/team/') ? path : url;
+  } catch {
+    return url;
+  }
+}
+
 
 const ADVISORS = [
   { name: 'Advisory Board', role: 'Strategic Advisor', dept: 'Leadership & Education', bio: 'A council of educators, business leaders, and alumni who guide programme strategy and quality.' },
@@ -35,7 +48,7 @@ export default function LeadershipPage() {
             const dynamicOfficers = data.map((member: any) => ({
               name: member.name,
               role: member.role,
-              img: member.avatarUrl,
+              img: teamImageSrc(member.avatarUrl),
               bio: member.bio,
               email: member.email,
               linkedin: member.linkedinUrl,
