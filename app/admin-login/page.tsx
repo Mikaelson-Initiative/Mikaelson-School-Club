@@ -348,13 +348,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
   const submitTeamForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!teamForm.name.trim() || !teamForm.role.trim() || !teamForm.email.trim()) return;
+    if (!teamForm.name.trim() || !teamForm.role.trim()) return;
     setTeamSubmitting(true);
     try {
       const payload = {
         name: teamForm.name,
         role: teamForm.role,
-        email: teamForm.email,
         bio: teamForm.bio || undefined,
         avatarUrl: teamForm.avatarUrl || undefined,
         linkedinUrl: teamForm.linkedinUrl || undefined,
@@ -1245,7 +1244,6 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                   <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">{editingTeamId ? 'Edit Team Member' : 'Add Team Member'}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <input className={inputCls} value={teamForm.name} onChange={e => setTeamForm(f => ({ ...f, name: e.target.value }))} placeholder="Name" required />
-                    <input className={inputCls} value={teamForm.email} onChange={e => setTeamForm(f => ({ ...f, email: e.target.value }))} type="email" placeholder="Email" required />
                     <input className={inputCls} value={teamForm.role} onChange={e => setTeamForm(f => ({ ...f, role: e.target.value }))} placeholder="Role (e.g. President)" required />
                     <input className={inputCls} value={teamForm.linkedinUrl} onChange={e => setTeamForm(f => ({ ...f, linkedinUrl: e.target.value }))} type="url" placeholder="LinkedIn URL (optional)" />
                   </div>
@@ -1275,7 +1273,11 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                       <h3 className="font-display font-bold text-[20px] text-[#111] mt-6 mb-2">{t.name}</h3>
                       <div className="font-mono text-[12px] font-bold uppercase tracking-[0.12em] text-[#40727e] mb-4">{t.role}</div>
                       {t.bio && <p className="text-[#6e675c] text-[14px] leading-[1.6] m-0 mb-4">{t.bio}</p>}
-                      {t.email && <a href={`mailto:${t.email}`} className="font-mono text-[13px] text-[#6e675c] underline underline-offset-2 hover:text-[#003e45] break-all">{t.email}</a>}
+                      {t.linkedinUrl && (
+                        <a href={t.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-[#0A66C2] opacity-80 hover:opacity-100 transition-opacity" aria-label={`LinkedIn profile for ${t.name}`}>
+                          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                      )}
                       <div className="flex gap-2 mt-5">
                         <button onClick={() => startEditTeam(t)} className="text-[10px] font-mono uppercase font-bold text-[#003e45] border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-[#f3eee5]">Edit</button>
                         <button onClick={() => deleteTeamMemberCard(t.id)} className="text-[10px] font-mono uppercase font-bold text-red-600 border border-[#e7e0d4] px-3 py-1 rounded-full hover:bg-red-50 hover:border-red-200">Delete</button>
