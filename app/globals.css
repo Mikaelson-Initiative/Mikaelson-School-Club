@@ -26,6 +26,9 @@
 
 /* ── Base ── */
 *, *::before, *::after { box-sizing: border-box; }
+/* Tailwind v4 defaults buttons to cursor:default — restore the clickable pointer. */
+button:not(:disabled), [role="button"]:not(:disabled), select:not(:disabled), summary { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
 html { scroll-behavior: smooth; }
 body {
   margin: 0;
