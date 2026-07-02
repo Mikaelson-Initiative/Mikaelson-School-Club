@@ -637,7 +637,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
         </nav>
 
         <div className="hidden lg:block p-3 border-t border-[#e7e0d4]">
-          <button onClick={onLogout} className="w-full text-xs font-mono uppercase tracking-widest text-[#6e675c] hover:text-[#003e45] transition-colors border border-[#e7e0d4] rounded-xl px-4 py-2.5">
+          <button onClick={onLogout} className="w-full text-xs font-mono uppercase tracking-widest text-white bg-[#003e45] hover:bg-[#005a63] transition-colors rounded-xl px-4 py-2.5">
             Sign out
           </button>
         </div>
@@ -881,7 +881,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                         <td className="px-6 py-4 text-sm text-[#201d16] max-w-[200px] truncate">{app.motivation}</td>
                         <td className="px-6 py-4 text-xs text-[#6e675c]">{new Date(app.createdAt).toLocaleDateString()}</td>
                         <td className="px-6 py-4">
-                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${app.status === 'LAUNCHED' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span>
+                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${app.status === 'LAUNCHED' ? 'bg-[#e0f6f7] text-[#003e45]' : app.status === 'REJECTED' ? 'bg-red-50 text-red-600' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{app.status}</span>
                         </td>
                         <td className="px-6 py-4 flex gap-1.5 flex-wrap">
                           <button onClick={() => setViewingDetails({ type: 'Volunteer', data: app })} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">View</button>
@@ -889,6 +889,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                           {app.status === 'REVIEWED' && <button onClick={() => handleVolunteerStatus(app.id, 'SCHEDULED')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Schedule</button>}
                           {app.status === 'SCHEDULED' && <button onClick={() => handleVolunteerStatus(app.id, 'TRAINING')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Train</button>}
                           {app.status === 'TRAINING' && <button onClick={() => handleVolunteerStatus(app.id, 'LAUNCHED')} className="bg-[#5ce1e6] text-[#003e45] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Launch</button>}
+                          {app.status !== 'REJECTED' && app.status !== 'LAUNCHED' && <button onClick={() => handleVolunteerStatus(app.id, 'REJECTED')} className="bg-white border border-[#e7e0d4] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-red-50 hover:text-red-600 hover:border-red-200">Reject</button>}
                         </td>
                       </tr>
                     ))}
@@ -972,7 +973,13 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                           <button onClick={() => setViewingDetails({ type: 'Contact', data: c })} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">View</button>
                           {c.status === 'UNREAD' && <button onClick={() => handleContactStatus(c.id, 'READ')} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Mark Read</button>}
                           {c.status !== 'RESPONDED' && <button onClick={() => handleContactStatus(c.id, 'RESPONDED')} className="bg-[#5ce1e6] text-[#003e45] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-95">Mark Responded</button>}
-                          <a href={`mailto:${c.email}`} className="bg-white border border-[#e7e0d4] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:border-[#003e45]">Reply</a>
+                          <a
+                            href={`https://mail.google.com/mail/?view=cm&fs=1&authuser=msc@mikaelsoninitiative.org&to=${encodeURIComponent(c.email)}&su=${encodeURIComponent('Re: Your message to Mikaelson School Club')}&body=${encodeURIComponent(`Hi ${c.name},\n\n\n\n———\nYou wrote to us on ${new Date(c.createdAt).toLocaleDateString()}:\n"${c.message}"`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => { if (c.status === 'UNREAD') handleContactStatus(c.id, 'READ'); }}
+                            className="bg-[#003e45] text-white text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:brightness-110"
+                          >Reply</a>
                         </td>
                       </tr>
                     ))}
