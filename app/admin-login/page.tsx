@@ -677,6 +677,47 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     }
   }
 
+  // Change-password modal state
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [pwForm, setPwForm] = useState({ current: '', next: '', confirm: '' });
+  const [pwSubmitting, setPwSubmitting] = useState(false);
+  const [pwError, setPwError] = useState<string | null>(null);
+  const [pwSuccess, setPwSuccess] = useState(false);
+
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+    setPwForm({ current: '', next: '', confirm: '' });
+    setPwError(null);
+    setPwSuccess(false);
+  };
+
+  const submitPasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPwError(null);
+    if (pwForm.next.length < 8) { setPwError('New password must be at least 8 characters.'); return; }
+    if (pwForm.next !== pwForm.confirm) { setPwError('New passwords do not match.'); return; }
+    setPwSubmitting(true);
+    try {
+      const res = await fetch('/api/auth/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ currentPassword: pwForm.current, newPassword: pwForm.next }),
+      });
+      if (res.ok) {
+        setPwSuccess(true);
+        setPwForm({ current: '', next: '', confirm: '' });
+      } else {
+        const d = await res.json().catch(() => ({}));
+        setPwError(d.error || 'Could not change password.');
+      }
+    } catch {
+      setPwError('Network error. Please try again.');
+    } finally {
+      setPwSubmitting(false);
+    }
+  };
+
   const inputCls = "w-full bg-[#f9f7f3] border border-[#e7e0d4] rounded-xl px-4 py-2.5 text-sm text-[#201d16] outline-none focus:border-[#5ce1e6] transition-colors";
   const labelCls = "text-[10px] font-mono uppercase tracking-widest text-[#6e675c] mb-1.5 block";
 
@@ -728,7 +769,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           })}
         </nav>
 
-        <div className="hidden lg:block p-3 border-t border-[#e7e0d4]">
+        <div className="hidden lg:block p-3 border-t border-[#e7e0d4] space-y-2">
+          <button onClick={() => setShowPasswordModal(true)} className="w-full text-xs font-mono uppercase tracking-widest text-[#6e675c] hover:text-[#003e45] border border-[#e7e0d4] rounded-xl px-4 py-2.5 transition-colors">
+            Change password
+          </button>
           <button onClick={onLogout} className="w-full text-xs font-mono uppercase tracking-widest text-white bg-[#003e45] hover:bg-[#005a63] transition-colors rounded-xl px-4 py-2.5">
             Sign out
           </button>
@@ -1361,6 +1405,48 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
               );
             })}
           </div>
+        </div>
+      </div>
+    )}
+
+    {/* Change Password Modal */}
+    {showPasswordModal && (
+      <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
+        <div className="bg-white w-full max-w-md rounded-2xl shadow-xl">
+          <div className="flex items-center justify-between p-6 border-b border-[#e7e0d4]">
+            <h2 className="font-display font-bold text-lg text-[#003e45]">Change password</h2>
+            <button onClick={closePasswordModal} className="text-[#6e675c] hover:text-[#201d16] text-xl leading-none">✕</button>
+          </div>
+          {pwSuccess ? (
+            <div className="p-6 text-center">
+              <div className="bg-[#e0f6f7] text-[#003e45] w-12 h-12 rounded-full grid place-items-center mx-auto mb-4 text-xl">✓</div>
+              <p className="text-sm text-[#201d16] mb-6">Your password has been changed.</p>
+              <button onClick={closePasswordModal} className="bg-[#003e45] text-white font-bold rounded-full py-2.5 px-6 text-sm">Done</button>
+            </div>
+          ) : (
+            <form onSubmit={submitPasswordChange} className="p-6 space-y-4">
+              <div>
+                <label className={labelCls}>Current password</label>
+                <input type="password" className={inputCls} value={pwForm.current} onChange={e => setPwForm(f => ({ ...f, current: e.target.value }))} autoComplete="current-password" required />
+              </div>
+              <div>
+                <label className={labelCls}>New password</label>
+                <input type="password" className={inputCls} value={pwForm.next} onChange={e => setPwForm(f => ({ ...f, next: e.target.value }))} autoComplete="new-password" required minLength={8} />
+                <p className="text-[11px] text-[#6e675c] mt-1">At least 8 characters.</p>
+              </div>
+              <div>
+                <label className={labelCls}>Confirm new password</label>
+                <input type="password" className={inputCls} value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))} autoComplete="new-password" required />
+              </div>
+              {pwError && <p className="text-red-600 text-xs">{pwError}</p>}
+              <div className="flex justify-end gap-3 pt-2">
+                <button type="button" onClick={closePasswordModal} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
+                <button type="submit" disabled={pwSubmitting} className="px-5 py-2 rounded-full bg-[#5ce1e6] text-[#003e45] font-bold text-sm disabled:opacity-50">
+                  {pwSubmitting ? 'Saving…' : 'Update password'}
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     )}
