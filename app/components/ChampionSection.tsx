@@ -17,8 +17,7 @@ export default function ChampionSection() {
             <div
               className="w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage:
-                  "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDauqArztxIGERMHMiRFE8-XSFuJK8JjnKJvgDDWAsxdna8uSBMZ1QmRfqbAxv0mzDvha1qu3YcHBnYdJryjjVBjborDkFwWw6bfzS0MHu4Sxc6yJ-SxKXWf5bw5q7hEW5HHjoLXBNmnD3cH-tvCAqq-hyWYE8wry-AqmAFicEn6acSpTl0mMsLSO2HvfnFGVKnjGeBzJD9Eq3aFrowMRHIYvEGlquUmsPm4GfVNN1pNALP-dwR_hqSoGWoY9FlSaPc2cV5IcVOeew')",
+                backgroundImage: "url('/Champions/Champion_Template.jpg')",
               }}
             />
             {/* Quote chip */}
