@@ -17,7 +17,7 @@ export default function ChampionSection() {
             <div
               className="w-full h-full bg-cover bg-center"
               style={{
-                backgroundImage: "url('/Champions/Champion_Template.jpg')",
+                backgroundImage: "url('/Champions/Champion_Template_crop.jpg')",
               }}
             />
             {/* Quote chip */}
