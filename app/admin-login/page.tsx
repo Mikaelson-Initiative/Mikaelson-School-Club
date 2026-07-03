@@ -1411,40 +1411,55 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
     {/* Change Password Modal */}
     {showPasswordModal && (
-      <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/30 p-4 backdrop-blur-[2px]">
-        <div className="bg-white w-full max-w-md rounded-2xl shadow-xl">
-          <div className="flex items-center justify-between p-6 border-b border-[#e7e0d4]">
-            <h2 className="font-display font-bold text-lg text-[#003e45]">Change password</h2>
-            <button onClick={closePasswordModal} className="text-[#6e675c] hover:text-[#201d16] text-xl leading-none">✕</button>
+      <div
+        className="fixed inset-0 z-[70] grid place-items-center p-4 bg-black/40 backdrop-blur-[2px]"
+        onClick={(e) => { if (e.target === e.currentTarget) closePasswordModal(); }}
+      >
+        <div className="bg-white w-[min(92vw,420px)] rounded-2xl border border-[#e7e0d4] shadow-xl p-8">
+          <div className="flex items-start justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-[#003e45]" style={{ fontFamily: 'var(--font-display)' }}>Change password</h2>
+              <p className="text-sm text-[#6e675c] mt-1">Update your admin password.</p>
+            </div>
+            <button onClick={closePasswordModal} aria-label="Close" className="text-[#6e675c] hover:text-[#201d16] text-2xl leading-none -mt-1">×</button>
           </div>
           {pwSuccess ? (
-            <div className="p-6 text-center">
-              <div className="bg-[#e0f6f7] text-[#003e45] w-12 h-12 rounded-full grid place-items-center mx-auto mb-4 text-xl">✓</div>
-              <p className="text-sm text-[#201d16] mb-6">Your password has been changed.</p>
-              <button onClick={closePasswordModal} className="bg-[#003e45] text-white font-bold rounded-full py-2.5 px-6 text-sm">Done</button>
+            <div className="text-center py-4">
+              <div className="bg-[#e0f6f7] text-[#003e45] w-14 h-14 rounded-full grid place-items-center mx-auto mb-4 text-2xl">✓</div>
+              <p className="text-[15px] text-[#201d16] mb-6">Your password has been changed.</p>
+              <button onClick={closePasswordModal} className="w-full bg-[#5ce1e6] text-[#003e45] font-bold rounded-full py-3 text-sm hover:translate-y-0.5 transition-transform" style={{ boxShadow: '0 8px 0 -2px #003e45' }}>Done</button>
             </div>
           ) : (
-            <form onSubmit={submitPasswordChange} className="p-6 space-y-4">
-              <div>
-                <label className={labelCls}>Current password</label>
-                <input type="password" className={inputCls} value={pwForm.current} onChange={e => setPwForm(f => ({ ...f, current: e.target.value }))} autoComplete="current-password" required />
-              </div>
-              <div>
-                <label className={labelCls}>New password</label>
-                <input type="password" className={inputCls} value={pwForm.next} onChange={e => setPwForm(f => ({ ...f, next: e.target.value }))} autoComplete="new-password" required minLength={8} />
-                <p className="text-[11px] text-[#6e675c] mt-1">At least 8 characters.</p>
-              </div>
-              <div>
-                <label className={labelCls}>Confirm new password</label>
-                <input type="password" className={inputCls} value={pwForm.confirm} onChange={e => setPwForm(f => ({ ...f, confirm: e.target.value }))} autoComplete="new-password" required />
-              </div>
+            <form onSubmit={submitPasswordChange} className="flex flex-col gap-4">
+              {[
+                { key: 'current' as const, label: 'Current password', ac: 'current-password', hint: '' },
+                { key: 'next' as const, label: 'New password', ac: 'new-password', hint: 'At least 8 characters.' },
+                { key: 'confirm' as const, label: 'Confirm new password', ac: 'new-password', hint: '' },
+              ].map(f => (
+                <div key={f.key}>
+                  <label className="block text-xs font-semibold text-[#003e45] mb-1.5">{f.label}</label>
+                  <input
+                    type="password"
+                    className="w-full border border-[#e7e0d4] rounded-xl px-4 py-3 text-sm bg-[#f3eee5] text-[#201d16] outline-none focus:border-[#5ce1e6] transition-colors"
+                    value={pwForm[f.key]}
+                    onChange={e => setPwForm(prev => ({ ...prev, [f.key]: e.target.value }))}
+                    autoComplete={f.ac}
+                    required
+                    minLength={f.key === 'current' ? undefined : 8}
+                  />
+                  {f.hint && <p className="text-[11px] text-[#6e675c] mt-1.5">{f.hint}</p>}
+                </div>
+              ))}
               {pwError && <p className="text-red-600 text-xs">{pwError}</p>}
-              <div className="flex justify-end gap-3 pt-2">
-                <button type="button" onClick={closePasswordModal} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
-                <button type="submit" disabled={pwSubmitting} className="px-5 py-2 rounded-full bg-[#5ce1e6] text-[#003e45] font-bold text-sm disabled:opacity-50">
-                  {pwSubmitting ? 'Saving…' : 'Update password'}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={pwSubmitting}
+                className="w-full mt-2 bg-[#5ce1e6] text-[#003e45] font-bold rounded-full py-3 text-sm hover:translate-y-0.5 transition-transform disabled:opacity-50 disabled:hover:translate-y-0"
+                style={{ boxShadow: '0 8px 0 -2px #003e45' }}
+              >
+                {pwSubmitting ? 'Saving…' : 'Update password'}
+              </button>
+              <button type="button" onClick={closePasswordModal} className="text-xs text-[#6e675c] hover:text-[#003e45] mt-1">Cancel</button>
             </form>
           )}
         </div>
