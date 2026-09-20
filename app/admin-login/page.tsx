@@ -114,21 +114,26 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
       });
       const { csrfToken } = await csrfRes.json();
 
-      const loginRes = await fetch('/api/auth/callback/credentials', {
+      await fetch('/api/auth/callback/credentials', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ email, password, csrfToken, redirect: false }),
       });
 
-      if (loginRes.ok || loginRes.redirected) {
+      // NextAuth's credentials callback redirects (with or without an
+      // ?error= param) on essentially every POST, so `res.ok`/`res.redirected`
+      // can't tell success from failure. Check for a real session instead.
+      const sessionRes = await fetch('/api/auth/session', { credentials: 'include' });
+      const session = await sessionRes.json().catch(() => null);
+
+      if (session?.user) {
         sessionStorage.setItem('msc_admin', '1');
         onLogin();
         return;
       }
 
-      const data = await loginRes.json();
-      console.error("Login failed:", data.error);
+      console.error('Login failed: no session established');
       setError(true);
     } catch (err) {
       console.error("Network/Parsing error:", err);
