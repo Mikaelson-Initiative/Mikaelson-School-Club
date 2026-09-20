@@ -660,6 +660,18 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       alert("Failed to delete event.");
     }
   };
+  const deleteSchool = async (id: string, name: string) => {
+    if (typeof window !== 'undefined' && !window.confirm(`Remove "${name}" from Chapters?`)) return;
+    const res = await fetch(`/api/admin/schools/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (res.ok) {
+      setSchools(prev => prev.filter(s => s.id !== id));
+    } else {
+      alert('Failed to delete school.');
+    }
+  };
 
   async function openRegistrations(ev: EventItem) {
     setViewingRegistrationsFor(ev);
@@ -1062,7 +1074,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 <table className="w-full text-left border-collapse min-w-[560px]">
                   <thead>
                     <tr className="bg-[#f9f7f3] border-b border-[#e7e0d4]">
-                      {['School Name', 'Region', 'Students', 'Approved', 'Status'].map(h => (
+                      {['School Name', 'Region', 'Students', 'Approved', 'Status', 'Actions'].map(h => (
                         <th key={h} className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-[#6e675c]">{h}</th>
                       ))}
                     </tr>
@@ -1075,6 +1087,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                         <td className="px-6 py-4 text-sm font-mono text-[#003e45] font-bold">{school.studentCount}</td>
                         <td className="px-6 py-4 text-xs text-[#6e675c]">{school.approvalDate}</td>
                         <td className="px-6 py-4"><span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${school.status === 'Active' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{school.status}</span></td>
+                        <td className="px-6 py-4">
+                          <button onClick={() => deleteSchool(school.id, school.name)} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors">Delete</button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>

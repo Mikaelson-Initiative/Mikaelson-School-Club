@@ -10,17 +10,14 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
-import { IconArrow, IconCheck, IconGlobe, IconDigital, IconCompass, IconLead } from '../components/Icons';
+import { IconArrow, IconCheck, IconCompass } from '../components/Icons';
 import Link from 'next/link';
 
 import { WRAP, SEC, LABEL } from '../lib/tw';
 const BTN_P = 'font-body font-bold text-[15px] border-none rounded-full px-[26px] py-[14px] cursor-pointer inline-flex items-center gap-[9px] no-underline whitespace-nowrap bg-accent-2 text-accent-ink shadow-[0_12px_0_-2px_var(--accent-ink)] transition-[transform,box-shadow] duration-200 hover:translate-y-[2px] hover:shadow-[0_8px_0_-2px_var(--accent-ink)] [&_.arr]:transition-transform [&_.arr]:duration-200 hover:[&_.arr]:translate-x-[3px]';
 
 const PARTNERS = [
-  { name: 'Sahara Tech Group', cat: 'Technology Partner', Icon: IconDigital, d: 'Provides mentorship and internship opportunities for members interested in tech.' },
-  { name: 'Ubuntu Community Foundation', cat: 'Community Partner', Icon: IconGlobe, d: 'Collaborates with us on service projects and community initiatives.' },
-  { name: 'PanAfrican Education Network', cat: 'Educational Partner', Icon: IconCompass, d: 'Offers scholarships and educational resources for chapter members.' },
-  { name: 'Young Leaders Council', cat: 'Leadership Partner', Icon: IconLead, d: 'Provides leadership training and professional development programmes.' },
+  { name: 'Igbobi College, Yaba', cat: 'Educational Partner', Icon: IconCompass, d: 'Our founding school partner, bringing the Mikaelson School Club programme to its students.' },
 ];
 
 const TIERS = [
@@ -48,7 +45,7 @@ export default function PartnersPage() {
             <span className={LABEL}>Our partners</span>
             <h2 className="font-display font-[800] tracking-[-0.02em] leading-[1.04] m-0 mt-[14px] mb-9" style={{ fontSize: 'clamp(26px,3.2vw,38px)' }}>Who we work with</h2>
           </Reveal>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className={`grid gap-5 ${PARTNERS.length > 1 ? 'md:grid-cols-2' : 'max-w-[560px]'}`}>
             {PARTNERS.map((p, i) => (
               <Reveal delay={i * 90} key={p.name}>
                 <div className="bg-surface border border-line rounded-[22px] py-[26px] px-[30px] flex items-start gap-5 max-sm:flex-col transition-[transform,border-color] duration-200 hover:-translate-y-[2px] hover:border-accent">
