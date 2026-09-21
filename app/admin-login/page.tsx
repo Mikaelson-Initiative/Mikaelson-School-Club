@@ -74,7 +74,7 @@ interface School {
   name: string;
   city: string;
   region: string;
-  status: 'Registered' | 'Active' | 'Inactive';
+  status: 'REGISTERED' | 'ONBOARDING' | 'ACTIVE' | 'INACTIVE';
   approvalDate: string;
   studentCount: number;
 }
@@ -333,7 +333,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [schoolSearch, setSchoolSearch] = useState('');
 
   // Add-school form state
-  const emptySchoolForm = () => ({ name: '', city: '', country: 'Nigeria', status: 'Active' as School['status'], studentsCount: '' });
+  const emptySchoolForm = () => ({ name: '', city: '', country: 'Nigeria', status: 'ACTIVE' as School['status'], studentsCount: '' });
   const [schoolForm, setSchoolForm] = useState(emptySchoolForm());
   const [showSchoolForm, setShowSchoolForm] = useState(false);
   const [schoolSubmitting, setSchoolSubmitting] = useState(false);
@@ -482,8 +482,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   };
 
   const stats = useMemo(() => {
-    const approvedChapters = schools.filter(s => s.status === 'Active' || s.status === 'Registered').length;
-    const activeChapters = schools.filter(s => s.status === 'Active').length;
+    const approvedChapters = schools.filter(s => s.status === 'ACTIVE' || s.status === 'REGISTERED').length;
+    const activeChapters = schools.filter(s => s.status === 'ACTIVE').length;
     const totalStudents = schools.reduce((acc, s) => acc + s.studentCount, 0);
     const pendingApps = applications.filter(a => a.status === 'PENDING').length;
     return { approvedChapters, activeChapters, totalStudents, pendingApps, totalApps: applications.length };
@@ -522,7 +522,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
               name: app.schoolName,
               city: app.location.split(',')[0].trim(),
               region: app.location.split(',')[1]?.trim() || 'Lagos',
-              status: 'Registered',
+              status: 'REGISTERED',
               approvalDate: new Date().toISOString().split('T')[0],
               studentCount: app.studentsEstimate,
             };
@@ -1121,9 +1121,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     <input className={inputCls} value={schoolForm.country} onChange={e => setSchoolForm(f => ({ ...f, country: e.target.value }))} placeholder="Country / Region" />
                     <input className={inputCls} type="number" min="0" value={schoolForm.studentsCount} onChange={e => setSchoolForm(f => ({ ...f, studentsCount: e.target.value }))} placeholder="Student count" />
                     <select className={inputCls} value={schoolForm.status} onChange={e => setSchoolForm(f => ({ ...f, status: e.target.value as School['status'] }))}>
-                      <option value="Active">Active</option>
-                      <option value="Registered">Registered</option>
-                      <option value="Inactive">Inactive</option>
+                      <option value="ACTIVE">Active</option>
+                      <option value="REGISTERED">Registered</option>
+                      <option value="ONBOARDING">Onboarding</option>
+                      <option value="INACTIVE">Inactive</option>
                     </select>
                   </div>
                   <div className="flex justify-end gap-3">
@@ -1167,7 +1168,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                         <td className="px-6 py-4 text-sm text-[#201d16]">{school.region}</td>
                         <td className="px-6 py-4 text-sm font-mono text-[#003e45] font-bold">{school.studentCount}</td>
                         <td className="px-6 py-4 text-xs text-[#6e675c]">{school.approvalDate}</td>
-                        <td className="px-6 py-4"><span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${school.status === 'Active' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{school.status}</span></td>
+                        <td className="px-6 py-4"><span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${school.status === 'ACTIVE' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{school.status}</span></td>
                         <td className="px-6 py-4">
                           <button onClick={() => deleteSchool(school.id, school.name)} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors">Delete</button>
                         </td>
