@@ -21,6 +21,7 @@ const FORMS: Record<string, {
     sub: 'Tell us a little about you and we\'ll connect you with the nearest chapter.',
     fields: [
       { name: 'name', label: 'Full Name', type: 'text', placeholder: 'e.g. Amara Okafor' },
+      { name: 'email', label: 'Email Address', type: 'email', placeholder: 'you@example.com' },
       { name: 'school', label: 'School Name', type: 'text', placeholder: 'e.g. King\'s College Lagos' },
       { name: 'year', label: 'Year / Grade', type: 'select', options: ['Year 7', 'Year 8', 'Year 9', 'Year 10', 'Year 11', 'Year 12', 'Year 13', 'Other'] },
       { name: 'city', label: 'City', type: 'text', placeholder: 'e.g. Nairobi' },
