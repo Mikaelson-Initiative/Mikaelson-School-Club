@@ -26,9 +26,9 @@ interface Chapter {
 type SponsorType = 'STUDENT' | 'CHAPTER';
 type Step = 'choice' | 'form';
 
-export default function SponsorModal({ onClose }: { onClose: () => void }) {
-  const [step, setStep] = useState<Step>('choice');
-  const [type, setType] = useState<SponsorType | null>(null);
+export default function SponsorModal({ onClose, initialType }: { onClose: () => void; initialType?: SponsorType }) {
+  const [step, setStep] = useState<Step>(initialType ? 'form' : 'choice');
+  const [type, setType] = useState<SponsorType | null>(initialType ?? null);
 
   const [donorName, setDonorName] = useState('');
   const [donorEmail, setDonorEmail] = useState('');

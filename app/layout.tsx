@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Hanken_Grotesk, Inter, JetBrains_Mono } from 'next/font/google';
+import SponsorPopup from './components/SponsorPopup';
 import './globals.css';
 
 const hankenGrotesk = Hanken_Grotesk({
@@ -150,7 +151,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <SponsorPopup />
+      </body>
     </html>
   );
 }
