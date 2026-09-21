@@ -26,9 +26,7 @@ function Modal({ onClose }: { onClose: () => void }) {
         email: values.email,
         phone: values.phone,
         role: values.role,
-        motivation: values.why,
-        // Since we combined 'why' and 'experience' on the frontend into motivation
-        // wait, we can just concat them or send experience if there's a field for it, but the volunteer schema uses `motivation`. Let's concat them.
+        motivation: values.why || '',
       };
       if (values.experience) {
         payload.motivation += `\n\nExperience: ${values.experience}`;
@@ -117,6 +115,7 @@ function Modal({ onClose }: { onClose: () => void }) {
                 <textarea
                   id={f.name}
                   placeholder={f.placeholder}
+                  required={!f.label.includes('optional')}
                   className={FIELD_INPUT + ' resize-y min-h-[90px]'}
                   value={values[f.name] || ''}
                   onChange={(e) => {

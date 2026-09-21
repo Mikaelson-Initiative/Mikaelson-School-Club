@@ -34,7 +34,7 @@ const FORMS: Record<string, {
     fields: [
       { name: 'school', label: 'School Name', type: 'text', placeholder: 'e.g. Greenfield Academy' },
       { name: 'name', label: 'Your Name', type: 'text', placeholder: 'Principal, HOD, or coordinator' },
-      { name: 'role', label: 'Your Role', type: 'select', options: ['Principal', 'Vice Principal', 'Head of Department', 'Teacher', 'Administrator', 'Other'] },
+      { name: 'role', label: 'Your Role', type: 'select', options: ['Principal', 'Deputy Principal', 'Head of Student Affairs', 'Teacher', 'Student', 'Other'] },
       { name: 'email', label: 'Email Address', type: 'email', placeholder: 'school@example.com' },
       { name: 'phone', label: 'Phone Number', type: 'tel', placeholder: '+234 800 000 0000' },
       { name: 'city', label: 'City / Country', type: 'text', placeholder: 'e.g. Accra, Ghana' },
@@ -107,10 +107,17 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
         // Need to rename size to studentsEstimate for schools endpoint, and map name to contactName
         payload.contactName = payload.name;
         payload.schoolName = payload.school;
-        payload.studentsEstimate = parseInt(
-          payload.size?.replace(/[^0-9]/g, '') || '0', 
-          10
-        );
+        // Map the range label to a single representative number rather than
+        // stripping non-digits, which concatenated both ends of a range
+        // (e.g. '50–100' became 50100, exceeding the backend's max).
+        const STUDENTS_ESTIMATE_BY_RANGE: Record<string, number> = {
+          'Under 20': 15,
+          '20–50': 35,
+          '50–100': 75,
+          '100+': 150,
+          'Not sure yet': 0,
+        };
+        payload.studentsEstimate = STUDENTS_ESTIMATE_BY_RANGE[payload.size] ?? 0;
         payload.location = payload.city;
         delete payload.name;
         delete payload.school;

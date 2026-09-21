@@ -77,6 +77,23 @@ interface School {
   status: 'REGISTERED' | 'ONBOARDING' | 'ACTIVE' | 'INACTIVE';
   approvalDate: string;
   studentCount: number;
+  isChapterOfMonth: boolean;
+}
+
+// The backend's SchoolChapter model uses different field names (country,
+// studentsCount, createdAt) than this dashboard's School shape — remap here
+// once so the rest of the file can rely on a single consistent shape.
+function remapSchool(s: any): School {
+  return {
+    id: s.id,
+    name: s.name,
+    city: s.city,
+    region: s.country,
+    status: s.status,
+    approvalDate: s.createdAt ? String(s.createdAt).split('T')[0] : '',
+    studentCount: s.studentsCount ?? 0,
+    isChapterOfMonth: !!s.isChapterOfMonth,
+  };
 }
 // Team data is now fetched from the API
 
@@ -248,7 +265,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     async function fetchData() {
       try {
         const [appsRes, studRes, mentRes, volRes, contactsRes, schoolsRes, eventsRes, teamRes] = await Promise.all([
-          fetch('/api/admin/applications', { credentials: 'include' }),
+          fetch('/api/admin/applications?limit=100', { credentials: 'include' }),
           fetch('/api/admin/students', { credentials: 'include' }),
           fetch('/api/admin/mentors', { credentials: 'include' }),
           fetch('/api/admin/volunteers', { credentials: 'include' }),
@@ -298,7 +315,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
         if (schoolsRes.ok) {
           const data = await schoolsRes.json();
-          setSchools(Array.isArray(data) ? data : data.schools || []);
+          const raw = Array.isArray(data) ? data : data.schools || [];
+          setSchools(raw.map(remapSchool));
         }
 
         if (eventsRes.ok) {
@@ -332,11 +350,13 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [schoolSortOrder, setSchoolSortOrder] = useState<'asc' | 'desc'>('asc');
   const [schoolSearch, setSchoolSearch] = useState('');
 
-  // Add-school form state
+  // Add/Edit-school form state
   const emptySchoolForm = () => ({ name: '', city: '', country: 'Nigeria', status: 'ACTIVE' as School['status'], studentsCount: '' });
   const [schoolForm, setSchoolForm] = useState(emptySchoolForm());
   const [showSchoolForm, setShowSchoolForm] = useState(false);
   const [schoolSubmitting, setSchoolSubmitting] = useState(false);
+  const [editingSchoolId, setEditingSchoolId] = useState<string | null>(null);
+  const [featuringSchoolId, setFeaturingSchoolId] = useState<string | null>(null);
 
   const [eventForm, setEventForm] = useState<Omit<EventItem, 'id'>>(emptyEvent());
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -504,6 +524,19 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
   const upcomingCount = events.filter(e => e.type === 'upcoming').length;
 
+  const refetchSchools = async () => {
+    try {
+      const res = await fetch('/api/admin/schools', { credentials: 'include' });
+      if (res.ok) {
+        const data = await res.json();
+        const raw = Array.isArray(data) ? data : data.schools || [];
+        setSchools(raw.map(remapSchool));
+      }
+    } catch (e) {
+      console.error('Error refetching schools:', e);
+    }
+  };
+
   const handleStatusChange = async (appId: string, newStatus: string) => {
     try {
       const res = await fetch(`/api/admin/applications/${appId}`, {
@@ -515,19 +548,10 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       if (res.ok) {
         setApplications(apps => apps.map(a => a.id === appId ? { ...a, status: newStatus as any } : a));
         if (newStatus === 'LAUNCHED') {
-          const app = applications.find(a => a.id === appId);
-          if (app) {
-            const newSchool: School = {
-              id: `school-${Date.now()}`,
-              name: app.schoolName,
-              city: app.location.split(',')[0].trim(),
-              region: app.location.split(',')[1]?.trim() || 'Lagos',
-              status: 'REGISTERED',
-              approvalDate: new Date().toISOString().split('T')[0],
-              studentCount: app.studentsEstimate,
-            };
-            setSchools(prev => [...prev, newSchool]);
-          }
+          // The backend already creates the real SchoolChapter as part of this
+          // transition (src/services/application.service.ts) — refetch rather
+          // than fabricating a local placeholder with a fake id.
+          await refetchSchools();
         }
       } else {
         const errText = await res.text();
@@ -548,6 +572,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       });
       if (res.ok) {
         setStudents(arr => arr.map(a => a.id === id ? { ...a, status: newStatus } : a));
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(`Failed to update status: ${d.error || 'Unknown error'}`);
       }
     } catch (e) { alert('Error updating status'); }
   };
@@ -562,6 +589,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       });
       if (res.ok) {
         setMentors(arr => arr.map(a => a.id === id ? { ...a, status: newStatus } : a));
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(`Failed to update status: ${d.error || 'Unknown error'}`);
       }
     } catch (e) { alert('Error updating status'); }
   };
@@ -576,6 +606,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       });
       if (res.ok) {
         setVolunteers(arr => arr.map(a => a.id === id ? { ...a, status: newStatus } : a));
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(`Failed to update status: ${d.error || 'Unknown error'}`);
       }
     } catch (e) { alert('Error updating status'); }
   };
@@ -590,6 +623,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
       });
       if (res.ok) {
         setContacts(arr => arr.map(c => c.id === id ? { ...c, status: newStatus as ContactMessage['status'] } : c));
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(`Failed to update status: ${d.error || 'Unknown error'}`);
       }
     } catch (e) { alert('Error updating status'); }
   };
@@ -684,46 +720,97 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     }
   };
 
+  const startEditSchool = (school: School) => {
+    setEditingSchoolId(school.id);
+    setSchoolForm({
+      name: school.name,
+      city: school.city,
+      country: school.region,
+      status: school.status,
+      studentsCount: String(school.studentCount),
+    });
+    setShowSchoolForm(true);
+  };
+
   const submitSchoolForm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!schoolForm.name.trim() || !schoolForm.city.trim()) return;
     setSchoolSubmitting(true);
     try {
       const studentsCount = Number(schoolForm.studentsCount) || 0;
-      const res = await fetch('/api/admin/schools', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          name: schoolForm.name,
-          city: schoolForm.city,
-          country: schoolForm.country,
-          status: schoolForm.status,
-          studentsCount,
-        }),
+      const body = JSON.stringify({
+        name: schoolForm.name,
+        city: schoolForm.city,
+        country: schoolForm.country,
+        status: schoolForm.status,
+        studentsCount,
       });
+      const res = editingSchoolId
+        ? await fetch(`/api/admin/schools/${editingSchoolId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body,
+          })
+        : await fetch('/api/admin/schools', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body,
+          });
       if (res.ok) {
         const data = await res.json();
-        setSchools(prev => [...prev, {
-          id: data.id,
+        const savedId = editingSchoolId || data.id;
+        const savedSchool: School = {
+          id: savedId,
           name: schoolForm.name,
           city: schoolForm.city,
           region: schoolForm.country,
           status: schoolForm.status,
-          approvalDate: new Date().toISOString().split('T')[0],
+          approvalDate: editingSchoolId
+            ? (schools.find(s => s.id === editingSchoolId)?.approvalDate || new Date().toISOString().split('T')[0])
+            : new Date().toISOString().split('T')[0],
           studentCount: studentsCount,
-        }]);
+          isChapterOfMonth: editingSchoolId
+            ? (schools.find(s => s.id === editingSchoolId)?.isChapterOfMonth || false)
+            : false,
+        };
+        setSchools(prev => editingSchoolId
+          ? prev.map(s => s.id === editingSchoolId ? savedSchool : s)
+          : [...prev, savedSchool]);
         setShowSchoolForm(false);
+        setEditingSchoolId(null);
         setSchoolForm(emptySchoolForm());
       } else {
         const d = await res.json().catch(() => ({}));
-        alert(`Failed to add school: ${d.error || 'Unknown error'}`);
+        alert(`Failed to save school: ${d.error || 'Unknown error'}`);
       }
     } catch (err) {
       console.error(err);
       alert('Error saving school.');
     } finally {
       setSchoolSubmitting(false);
+    }
+  };
+
+  const featureSchool = async (id: string) => {
+    setFeaturingSchoolId(id);
+    try {
+      const res = await fetch(`/api/admin/schools/${id}/feature`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (res.ok) {
+        setSchools(prev => prev.map(s => ({ ...s, isChapterOfMonth: s.id === id })));
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(`Failed to feature chapter: ${d.error || 'Unknown error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error featuring chapter.');
+    } finally {
+      setFeaturingSchoolId(null);
     }
   };
 
@@ -858,7 +945,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
               </span>
               {activeTab === 'schools' && (
                 <>
-                  <button onClick={() => { setSchoolForm(emptySchoolForm()); setShowSchoolForm(v => !v); }} className="bg-[#5ce1e6] text-[#003e45] px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:brightness-95 transition">
+                  <button onClick={() => { setEditingSchoolId(null); setSchoolForm(emptySchoolForm()); setShowSchoolForm(v => !v); }} className="bg-[#5ce1e6] text-[#003e45] px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:brightness-95 transition">
                     {showSchoolForm ? 'Cancel' : '+ New Chapter'}
                   </button>
                   <button onClick={exportEnrollmentData} className="bg-[#003e45] text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-[#005a63] transition-colors">
@@ -1114,7 +1201,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
             <div className="space-y-6">
               {showSchoolForm && (
                 <form onSubmit={submitSchoolForm} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 shadow-sm">
-                  <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">Add Chapter</h3>
+                  <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">{editingSchoolId ? 'Edit Chapter' : 'Add Chapter'}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <input className={inputCls} value={schoolForm.name} onChange={e => setSchoolForm(f => ({ ...f, name: e.target.value }))} placeholder="School name" required />
                     <input className={inputCls} value={schoolForm.city} onChange={e => setSchoolForm(f => ({ ...f, city: e.target.value }))} placeholder="City" required />
@@ -1128,9 +1215,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     </select>
                   </div>
                   <div className="flex justify-end gap-3">
-                    <button type="button" onClick={() => { setShowSchoolForm(false); setSchoolForm(emptySchoolForm()); }} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
+                    <button type="button" onClick={() => { setShowSchoolForm(false); setEditingSchoolId(null); setSchoolForm(emptySchoolForm()); }} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
                     <button type="submit" disabled={schoolSubmitting} className="px-5 py-2 rounded-full bg-[#5ce1e6] text-[#003e45] font-bold text-sm disabled:opacity-50">
-                      {schoolSubmitting ? 'Saving...' : 'Save Chapter'}
+                      {schoolSubmitting ? 'Saving...' : editingSchoolId ? 'Update Chapter' : 'Save Chapter'}
                     </button>
                   </div>
                 </form>
@@ -1164,13 +1251,25 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                   <tbody className="divide-y divide-[#f3eee5]">
                     {sortedSchools.map(school => (
                       <tr key={school.id} className="hover:bg-[#faf9f6] transition-colors">
-                        <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{school.name}</div><div className="text-xs text-[#6e675c]">{school.city}</div></td>
+                        <td className="px-6 py-4">
+                          <div className="font-bold text-[#003e45] text-sm flex items-center gap-1.5">
+                            {school.name}
+                            {school.isChapterOfMonth && <span title="Chapter of the Month">⭐</span>}
+                          </div>
+                          <div className="text-xs text-[#6e675c]">{school.city}</div>
+                        </td>
                         <td className="px-6 py-4 text-sm text-[#201d16]">{school.region}</td>
                         <td className="px-6 py-4 text-sm font-mono text-[#003e45] font-bold">{school.studentCount}</td>
                         <td className="px-6 py-4 text-xs text-[#6e675c]">{school.approvalDate}</td>
                         <td className="px-6 py-4"><span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${school.status === 'ACTIVE' ? 'bg-[#e0f6f7] text-[#003e45]' : 'bg-[#f3eee5] text-[#6e675c]'}`}>{school.status}</span></td>
                         <td className="px-6 py-4">
-                          <button onClick={() => deleteSchool(school.id, school.name)} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors">Delete</button>
+                          <div className="flex flex-wrap gap-2">
+                            <button onClick={() => startEditSchool(school)} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-[#e0f6f7] hover:text-[#003e45] transition-colors">Edit</button>
+                            <button onClick={() => featureSchool(school.id)} disabled={featuringSchoolId === school.id || school.isChapterOfMonth} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-[#fff3d6] hover:text-[#8a6d00] transition-colors disabled:opacity-50">
+                              {school.isChapterOfMonth ? 'Featured' : 'Feature'}
+                            </button>
+                            <button onClick={() => deleteSchool(school.id, school.name)} className="bg-[#f3eee5] text-[#6e675c] text-[9px] font-mono font-bold px-2.5 py-1 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors">Delete</button>
+                          </div>
                         </td>
                       </tr>
                     ))}
