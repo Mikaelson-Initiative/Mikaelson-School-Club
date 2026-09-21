@@ -33,6 +33,7 @@ const NAV_ITEMS: NavItem[] = [
       ['For Students', '/for-students'],
       ['For Schools', '/for-schools'],
       ['Partners', '/partners'],
+      ['Sponsor', '/sponsor'],
       ['Apply Now', '/apply'],
     ],
   },
@@ -162,7 +163,7 @@ export default function Header() {
           {/* Desktop CTA */}
           <div className="flex items-center gap-4 max-md:hidden">
             <Link
-              href="/partners"
+              href="/sponsor"
               className={BTN_PRIMARY}
             >
               Sponsor a Chapter
@@ -260,7 +261,7 @@ export default function Header() {
               )
             )}
             <Link
-              href="/partners"
+              href="/sponsor"
               className={`mt-5 flex w-full justify-center ${BTN_PRIMARY}`}
               onClick={() => setMenuOpen(false)}
             >
