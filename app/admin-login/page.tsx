@@ -95,9 +95,20 @@ function remapSchool(s: any): School {
     isChapterOfMonth: !!s.isChapterOfMonth,
   };
 }
+interface Sponsorship {
+  id: string;
+  type: 'STUDENT' | 'CHAPTER';
+  quantity: number;
+  amountKobo: number;
+  donorName: string;
+  donorEmail: string;
+  status: 'PENDING' | 'SUCCESS' | 'FAILED';
+  createdAt: string;
+  chapter: { id: string; name: string } | null;
+}
 // Team data is now fetched from the API
 
-type TabKey = 'overview' | 'applications' | 'students' | 'mentors' | 'volunteers' | 'contacts' | 'schools' | 'events' | 'analytics' | 'team';
+type TabKey = 'overview' | 'applications' | 'students' | 'mentors' | 'volunteers' | 'contacts' | 'schools' | 'sponsorships' | 'events' | 'analytics' | 'team';
 
 const NAV: { key: TabKey; label: string; icon: string }[] = [
   { key: 'overview', label: 'Overview', icon: 'M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z' },
@@ -107,6 +118,7 @@ const NAV: { key: TabKey; label: string; icon: string }[] = [
   { key: 'volunteers', label: 'Volunteers', icon: 'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z' },
   { key: 'contacts', label: 'Contacts', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
   { key: 'schools', label: 'Chapters', icon: 'M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.42a12 12 0 01.84 4.42 12 12 0 01-7 1 12 12 0 01-7-1 12 12 0 01.84-4.42L12 14z' },
+  { key: 'sponsorships', label: 'Sponsorships', icon: 'M12 8c-1.657 0-3 1.12-3 2.5S10.343 13 12 13s3 1.12 3 2.5S13.657 18 12 18m0-10c1.11 0 2.08.402 2.599 1M12 8V6m0 12v-2m0-8c-1.11 0-2.08.402-2.599 1M12 21a9 9 0 100-18 9 9 0 000 18z' },
   { key: 'events', label: 'Events', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
   { key: 'analytics', label: 'Analytics', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
   { key: 'team', label: 'Team', icon: 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1a4 4 0 100-8 4 4 0 000 8z' },
@@ -255,6 +267,8 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [mentors, setMentors] = useState<MentorApplication[]>([]);
   const [volunteers, setVolunteers] = useState<VolunteerApplication[]>([]);
   const [schools, setSchools] = useState<School[]>([]);
+  const [sponsorships, setSponsorships] = useState<Sponsorship[]>([]);
+  const [sponsorshipSummary, setSponsorshipSummary] = useState({ totalRaisedKobo: 0, successCount: 0, pendingCount: 0 });
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
   const [team, setTeam] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -264,20 +278,21 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [appsRes, studRes, mentRes, volRes, contactsRes, schoolsRes, eventsRes, teamRes] = await Promise.all([
+        const [appsRes, studRes, mentRes, volRes, contactsRes, schoolsRes, sponsorshipsRes, eventsRes, teamRes] = await Promise.all([
           fetch('/api/admin/applications?limit=100', { credentials: 'include' }),
           fetch('/api/admin/students', { credentials: 'include' }),
           fetch('/api/admin/mentors', { credentials: 'include' }),
           fetch('/api/admin/volunteers', { credentials: 'include' }),
           fetch('/api/admin/contacts', { credentials: 'include' }),
           fetch('/api/admin/schools', { credentials: 'include' }),
+          fetch('/api/admin/sponsorships?limit=100', { credentials: 'include' }),
           fetch('/api/admin/events', { credentials: 'include', cache: 'no-store' }),
           fetch('/api/team')
         ]);
 
         // Middleware rejects unauthenticated admin calls with 401; in-handler
         // role checks use 403. Treat either as "not authorised".
-        const unauthorised = [appsRes, studRes, mentRes, volRes, contactsRes, schoolsRes, eventsRes]
+        const unauthorised = [appsRes, studRes, mentRes, volRes, contactsRes, schoolsRes, sponsorshipsRes, eventsRes]
           .some(r => r.status === 401 || r.status === 403);
         if (unauthorised) {
           setIsAdmin(false);
@@ -317,6 +332,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           const data = await schoolsRes.json();
           const raw = Array.isArray(data) ? data : data.schools || [];
           setSchools(raw.map(remapSchool));
+        }
+
+        if (sponsorshipsRes.ok) {
+          const data = await sponsorshipsRes.json();
+          setSponsorships(data.sponsorships || []);
+          if (data.summary) setSponsorshipSummary(data.summary);
         }
 
         if (eventsRes.ok) {
@@ -1273,6 +1294,54 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Sponsorships */}
+          {activeTab === 'sponsorships' && (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="bg-white rounded-2xl border border-[#e7e0d4] p-6">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#6e675c] mb-2">Total Raised</div>
+                  <div className="font-display font-[800] text-[28px] text-[#003e45]">₦{(sponsorshipSummary.totalRaisedKobo / 100).toLocaleString('en-NG')}</div>
+                </div>
+                <div className="bg-white rounded-2xl border border-[#e7e0d4] p-6">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#6e675c] mb-2">Successful Payments</div>
+                  <div className="font-display font-[800] text-[28px] text-[#003e45]">{sponsorshipSummary.successCount}</div>
+                </div>
+                <div className="bg-white rounded-2xl border border-[#e7e0d4] p-6">
+                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#6e675c] mb-2">Pending</div>
+                  <div className="font-display font-[800] text-[28px] text-[#003e45]">{sponsorshipSummary.pendingCount}</div>
+                </div>
+              </div>
+              <div className="bg-white rounded-2xl border border-[#e7e0d4] overflow-hidden shadow-sm overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[720px]">
+                  <thead>
+                    <tr className="bg-[#f9f7f3] border-b border-[#e7e0d4]">
+                      {['Donor', 'Type', 'Chapter', 'Amount', 'Status', 'Date'].map(h => (
+                        <th key={h} className="px-6 py-4 text-[10px] font-mono uppercase tracking-widest text-[#6e675c]">{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#f3eee5]">
+                    {sponsorships.map(s => (
+                      <tr key={s.id} className="hover:bg-[#faf9f6] transition-colors">
+                        <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{s.donorName}</div><div className="text-xs text-[#6e675c]">{s.donorEmail}</div></td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{s.type === 'STUDENT' ? `${s.quantity} Student${s.quantity > 1 ? 's' : ''}` : 'Full Chapter'}</td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{s.chapter?.name ?? '—'}</td>
+                        <td className="px-6 py-4 text-sm font-mono text-[#003e45] font-bold">₦{(s.amountKobo / 100).toLocaleString('en-NG')}</td>
+                        <td className="px-6 py-4">
+                          <span className={`text-[10px] font-mono font-bold px-2.5 py-1 rounded-full ${s.status === 'SUCCESS' ? 'bg-[#e0f6f7] text-[#003e45]' : s.status === 'PENDING' ? 'bg-[#fff3d6] text-[#8a6d00]' : 'bg-[#fbe6e6] text-[#8a1f1f]'}`}>{s.status}</span>
+                        </td>
+                        <td className="px-6 py-4 text-xs text-[#6e675c]">{s.createdAt.split('T')[0]}</td>
+                      </tr>
+                    ))}
+                    {sponsorships.length === 0 && (
+                      <tr><td colSpan={6} className="px-6 py-10 text-center text-sm text-[#6e675c] italic">No sponsorships yet.</td></tr>
+                    )}
                   </tbody>
                 </table>
               </div>
