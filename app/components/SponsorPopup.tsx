@@ -98,7 +98,6 @@ export default function SponsorPopup() {
 
       {modalOpen && (
         <SponsorModal
-          initialType="STUDENT"
           onClose={() => {
             setModalOpen(false);
             setStage('icon');
