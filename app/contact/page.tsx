@@ -12,11 +12,8 @@ import PageHero from '../components/PageHero';
 import Reveal from '../components/Reveal';
 import ContactForm from '../components/ContactForm';
 import { IconMail, IconGlobe, IconCompass, IconInstagram, IconX, IconLinkedin, IconYoutube, IconCalendar, IconArrow } from '../components/Icons';
-import Link from 'next/link';
 
 import { WRAP, LABEL } from '../lib/tw';
-const FIELD_INPUT = 'bg-white border border-line rounded-[14px] font-body text-site-text py-[11px] px-[14px] text-[15px] w-full box-border outline-none transition-[border-color] duration-200 focus:border-accent-2';
-const FIELD_LABEL = 'font-mono text-[11px] uppercase tracking-[0.1em] text-accent-ink font-bold block mb-[7px]';
 const BOOKING_URL = 'https://calendar.google.com/appointments/schedules/AcZssZ1JVLcmrQSO15PwdFlP3GVv8YDwb74-Ey_unMB6kNXziUKoGUkWhzc9UsTlPlqp-3JUZvWbfkuo';
 
 const CONTACTS = [

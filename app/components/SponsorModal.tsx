@@ -43,6 +43,10 @@ export default function SponsorModal({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     if (type !== 'CHAPTER' || chapters.length > 0) return;
+    // Genuine async fetch triggered by a state change — setting the loading
+    // flag before the request starts is the correct pattern here, not a
+    // derivable render-time value.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setChaptersLoading(true);
     fetch('/api/schools')
       .then((r) => (r.ok ? r.json() : []))
@@ -118,7 +122,7 @@ export default function SponsorModal({ onClose }: { onClose: () => void }) {
               className="text-left bg-[var(--surface-2)] border-[1.5px] border-line rounded-[16px] p-5 transition-[border-color,transform] duration-200 hover:border-accent-2 hover:-translate-y-[2px] cursor-pointer"
             >
               <div className="font-display font-bold text-[18px] text-site-text mb-1">Sponsor a Student</div>
-              <div className="text-muted text-[14px]">{formatNaira(STUDENT_PRICE_NGN)} funds one student's leadership journey for a year.</div>
+              <div className="text-muted text-[14px]">{formatNaira(STUDENT_PRICE_NGN)} funds one student&apos;s leadership journey for a year.</div>
             </button>
             <button
               onClick={() => chooseType('CHAPTER')}
@@ -234,7 +238,7 @@ export default function SponsorModal({ onClose }: { onClose: () => void }) {
             >
               {isSubmitting ? 'Redirecting to payment…' : `Pay ${formatNaira(amount)}`} {!isSubmitting && <IconArrow size={16} className="arr" />}
             </button>
-            <p className="text-muted text-[12px] text-center m-0">You'll be securely redirected to Paystack to complete payment.</p>
+            <p className="text-muted text-[12px] text-center m-0">You&apos;ll be securely redirected to Paystack to complete payment.</p>
           </form>
         </>
       )}

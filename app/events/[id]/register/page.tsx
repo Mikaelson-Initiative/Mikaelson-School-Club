@@ -151,9 +151,9 @@ export default function RegisterPage({ params }: { params: Promise<{ id: string 
               {regStatus === 'success' ? (
                 <div className="flex flex-col items-center justify-center text-center py-10">
                   <div className="w-20 h-20 bg-[#e0f6f7] rounded-full flex items-center justify-center text-[40px] mb-6 shadow-inner">🎉</div>
-                  <h3 className="font-display font-bold text-[28px] mb-3 text-[#003e45]">You're In!</h3>
+                  <h3 className="font-display font-bold text-[28px] mb-3 text-[#003e45]">You&apos;re In!</h3>
                   <p className="text-muted text-[15px] max-w-[280px] mx-auto leading-relaxed mb-8">
-                    We've sent a confirmation email to <strong>{regForm.email}</strong>. Check your inbox for details.
+                    We&apos;ve sent a confirmation email to <strong>{regForm.email}</strong>. Check your inbox for details.
                   </p>
                   <button onClick={() => router.push('/events')} className="font-mono text-[12px] uppercase tracking-widest bg-surface border-2 border-[#e7e0d4] text-accent-ink px-8 py-3.5 rounded-full hover:border-[#003e45] transition-colors font-bold">
                     Return to Events

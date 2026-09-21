@@ -45,17 +45,23 @@ export default function Header() {
   const [mobileSub, setMobileSub] = useState<string | null>(null);
   const pathname = usePathname();
 
+  // Reset the mobile menu when the route changes. Adjusted during render
+  // (comparing against the last-seen pathname) rather than in an effect,
+  // per React's guidance for resetting state in response to a prop/value
+  // change — avoids an extra render pass.
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setMenuOpen(false);
+    setMobileSub(null);
+  }
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
-
-  useEffect(() => {
-    setMenuOpen(false);
-    setMobileSub(null);
-  }, [pathname]);
 
   const isItemActive = (item: NavItem) =>
     pathname === item.href || item.children?.some(([, href]) => pathname === href);

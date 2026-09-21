@@ -28,7 +28,10 @@ export default function SponsorPopup() {
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
+    // Reads sessionStorage, a browser-only API unavailable during SSR, so
+    // this genuinely has to run as an effect rather than during render.
     if (EXCLUDED_PREFIXES.some((p) => pathname.startsWith(p))) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStage('hidden');
       return;
     }
@@ -73,7 +76,7 @@ export default function SponsorPopup() {
           </h3>
           <div className="flex items-center gap-4 max-sm:flex-col max-sm:items-start">
             <p className="text-muted text-[14px] leading-[1.5] m-0 flex-1">
-              Did you know that for ₦15,000, you're funding one student's full year in the programme?
+              Did you know that for ₦15,000, you&apos;re funding one student&apos;s full year in the programme?
             </p>
             <button
               onClick={openModal}

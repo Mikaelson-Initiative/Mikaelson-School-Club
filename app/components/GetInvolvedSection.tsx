@@ -99,7 +99,7 @@ function Modal({ audienceKey, onClose }: { audienceKey: string; onClose: () => v
 
     try {
       let endpoint = '';
-      let payload: any = { ...values };
+      const payload: any = { ...values };
 
       if (audienceKey === 'students') {
         endpoint = '/api/apply/student';

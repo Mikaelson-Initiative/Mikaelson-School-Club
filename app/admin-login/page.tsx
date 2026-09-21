@@ -270,6 +270,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [sponsorships, setSponsorships] = useState<Sponsorship[]>([]);
   const [sponsorshipSummary, setSponsorshipSummary] = useState({ totalRaisedKobo: 0, successCount: 0, pendingCount: 0 });
   const [contacts, setContacts] = useState<ContactMessage[]>([]);
+  const [events, setEvents] = useState<EventItem[]>([]);
   const [team, setTeam] = useState<any[]>([]);
   const [mounted, setMounted] = useState(false);
   const [isAdmin, setIsAdmin] = useState(true);
@@ -307,19 +308,16 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
 
         if (studRes.ok) {
           const data = await studRes.json();
-          console.log('Students data:', data);
           setStudents(data.applications || []);
         }
 
         if (mentRes.ok) {
           const data = await mentRes.json();
-          console.log('Mentors data:', data);
           setMentors(data.applications || []);
         }
 
         if (volRes.ok) {
           const data = await volRes.json();
-          console.log('Volunteers data:', data);
           setVolunteers(data.volunteers || []);
         }
 
@@ -362,8 +360,9 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     fetchData();
   }, []);
 
-  const [events, setEvents] = useState<EventItem[]>([]);
-
+  // Standard client-mounted guard against SSR/CSR hydration mismatch —
+  // inherently can't be computed during render.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMounted(true); }, []);
 
   const [appFilter, setAppFilter] = useState<'ALL' | 'PENDING' | 'REVIEWED' | 'SCHEDULED' | 'TRAINING' | 'LAUNCHED' | 'REJECTED'>('ALL');
@@ -483,44 +482,6 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     }
   };
 
-  const seedTeam = async () => {
-    const HARDCODED_OFFICERS = [
-      { name: 'Michael Olukayode', role: 'Team Lead', avatarUrl: '/team/Michael%20Olukayode.jpg', linkedinUrl: 'https://www.linkedin.com/in/michael-olukayode-73890b214/' },
-      { name: 'Boluwatife Adeleke', role: 'Project Manager', avatarUrl: '/team/Boluwatife%20Mercy%20Adeleke.jpeg', linkedinUrl: 'https://www.linkedin.com/in/boluwatifemercyadeleke/' },
-      { name: 'Irene Ezechi', role: 'Program Manager', avatarUrl: '/team/Irene%20Ezechi.jpg', linkedinUrl: 'https://www.linkedin.com/in/ireneezechi/' },
-      { name: 'Mariam Jimoh', role: 'ESG and Impact', avatarUrl: '/team/Mariam%20Jimoh.jpeg', linkedinUrl: 'https://www.linkedin.com/in/jimohmariamajoke/' },
-      { name: 'Bright Temitope Ayegbusi', role: 'Visuals and Designs', avatarUrl: '/team/Ayegbusi%20Bright%20Temitope.jpg', linkedinUrl: '' },
-      { name: 'Feranmi Oluwole', role: 'Operations Manager', avatarUrl: '/team/Feranmi%20Oluwole.JPG', linkedinUrl: 'https://www.linkedin.com/in/feranmi-oluwole-675712339/' },
-      { name: 'Theresa Asiedu Gyamfi', role: 'GRC and Policy Engineer', avatarUrl: '/team/Asiedu%20Gyamfi.jpg', linkedinUrl: 'https://www.linkedin.com/in/theresa-gyamfi/' },
-      { name: 'Esther Adeoye', role: 'Social Media Manager', avatarUrl: '/team/Adeoye%20Esther.jpg', linkedinUrl: 'https://www.linkedin.com/in/adeoye-esther-4151a62b8/' },
-      { name: 'Ariyo Aresa', role: 'Front-end Engineer', avatarUrl: '/team/AriyoAresa.avif', linkedinUrl: 'https://www.linkedin.com/in/ariyoaresa/' },
-      { name: 'Ayomide Idowu', role: 'Visuals and Designs', avatarUrl: '/team/Ayomide%20Idowu.jpg', linkedinUrl: 'https://www.linkedin.com/in/ayomide-idowu-4a852623a/' },
-      { name: 'Happiness Obochi', role: 'Team Member', avatarUrl: '/team/Happiness%20Obochi.jpg', linkedinUrl: 'https://www.linkedin.com/in/happinessobochi/' },
-    ];
-    
-    const token = sessionStorage.getItem('msc_admin_token') || '';
-    for (let i = 0; i < HARDCODED_OFFICERS.length; i++) {
-      const o = HARDCODED_OFFICERS[i];
-      const res = await fetch('/api/admin/team', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: o.name,
-          role: o.role,
-          email: o.name.split(' ')[0].toLowerCase() + '@mikaelsoninitiative.org',
-          avatarUrl: o.avatarUrl ? `https://mikaelsoninitiative.org${o.avatarUrl}` : undefined,
-          linkedinUrl: o.linkedinUrl || undefined,
-          sortOrder: i
-        })
-      });
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        alert(`Failed to add ${o.name}: ${errorData.error || 'Unknown error'}`);
-      }
-    }
-    alert("Team Seeded! Please refresh the page.");
-  };
 
   const stats = useMemo(() => {
     const approvedChapters = schools.filter(s => s.status === 'ACTIVE' || s.status === 'REGISTERED').length;
@@ -977,11 +938,6 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
               {activeTab === 'events' && (
                 <button onClick={openNewEvent} className="bg-[#5ce1e6] text-[#003e45] px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:brightness-95 transition">
                   + New Event
-                </button>
-              )}
-              {activeTab === 'team' && (
-                <button onClick={seedTeam} className="bg-orange-500 text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-orange-600 transition-colors">
-                  Seed Team (Temp)
                 </button>
               )}
               <button onClick={onLogout} className="lg:hidden text-[11px] font-mono uppercase tracking-widest text-[#6e675c] border border-[#e7e0d4] rounded-full px-3 py-1.5">
@@ -1740,6 +1696,9 @@ export default function AdminPage() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Client-mounted guard + sessionStorage read (browser-only API) —
+    // both inherently require an effect, not a render-time computation.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     if (sessionStorage.getItem('msc_admin') === '1') setAuthed(true);
   }, []);

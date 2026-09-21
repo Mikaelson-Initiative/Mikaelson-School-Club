@@ -29,7 +29,10 @@ function CallbackContent() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Genuine async verification call (and its no-reference guard clause) —
+    // not a value derivable during render.
     if (!reference) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setState('error');
       setError('No payment reference was provided.');
       return;
@@ -60,7 +63,7 @@ function CallbackContent() {
 
           {state === 'error' && (
             <>
-              <h1 className="font-display font-bold text-[26px] text-site-text mb-2">We couldn't confirm that</h1>
+              <h1 className="font-display font-bold text-[26px] text-site-text mb-2">We couldn&apos;t confirm that</h1>
               <p className="text-muted text-[15px] mb-6">{error}</p>
               <Link href="/sponsor" className={BTN_PRIMARY}>Try again</Link>
             </>
@@ -82,7 +85,7 @@ function CallbackContent() {
           {state === 'done' && result?.status !== 'SUCCESS' && (
             <>
               <h1 className="font-display font-bold text-[26px] text-site-text mb-2">Payment not completed</h1>
-              <p className="text-muted text-[15px] mb-6">Your payment wasn't successful, so nothing was charged. Feel free to try again.</p>
+              <p className="text-muted text-[15px] mb-6">Your payment wasn&apos;t successful, so nothing was charged. Feel free to try again.</p>
               <Link href="/sponsor" className={BTN_PRIMARY}>Try again</Link>
             </>
           )}
