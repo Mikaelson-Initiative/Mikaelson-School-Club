@@ -11,9 +11,12 @@ const EXCLUDED_PREFIXES = ['/admin-login', '/sponsor'];
 
 type Stage = 'hidden' | 'card' | 'icon';
 
+// sessionStorage (not localStorage): scoped to this one tab and cleared when
+// it closes, so the full popup shows again in every new tab instead of being
+// remembered indefinitely.
 function markSeen() {
   try {
-    localStorage.setItem(SEEN_KEY, 'true');
+    sessionStorage.setItem(SEEN_KEY, 'true');
   } catch {
     // ignore — worst case the full card shows again next visit
   }
@@ -31,9 +34,9 @@ export default function SponsorPopup() {
     }
     let seen = false;
     try {
-      seen = !!localStorage.getItem(SEEN_KEY);
+      seen = !!sessionStorage.getItem(SEEN_KEY);
     } catch {
-      // localStorage unavailable (private mode, etc.) — treat as first visit.
+      // sessionStorage unavailable (private mode, etc.) — treat as first visit.
     }
     setStage(seen ? 'icon' : 'card');
   }, [pathname]);
