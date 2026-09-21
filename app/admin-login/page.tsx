@@ -332,6 +332,12 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
   const [schoolSortOrder, setSchoolSortOrder] = useState<'asc' | 'desc'>('asc');
   const [schoolSearch, setSchoolSearch] = useState('');
 
+  // Add-school form state
+  const emptySchoolForm = () => ({ name: '', city: '', country: 'Nigeria', status: 'Active' as School['status'], studentsCount: '' });
+  const [schoolForm, setSchoolForm] = useState(emptySchoolForm());
+  const [showSchoolForm, setShowSchoolForm] = useState(false);
+  const [schoolSubmitting, setSchoolSubmitting] = useState(false);
+
   const [eventForm, setEventForm] = useState<Omit<EventItem, 'id'>>(emptyEvent());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showEventForm, setShowEventForm] = useState(false);
@@ -678,6 +684,49 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
     }
   };
 
+  const submitSchoolForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!schoolForm.name.trim() || !schoolForm.city.trim()) return;
+    setSchoolSubmitting(true);
+    try {
+      const studentsCount = Number(schoolForm.studentsCount) || 0;
+      const res = await fetch('/api/admin/schools', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          name: schoolForm.name,
+          city: schoolForm.city,
+          country: schoolForm.country,
+          status: schoolForm.status,
+          studentsCount,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setSchools(prev => [...prev, {
+          id: data.id,
+          name: schoolForm.name,
+          city: schoolForm.city,
+          region: schoolForm.country,
+          status: schoolForm.status,
+          approvalDate: new Date().toISOString().split('T')[0],
+          studentCount: studentsCount,
+        }]);
+        setShowSchoolForm(false);
+        setSchoolForm(emptySchoolForm());
+      } else {
+        const d = await res.json().catch(() => ({}));
+        alert(`Failed to add school: ${d.error || 'Unknown error'}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Error saving school.');
+    } finally {
+      setSchoolSubmitting(false);
+    }
+  };
+
   async function openRegistrations(ev: EventItem) {
     setViewingRegistrationsFor(ev);
     setRegistrations([]);
@@ -808,9 +857,14 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                 {mounted ? new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
               </span>
               {activeTab === 'schools' && (
-                <button onClick={exportEnrollmentData} className="bg-[#003e45] text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-[#005a63] transition-colors">
-                  Export .CSV
-                </button>
+                <>
+                  <button onClick={() => { setSchoolForm(emptySchoolForm()); setShowSchoolForm(v => !v); }} className="bg-[#5ce1e6] text-[#003e45] px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:brightness-95 transition">
+                    {showSchoolForm ? 'Cancel' : '+ New Chapter'}
+                  </button>
+                  <button onClick={exportEnrollmentData} className="bg-[#003e45] text-white px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-[#005a63] transition-colors">
+                    Export .CSV
+                  </button>
+                </>
               )}
               {activeTab === 'events' && (
                 <button onClick={openNewEvent} className="bg-[#5ce1e6] text-[#003e45] px-4 py-2 rounded-full text-[11px] font-mono uppercase tracking-widest font-bold hover:brightness-95 transition">
@@ -1058,6 +1112,28 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
           {/* Schools */}
           {activeTab === 'schools' && (
             <div className="space-y-6">
+              {showSchoolForm && (
+                <form onSubmit={submitSchoolForm} className="bg-white rounded-2xl border border-[#e7e0d4] p-6 shadow-sm">
+                  <h3 className="font-display font-bold text-lg text-[#003e45] mb-4">Add Chapter</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <input className={inputCls} value={schoolForm.name} onChange={e => setSchoolForm(f => ({ ...f, name: e.target.value }))} placeholder="School name" required />
+                    <input className={inputCls} value={schoolForm.city} onChange={e => setSchoolForm(f => ({ ...f, city: e.target.value }))} placeholder="City" required />
+                    <input className={inputCls} value={schoolForm.country} onChange={e => setSchoolForm(f => ({ ...f, country: e.target.value }))} placeholder="Country / Region" />
+                    <input className={inputCls} type="number" min="0" value={schoolForm.studentsCount} onChange={e => setSchoolForm(f => ({ ...f, studentsCount: e.target.value }))} placeholder="Student count" />
+                    <select className={inputCls} value={schoolForm.status} onChange={e => setSchoolForm(f => ({ ...f, status: e.target.value as School['status'] }))}>
+                      <option value="Active">Active</option>
+                      <option value="Registered">Registered</option>
+                      <option value="Inactive">Inactive</option>
+                    </select>
+                  </div>
+                  <div className="flex justify-end gap-3">
+                    <button type="button" onClick={() => { setShowSchoolForm(false); setSchoolForm(emptySchoolForm()); }} className="px-5 py-2 rounded-full border border-[#e7e0d4] text-[#6e675c] font-bold text-sm">Cancel</button>
+                    <button type="submit" disabled={schoolSubmitting} className="px-5 py-2 rounded-full bg-[#5ce1e6] text-[#003e45] font-bold text-sm disabled:opacity-50">
+                      {schoolSubmitting ? 'Saving...' : 'Save Chapter'}
+                    </button>
+                  </div>
+                </form>
+              )}
               <div className="flex flex-col sm:flex-row justify-between gap-4">
                 <div className="relative flex-1 max-w-md">
                   <input type="text" placeholder="Search schools or cities..." value={schoolSearch} onChange={(e) => setSchoolSearch(e.target.value)} className="w-full bg-white border border-[#e7e0d4] rounded-full px-10 py-2 text-sm outline-none focus:border-[#5ce1e6]" />
