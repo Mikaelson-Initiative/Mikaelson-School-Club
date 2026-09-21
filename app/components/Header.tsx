@@ -90,7 +90,7 @@ export default function Header() {
               width={35}
               height={35}
             />
-            <span className="font-display font-bold text-[14px] tracking-[-0.01em] whitespace-nowrap text-accent-ink mobile:hidden md:flex">
+            <span className="font-display font-bold text-[16px] md:text-[19px] tracking-[-0.01em] whitespace-nowrap text-accent-ink flex">
               Mikaelson School Club
             </span>
           </Link>
