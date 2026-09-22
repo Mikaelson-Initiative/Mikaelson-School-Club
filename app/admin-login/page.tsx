@@ -97,7 +97,7 @@ function remapSchool(s: any): School {
 }
 interface Sponsorship {
   id: string;
-  type: 'STUDENT' | 'CHAPTER' | 'TEST'; // TEST is TEMPORARY, see SponsorModal.tsx
+  type: 'STUDENT' | 'CHAPTER' | 'TEST'; // TEST: one historical live-mode test payment, no longer creatable
   quantity: number;
   amountKobo: number;
   donorName: string;
