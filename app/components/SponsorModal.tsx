@@ -8,6 +8,10 @@ import { BTN_PRIMARY } from '../lib/tw';
 const STUDENT_PRICE_NGN = 15_000;
 const CHAPTER_STUDENT_COUNT = 40;
 const CHAPTER_PRICE_NGN = STUDENT_PRICE_NGN * CHAPTER_STUDENT_COUNT;
+// TEMPORARY — ₦100 option for verifying the live Paystack integration.
+// Remove this constant, the 'TEST' choice card, and its form-step branches
+// once that's confirmed (backend: see sponsorship.service.ts's matching note).
+const TEST_PRICE_NGN = 100;
 
 const FIELD_INPUT =
   'bg-[var(--surface-2)] border-[1.5px] border-line rounded-[14px] font-body text-site-text py-[13px] px-4 text-[15px] w-full box-border outline-none transition-[border-color] duration-200 focus:border-accent-2';
@@ -23,7 +27,7 @@ interface Chapter {
   country: string;
 }
 
-type SponsorType = 'STUDENT' | 'CHAPTER';
+type SponsorType = 'STUDENT' | 'CHAPTER' | 'TEST'; // TEST is TEMPORARY, see above
 type Step = 'choice' | 'form';
 
 export default function SponsorModal({ onClose }: { onClose: () => void }) {
@@ -67,7 +71,9 @@ export default function SponsorModal({ onClose }: { onClose: () => void }) {
   }
 
   const amount =
-    type === 'CHAPTER' ? CHAPTER_PRICE_NGN : STUDENT_PRICE_NGN * Math.max(1, quantity || 1);
+    type === 'CHAPTER' ? CHAPTER_PRICE_NGN
+    : type === 'TEST' ? TEST_PRICE_NGN
+    : STUDENT_PRICE_NGN * Math.max(1, quantity || 1);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -131,6 +137,14 @@ export default function SponsorModal({ onClose }: { onClose: () => void }) {
               <div className="font-display font-bold text-[18px] text-site-text mb-1">Sponsor a Chapter</div>
               <div className="text-muted text-[14px]">{formatNaira(CHAPTER_PRICE_NGN)} runs an entire {CHAPTER_STUDENT_COUNT}-student chapter for a year.</div>
             </button>
+            {/* TEMPORARY — remove once the live Paystack integration is confirmed */}
+            <button
+              onClick={() => chooseType('TEST')}
+              className="text-left bg-[var(--surface-2)] border-[1.5px] border-dashed border-line rounded-[16px] p-5 transition-[border-color,transform] duration-200 hover:border-accent-2 hover:-translate-y-[2px] cursor-pointer"
+            >
+              <div className="font-display font-bold text-[18px] text-site-text mb-1">Test Payment</div>
+              <div className="text-muted text-[14px]">{formatNaira(TEST_PRICE_NGN)} — verifies the payment flow works, not a real sponsorship.</div>
+            </button>
           </div>
         </>
       )}
@@ -145,12 +159,14 @@ export default function SponsorModal({ onClose }: { onClose: () => void }) {
             ← Back
           </button>
           <h3 className="font-display font-bold text-[24px] text-site-text m-0 mb-1">
-            {type === 'STUDENT' ? 'Sponsor a Student' : 'Sponsor a Chapter'}
+            {type === 'STUDENT' ? 'Sponsor a Student' : type === 'CHAPTER' ? 'Sponsor a Chapter' : 'Test Payment'}
           </h3>
           <p className="text-muted text-[14.5px] mb-6">
             {type === 'STUDENT'
               ? `${formatNaira(STUDENT_PRICE_NGN)} per student, per year.`
-              : `${formatNaira(CHAPTER_PRICE_NGN)} covers all ${CHAPTER_STUDENT_COUNT} students in the chapter for a year.`}
+              : type === 'CHAPTER'
+              ? `${formatNaira(CHAPTER_PRICE_NGN)} covers all ${CHAPTER_STUDENT_COUNT} students in the chapter for a year.`
+              : `${formatNaira(TEST_PRICE_NGN)} — a real charge to verify the payment flow, not a real sponsorship.`}
           </p>
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">

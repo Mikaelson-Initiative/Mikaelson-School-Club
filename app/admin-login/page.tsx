@@ -97,7 +97,7 @@ function remapSchool(s: any): School {
 }
 interface Sponsorship {
   id: string;
-  type: 'STUDENT' | 'CHAPTER';
+  type: 'STUDENT' | 'CHAPTER' | 'TEST'; // TEST is TEMPORARY, see SponsorModal.tsx
   quantity: number;
   amountKobo: number;
   donorName: string;
@@ -1286,7 +1286,7 @@ function Dashboard({ onLogout }: { onLogout: () => void }) {
                     {sponsorships.map(s => (
                       <tr key={s.id} className="hover:bg-[#faf9f6] transition-colors">
                         <td className="px-6 py-4"><div className="font-bold text-[#003e45] text-sm">{s.donorName}</div><div className="text-xs text-[#6e675c]">{s.donorEmail}</div></td>
-                        <td className="px-6 py-4 text-sm text-[#201d16]">{s.type === 'STUDENT' ? `${s.quantity} Student${s.quantity > 1 ? 's' : ''}` : 'Full Chapter'}</td>
+                        <td className="px-6 py-4 text-sm text-[#201d16]">{s.type === 'STUDENT' ? `${s.quantity} Student${s.quantity > 1 ? 's' : ''}` : s.type === 'CHAPTER' ? 'Full Chapter' : 'Test Payment'}</td>
                         <td className="px-6 py-4 text-sm text-[#201d16]">{s.chapter?.name ?? '—'}</td>
                         <td className="px-6 py-4 text-sm font-mono text-[#003e45] font-bold">₦{(s.amountKobo / 100).toLocaleString('en-NG')}</td>
                         <td className="px-6 py-4">
