@@ -250,7 +250,7 @@ function TeamPhotoDropzone({ avatarUrl, name, uploading, onFile }: { avatarUrl?:
         <span className="text-[10px] font-mono text-[#6e675c]">Uploading…</span>
       ) : avatarUrl ? (
         <>
-          <img src={avatarUrl} alt={name} className="w-full h-full object-cover" />
+          <img src={avatarUrl} alt={name} className="w-full h-full object-cover object-[center_20%]" />
           <span className="absolute inset-0 bg-black/45 text-white text-[10px] font-mono grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity">Change</span>
         </>
       ) : (

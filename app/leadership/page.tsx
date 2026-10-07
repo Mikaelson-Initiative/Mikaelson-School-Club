@@ -41,7 +41,7 @@ export default function LeadershipPage() {
   useEffect(() => {
     async function fetchTeam() {
       try {
-        const res = await fetch('/api/team');
+        const res = await fetch('/api/team', { cache: 'no-store' });
         if (res.ok) {
           const data = await res.json();
           if (data && data.length > 0) {
@@ -91,7 +91,7 @@ export default function LeadershipPage() {
                     {/* Avatar */}
                     <div className="w-[108px] h-[108px] rounded-full overflow-hidden bg-[var(--surface-2)] border border-line grid place-items-center shrink-0 relative">
                       {o.img ? (
-                        <Image src={o.img} alt={o.name} fill className="object-cover" />
+                        <Image src={o.img} alt={o.name} fill sizes="108px" className="object-cover object-[center_20%]" />
                       ) : (
                         <span className="font-display font-bold text-4xl text-muted opacity-30">{o.name.charAt(0)}</span>
                       )}
